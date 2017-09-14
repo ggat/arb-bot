@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ShitBot.iml" filepath="$PROJECT_DIR$/ShitBot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shit-bot-gui/shit-bot-gui.iml" filepath="$PROJECT_DIR$/shit-bot-gui/shit-bot-gui.iml" />
     </modules>
   </component>
 </project>
