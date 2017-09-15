@@ -6,5 +6,5 @@ package drivers;
 public interface BookieDriver {
 
     Long getBalance() throws Throwable;
-    //boolean isLoggedIn() throws Throwable;
+    boolean isLoggedIn() throws Throwable;
 }

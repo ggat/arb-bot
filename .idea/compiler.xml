@@ -11,7 +11,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="shit-bot-gui" target="1.8" />
-      <module name="ShitBot" target="1.8" />
+      <module name="ShitBot" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>
