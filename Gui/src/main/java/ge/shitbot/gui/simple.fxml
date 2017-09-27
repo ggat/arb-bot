@@ -19,7 +19,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="552.0" prefWidth="385.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Button alignment="CENTER" layoutX="278.0" layoutY="173.0" mnemonicParsing="false" text="კნოპკა">
+                        <Button alignment="CENTER" layoutX="298.0" layoutY="99.0" mnemonicParsing="false" text="კნოპკა">
                            <font>
                               <Font name="!BPG! DejaVu Sans Light Caps ExtraLight" size="13.0" />
                            </font>

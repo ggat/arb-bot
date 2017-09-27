@@ -1,0 +1,722 @@
+[
+  {
+    "profit": 0.73684210526315042,
+    "date": "16 Oct 2017 23:00",
+    "hostID": 11773,
+    "guestID": 11768,
+    "bookie_1": {
+      "name": "CrystalBet",
+      "odd_type": "2",
+      "odd": 3.3,
+      "team_1_name": "ლას პალმასი",
+      "team_2_name": "სელტა",
+      "category": "ესპანეთი",
+      "sub_category": "პრიმერა დივიზიონი"
+    },
+    "bookie_2": {
+      "name": "EuropeBet",
+      "odd_type": "1X",
+      "odd": 1.45,
+      "team_1_name": "ლას პალმასი",
+      "team_2_name": "სელტა",
+      "category": "ესპანეთი",
+      "sub_category": "პრიმერა დივიზიონი"
+    }
+  },
+  {
+    "profit": 4.470588235294116,
+    "date": "30 Sep 2017 20:00",
+    "hostID": 11519,
+    "guestID": 12122,
+    "bookie_1": {
+      "name": "CrystalBet",
+      "odd_type": "Yes",
+      "odd": 2.4,
+      "team_1_name": "სპარტაკი მ.",
+      "team_2_name": "ურალი",
+      "category": "რუსეთი",
+      "sub_category": "პრემიერლიგა"
+    },
+    "bookie_2": {
+      "name": "AdjaraBet",
+      "odd_type": "No",
+      "odd": 1.85,
+      "team_1_name": "სპარტაკი მოსკოვი",
+      "team_2_name": "ურალი ეკატერინბურგი",
+      "category": "რუსეთი",
+      "sub_category": "პრემიერლიგა"
+    }
+  },
+  {
+    "profit": 0.95617529880478,
+    "date": "07 Oct 2017 22:45",
+    "hostID": 11990,
+    "guestID": 11986,
+    "bookie_1": {
+      "name": "CrystalBet",
+      "odd_type": "1",
+      "odd": 1.4,
+      "team_1_name": "შვეიცარია",
+      "team_2_name": "უნგრეთი",
+      "category": "საერთაშორისო",
+      "sub_category": "მჩ კვალიფიკაცია, UEFA, ჯგუფი B"
+    },
+    "bookie_2": {
+      "name": "AdjaraBet",
+      "odd_type": "X2",
+      "odd": 3.62,
+      "team_1_name": "შვეიცარია",
+      "team_2_name": "უნგრეთი",
+      "category": "საერთაშორისო",
+      "sub_category": "მჩ კვალიფიკაცია, UEFA, ჯგუფი B"
+    }
+  },
+  {
+    "profit": 0.13916500994037051,
+    "date": "28 Sep 2017 23:05",
+    "hostID": 11553,
+    "guestID": 11554,
+    "bookie_1": {
+      "name": "AdjaraBet",
+      "odd_type": "1",
+      "odd": 3.65,
+      "team_1_name": "შერიფი ტირასპოლი",
+      "team_2_name": "ფკ კოპენჰაგენი",
+      "category": "საერთაშორისო, კლუბები",
+      "sub_category": "უეფა ევროპა ლიგა, F ჯგუფი"
+    },
+    "bookie_2": {
+      "name": "CrystalBet",
+      "odd_type": "X2",
+      "odd": 1.38,
+      "team_1_name": "შერიფი",
+      "team_2_name": "კოპენჰაგენი",
+      "category": "საერთაშორისო, კლუბები",
+      "sub_category": "უეფა ევროპა ლიგა, F ჯგუფი"
+    }
+  },
+  {
+    "profit": 0.11990407673860659,
+    "date": "07 Oct 2017 22:45",
+    "hostID": 12022,
+    "guestID": 12024,
+    "bookie_1": {
+      "name": "CrystalBet",
+      "odd_type": "2",
+      "odd": 1.67,
+      "team_1_name": "კვიპროსი",
+      "team_2_name": "საბერძნეთი",
+      "category": "საერთაშორისო",
+      "sub_category": "მჩ კვალიფიკაცია, UEFA, ჯგუფი H"
+    },
+    "bookie_2": {
+      "name": "AdjaraBet",
+      "odd_type": "1X",
+      "odd": 2.5,
+      "team_1_name": "კვიპროსი",
+      "team_2_name": "საბერძნეთი",
+      "category": "საერთაშორისო",
+      "sub_category": "მჩ კვალიფიკაცია, UEFA, ჯგუფი H"
+    }
+  },
+  {
+    "profit": 0.25316455696201956,
+    "date": "16 Oct 2017 23:00",
+    "hostID": 11773,
+    "guestID": 11768,
+    "bookie_1": {
+      "name": "CrystalBet",
+      "odd_type": "2",
+      "odd": 3.3,
+      "team_1_name": "ლას პალმასი",
+      "team_2_name": "სელტა",
+      "category": "ესპანეთი",
+      "sub_category": "ლა ლიგა"
+    },
+    "bookie_2": {
+      "name": "AdjaraBet",
+      "odd_type": "1X",
+      "odd": 1.44,
+      "team_1_name": "ლას პალმასი",
+      "team_2_name": "სელტა ვიგო",
+      "category": "ესპანეთი",
+      "sub_category": "ლა ლიგა"
+    }
+  },
+  {
+    "profit": 0.023913043478273721,
+    "date": "27 Sep 2017 20:00",
+    "hostID": 11509,
+    "guestID": 11510,
+    "bookie_1": {
+      "name": "CrocoBet",
+      "odd_type": "2",
+      "odd": 1.47,
+      "team_1_name": "",
+      "team_2_name": "",
+      "category": "საერთაშორისო, კლუბები",
+      "sub_category": "უეფა ჩემპიონთა ლიგა, C ჯგუფი"
+    },
+    "bookie_2": {
+      "name": "AdjaraBet",
+      "odd_type": "1X",
+      "odd": 3.13,
+      "team_1_name": "ფკ ყარაბახი",
+      "team_2_name": "რომა",
+      "category": "საერთაშორისო, კლუბები",
+      "sub_category": "უეფა ჩემპიონთა ლიგა, C ჯგუფი"
+    }
+  },
+  {
+    "profit": 1.7094861660079204,
+    "date": "28 Sep 2017 23:05",
+    "hostID": 11553,
+    "guestID": 11554,
+    "bookie_1": {
+      "name": "AdjaraBet",
+      "odd_type": "1",
+      "odd": 3.65,
+      "team_1_name": "შერიფი ტირასპოლი",
+      "team_2_name": "ფკ კოპენჰაგენი",
+      "category": "საერთაშორისო, კლუბები",
+      "sub_category": "უეფა ევროპა ლიგა, F ჯგუფი"
+    },
+    "bookie_2": {
+      "name": "CrocoBet",
+      "odd_type": "X2",
+      "odd": 1.41,
+      "team_1_name": "",
+      "team_2_name": "",
+      "category": "საერთაშორისო, კლუბები",
+      "sub_category": "უეფა ევროპა ლიგა, F ჯგუფი"
+    }
+  },
+  {
+    "profit": 0.13916500994037051,
+    "date": "28 Sep 2017 23:05",
+    "hostID": 11553,
+    "guestID": 11554,
+    "bookie_1": {
+      "name": "LiderBet",
+      "odd_type": "1",
+      "odd": 3.65,
+      "team_1_name": "შერიფი",
+      "team_2_name": "კოპენჰაგენი",
+      "category": " ევროპის ლიგა",
+      "sub_category": " ჯგუფური ეტაპი"
+    },
+    "bookie_2": {
+      "name": "CrystalBet",
+      "odd_type": "X2",
+      "odd": 1.38,
+      "team_1_name": "შერიფი",
+      "team_2_name": "კოპენჰაგენი",
+      "category": " ევროპის ლიგა",
+      "sub_category": " ჯგუფური ეტაპი"
+    }
+  },
+  {
+    "profit": 0.39772727272728048,
+    "date": "06 Oct 2017 22:45",
+    "hostID": 12032,
+    "guestID": 12028,
+    "bookie_1": {
+      "name": "LiderBet",
+      "odd_type": "Yes",
+      "odd": 2.85,
+      "team_1_name": "ხორვატია",
+      "team_2_name": "ფინეთი",
+      "category": " მსოფლიო ჩემპიონატი",
+      "sub_category": " კვალიფიკაცია. ევროპა"
+    },
+    "bookie_2": {
+      "name": "CrystalBet",
+      "odd_type": "No",
+      "odd": 1.55,
+      "team_1_name": "ხორვატია",
+      "team_2_name": "ფინეთი",
+      "category": " მსოფლიო ჩემპიონატი",
+      "sub_category": " კვალიფიკაცია. ევროპა"
+    }
+  },
+  {
+    "profit": 0.30487804878049474,
+    "date": "07 Oct 2017 22:45",
+    "hostID": 11980,
+    "guestID": 11982,
+    "bookie_1": {
+      "name": "LiderBet",
+      "odd_type": "Yes",
+      "odd": 2.35,
+      "team_1_name": "ბულგარეთი",
+      "team_2_name": "საფრანგეთი",
+      "category": " მსოფლიო ჩემპიონატი",
+      "sub_category": " კვალიფიკაცია. ევროპა"
+    },
+    "bookie_2": {
+      "name": "CrystalBet",
+      "odd_type": "No",
+      "odd": 1.75,
+      "team_1_name": "ბულგარეთი",
+      "team_2_name": "საფრანგეთი",
+      "category": " მსოფლიო ჩემპიონატი",
+      "sub_category": " კვალიფიკაცია. ევროპა"
+    }
+  },
+  {
+    "profit": 0.11990407673860659,
+    "date": "07 Oct 2017 22:45",
+    "hostID": 12022,
+    "guestID": 12024,
+    "bookie_1": {
+      "name": "CrystalBet",
+      "odd_type": "2",
+      "odd": 1.67,
+      "team_1_name": "კვიპროსი",
+      "team_2_name": "საბერძნეთი",
+      "category": " მსოფლიო ჩემპიონატი",
+      "sub_category": " კვალიფიკაცია. ევროპა"
+    },
+    "bookie_2": {
+      "name": "LiderBet",
+      "odd_type": "1X",
+      "odd": 2.5,
+      "team_1_name": "კვიპროსი",
+      "team_2_name": "საბერძნეთი",
+      "category": " მსოფლიო ჩემპიონატი",
+      "sub_category": " კვალიფიკაცია. ევროპა"
+    }
+  },
+  {
+    "profit": 0.39772727272728048,
+    "date": "07 Oct 2017 22:45",
+    "hostID": 12022,
+    "guestID": 12024,
+    "bookie_1": {
+      "name": "LiderBet",
+      "odd_type": "Yes",
+      "odd": 2.85,
+      "team_1_name": "კვიპროსი",
+      "team_2_name": "საბერძნეთი",
+      "category": " მსოფლიო ჩემპიონატი",
+      "sub_category": " კვალიფიკაცია. ევროპა"
+    },
+    "bookie_2": {
+      "name": "CrystalBet",
+      "odd_type": "No",
+      "odd": 1.55,
+      "team_1_name": "კვიპროსი",
+      "team_2_name": "საბერძნეთი",
+      "category": " მსოფლიო ჩემპიონატი",
+      "sub_category": " კვალიფიკაცია. ევროპა"
+    }
+  },
+  {
+    "profit": 1.03379721669981,
+    "date": "07 Oct 2017 22:45",
+    "hostID": 11990,
+    "guestID": 11986,
+    "bookie_1": {
+      "name": "CrystalBet",
+      "odd_type": "1",
+      "odd": 1.4,
+      "team_1_name": "შვეიცარია",
+      "team_2_name": "უნგრეთი",
+      "category": " მსოფლიო ჩემპიონატი",
+      "sub_category": " კვალიფიკაცია. ევროპა"
+    },
+    "bookie_2": {
+      "name": "LiderBet",
+      "odd_type": "X2",
+      "odd": 3.63,
+      "team_1_name": "შვეიცარია",
+      "team_2_name": "უნგრეთი",
+      "category": " მსოფლიო ჩემპიონატი",
+      "sub_category": " კვალიფიკაცია. ევროპა"
+    }
+  },
+  {
+    "profit": 0.73684210526315042,
+    "date": "16 Oct 2017 23:00",
+    "hostID": 11773,
+    "guestID": 11768,
+    "bookie_1": {
+      "name": "CrystalBet",
+      "odd_type": "2",
+      "odd": 3.3,
+      "team_1_name": "ლას პალმასი",
+      "team_2_name": "სელტა",
+      "category": " ესპანეთი",
+      "sub_category": " ლა ლიგა"
+    },
+    "bookie_2": {
+      "name": "LiderBet",
+      "odd_type": "1X",
+      "odd": 1.45,
+      "team_1_name": "ლას პალმასი",
+      "team_2_name": "სელტა",
+      "category": " ესპანეთი",
+      "sub_category": " ლა ლიგა"
+    }
+  },
+  {
+    "profit": 4.470588235294116,
+    "date": "30 Sep 2017 20:00",
+    "hostID": 11519,
+    "guestID": 12122,
+    "bookie_1": {
+      "name": "CrystalBet",
+      "odd_type": "Yes",
+      "odd": 2.4,
+      "team_1_name": "სპარტაკი მ.",
+      "team_2_name": "ურალი",
+      "category": " რუსეთი",
+      "sub_category": " პრემიერლიგა"
+    },
+    "bookie_2": {
+      "name": "LiderBet",
+      "odd_type": "No",
+      "odd": 1.85,
+      "team_1_name": "სპარტაკი მ",
+      "team_2_name": "ურალი",
+      "category": " რუსეთი",
+      "sub_category": " პრემიერლიგა"
+    }
+  },
+  {
+    "profit": 0.42887931034482563,
+    "date": "27 Sep 2017 20:00",
+    "hostID": 11509,
+    "guestID": 11510,
+    "bookie_1": {
+      "name": "CrocoBet",
+      "odd_type": "2",
+      "odd": 1.47,
+      "team_1_name": "",
+      "team_2_name": "",
+      "category": "",
+      "sub_category": ""
+    },
+    "bookie_2": {
+      "name": "LiderBet",
+      "odd_type": "1X",
+      "odd": 3.17,
+      "team_1_name": "ყარაბახი",
+      "team_2_name": "რომა",
+      "category": "",
+      "sub_category": ""
+    }
+  },
+  {
+    "profit": 1.7094861660079204,
+    "date": "28 Sep 2017 23:05",
+    "hostID": 11553,
+    "guestID": 11554,
+    "bookie_1": {
+      "name": "LiderBet",
+      "odd_type": "1",
+      "odd": 3.65,
+      "team_1_name": "შერიფი",
+      "team_2_name": "კოპენჰაგენი",
+      "category": "",
+      "sub_category": ""
+    },
+    "bookie_2": {
+      "name": "CrocoBet",
+      "odd_type": "X2",
+      "odd": 1.41,
+      "team_1_name": "",
+      "team_2_name": "",
+      "category": "",
+      "sub_category": ""
+    }
+  },
+  {
+    "profit": 0.7091346153846132,
+    "date": "28 Sep 2017 23:05",
+    "hostID": 11553,
+    "guestID": 11554,
+    "bookie_1": {
+      "name": "CrocoBet",
+      "odd_type": "2",
+      "odd": 2.45,
+      "team_1_name": "",
+      "team_2_name": "",
+      "category": "",
+      "sub_category": ""
+    },
+    "bookie_2": {
+      "name": "LiderBet",
+      "odd_type": "1X",
+      "odd": 1.71,
+      "team_1_name": "შერიფი",
+      "team_2_name": "კოპენჰაგენი",
+      "category": "",
+      "sub_category": ""
+    }
+  },
+  {
+    "profit": 0.50916496945009726,
+    "date": "28 Sep 2017 23:05",
+    "hostID": 11553,
+    "guestID": 11554,
+    "bookie_1": {
+      "name": "BetLive",
+      "odd_type": "1",
+      "odd": 3.5,
+      "team_1_name": "შერიფი",
+      "team_2_name": "კოპენჰაგენი",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    },
+    "bookie_2": {
+      "name": "CrocoBet",
+      "odd_type": "X2",
+      "odd": 1.41,
+      "team_1_name": "",
+      "team_2_name": "",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    }
+  },
+  {
+    "profit": 0.50916496945009726,
+    "date": "28 Sep 2017 23:05",
+    "hostID": 11553,
+    "guestID": 11554,
+    "bookie_1": {
+      "name": "BetLive",
+      "odd_type": "1",
+      "odd": 3.5,
+      "team_1_name": "შერიფი",
+      "team_2_name": "კოპენჰაგენი",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    },
+    "bookie_2": {
+      "name": "CrocoBet",
+      "odd_type": "X2",
+      "odd": 1.41,
+      "team_1_name": "",
+      "team_2_name": "",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    }
+  },
+  {
+    "profit": 0.50916496945009726,
+    "date": "28 Sep 2017 23:05",
+    "hostID": 11553,
+    "guestID": 11554,
+    "bookie_1": {
+      "name": "BetLive",
+      "odd_type": "1",
+      "odd": 3.5,
+      "team_1_name": "შერიფი",
+      "team_2_name": "კოპენჰაგენი",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    },
+    "bookie_2": {
+      "name": "CrocoBet",
+      "odd_type": "X2",
+      "odd": 1.41,
+      "team_1_name": "",
+      "team_2_name": "",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    }
+  },
+  {
+    "profit": 0.50916496945009726,
+    "date": "28 Sep 2017 23:05",
+    "hostID": 11553,
+    "guestID": 11554,
+    "bookie_1": {
+      "name": "BetLive",
+      "odd_type": "1",
+      "odd": 3.5,
+      "team_1_name": "შერიფი",
+      "team_2_name": "კოპენჰაგენი",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    },
+    "bookie_2": {
+      "name": "CrocoBet",
+      "odd_type": "X2",
+      "odd": 1.41,
+      "team_1_name": "",
+      "team_2_name": "",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    }
+  },
+  {
+    "profit": 0.50916496945009726,
+    "date": "28 Sep 2017 23:05",
+    "hostID": 11553,
+    "guestID": 11554,
+    "bookie_1": {
+      "name": "BetLive",
+      "odd_type": "1",
+      "odd": 3.5,
+      "team_1_name": "შერიფი",
+      "team_2_name": "კოპენჰაგენი",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    },
+    "bookie_2": {
+      "name": "CrocoBet",
+      "odd_type": "X2",
+      "odd": 1.41,
+      "team_1_name": "",
+      "team_2_name": "",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    }
+  },
+  {
+    "profit": 0.50916496945009726,
+    "date": "28 Sep 2017 23:05",
+    "hostID": 11553,
+    "guestID": 11554,
+    "bookie_1": {
+      "name": "BetLive",
+      "odd_type": "1",
+      "odd": 3.5,
+      "team_1_name": "შერიფი",
+      "team_2_name": "კოპენჰაგენი",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    },
+    "bookie_2": {
+      "name": "CrocoBet",
+      "odd_type": "X2",
+      "odd": 1.41,
+      "team_1_name": "",
+      "team_2_name": "",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    }
+  },
+  {
+    "profit": 0.50916496945009726,
+    "date": "28 Sep 2017 23:05",
+    "hostID": 11553,
+    "guestID": 11554,
+    "bookie_1": {
+      "name": "BetLive",
+      "odd_type": "1",
+      "odd": 3.5,
+      "team_1_name": "შერიფი",
+      "team_2_name": "კოპენჰაგენი",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    },
+    "bookie_2": {
+      "name": "CrocoBet",
+      "odd_type": "X2",
+      "odd": 1.41,
+      "team_1_name": "",
+      "team_2_name": "",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    }
+  },
+  {
+    "profit": 0.50916496945009726,
+    "date": "28 Sep 2017 23:05",
+    "hostID": 11553,
+    "guestID": 11554,
+    "bookie_1": {
+      "name": "BetLive",
+      "odd_type": "1",
+      "odd": 3.5,
+      "team_1_name": "შერიფი",
+      "team_2_name": "კოპენჰაგენი",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    },
+    "bookie_2": {
+      "name": "CrocoBet",
+      "odd_type": "X2",
+      "odd": 1.41,
+      "team_1_name": "",
+      "team_2_name": "",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    }
+  },
+  {
+    "profit": 0.50916496945009726,
+    "date": "28 Sep 2017 23:05",
+    "hostID": 11553,
+    "guestID": 11554,
+    "bookie_1": {
+      "name": "BetLive",
+      "odd_type": "1",
+      "odd": 3.5,
+      "team_1_name": "შერიფი",
+      "team_2_name": "კოპენჰაგენი",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    },
+    "bookie_2": {
+      "name": "CrocoBet",
+      "odd_type": "X2",
+      "odd": 1.41,
+      "team_1_name": "",
+      "team_2_name": "",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    }
+  },
+  {
+    "profit": 0.50916496945009726,
+    "date": "28 Sep 2017 23:05",
+    "hostID": 11553,
+    "guestID": 11554,
+    "bookie_1": {
+      "name": "BetLive",
+      "odd_type": "1",
+      "odd": 3.5,
+      "team_1_name": "შერიფი",
+      "team_2_name": "კოპენჰაგენი",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    },
+    "bookie_2": {
+      "name": "CrocoBet",
+      "odd_type": "X2",
+      "odd": 1.41,
+      "team_1_name": "",
+      "team_2_name": "",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    }
+  },
+  {
+    "profit": 0.50916496945009726,
+    "date": "28 Sep 2017 23:05",
+    "hostID": 11553,
+    "guestID": 11554,
+    "bookie_1": {
+      "name": "BetLive",
+      "odd_type": "1",
+      "odd": 3.5,
+      "team_1_name": "შერიფი",
+      "team_2_name": "კოპენჰაგენი",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    },
+    "bookie_2": {
+      "name": "CrocoBet",
+      "odd_type": "X2",
+      "odd": 1.41,
+      "team_1_name": "",
+      "team_2_name": "",
+      "category": "UEFA",
+      "sub_category": "ევროპის ლიგა"
+    }
+  }
+]

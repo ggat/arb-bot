@@ -33,10 +33,26 @@ public class EuropeBetDriver extends AbstractBookieDriver implements BookieDrive
             login();
         }
 
-        WebElement accountLink = (new WebDriverWait(webDriver, 10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@id=\"mainheader\"]/div/div/div[2]/form/ul/li[@data-itemclicked='Account']")));
+        try {
+            WebElement accountLink = (new WebDriverWait(webDriver, 10))
+                    .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@id=\"mainheader\"]/div/div/div[2]/form/ul/li[@data-itemclicked='Account']")));
 
-        accountLink.click();
+            accountLink.click();
+
+        } catch (Throwable e) { //Sometimes we have dropdown to access account and this must be a case.
+
+            WebElement accountDropDown = (new WebDriverWait(webDriver, 10))
+                    .until(ExpectedConditions.presenceOfElementLocated(
+                            By.xpath("//*[@id=\"gAccount\"]/div[contains(@class, 'dropdown')]")));
+
+            accountDropDown.click();
+
+            WebElement balanceLink = (new WebDriverWait(webDriver, 10))
+                    .until(ExpectedConditions.presenceOfElementLocated(
+                            By.xpath("//*[@id=\"gAccount\"]//a/div/span[contains(text(), 'ბალანსი')]")));
+
+            balanceLink.click();
+        }
     }
 
     protected void login() {
@@ -51,20 +67,29 @@ public class EuropeBetDriver extends AbstractBookieDriver implements BookieDrive
             webDriver.findElement(By.xpath("//*[@id=\"main-loginform\"]/span[2]/button")).click();
         } catch (Throwable e) {
 
-            // Click on 'შესვლა' button to open modal window
-            webDriver.findElement(By.cssSelector("#btnLogin")).click();
+            try {
+                // Click on 'შესვლა' button to open modal window
+                webDriver.findElement(By.cssSelector("#btnLogin")).click();
 
-            //Wait for it
-            WebElement modal = (new WebDriverWait(webDriver, 10))
-                    .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#BCore-ModalDialog-Content-LoginWindow")));
+                //Wait for it
+                WebElement modal = (new WebDriverWait(webDriver, 10))
+                        .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#BCore-ModalDialog-Content-iframe-LoginWindow")));
 
-            WebElement userInput = (new WebDriverWait(webDriver, 10))
-                    .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#Username")));
+                webDriver.switchTo().frame("BCore-ModalDialog-Content-iframe-LoginWindow");
 
-            //Input credentials and login
-            userInput.sendKeys(user);
-            modal.findElement(By.cssSelector("#Password")).sendKeys(password);
-            modal.findElement(By.cssSelector("#modalLoginButton")).click();
+                WebElement userInput = (new WebDriverWait(webDriver, 10))
+                        .until(ExpectedConditions.presenceOfElementLocated(By.id("Username")));
+
+                //Input credentials and login
+                userInput.sendKeys(user);
+                webDriver.findElement(By.cssSelector("#Password")).sendKeys(password);
+                webDriver.findElement(By.cssSelector("#modalLoginButton")).click();
+
+                webDriver.switchTo().defaultContent();
+
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
         }
 
     }
@@ -86,11 +111,7 @@ public class EuropeBetDriver extends AbstractBookieDriver implements BookieDrive
         goToAccountPage();
 
         String stringAmount = webDriver.findElement(By.xpath("//*[@id=\"myaccountcontent\"]/div/div[2]/ul/div" +
-                "/div[1]/div/div[2]/div/div[contains(@class, 'bonustamount')]")).getText().trim().replaceAll(",", ".");
-
-        Double balance = Double.parseDouble(stringAmount);
-
-        //Long shiftedBalance = (long) (balance * 100);
+                    "/div[1]/div/div[2]/div/div[contains(@class, 'bonustamount')]")).getText().trim().replaceAll(",", ".");
 
         return Math.round(Double.parseDouble(stringAmount) * 100);
     }
