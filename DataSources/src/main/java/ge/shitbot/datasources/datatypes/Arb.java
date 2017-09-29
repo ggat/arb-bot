@@ -1,5 +1,8 @@
 package ge.shitbot.datasources.datatypes;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import java.sql.Date;
 
 /**
@@ -7,15 +10,90 @@ import java.sql.Date;
  */
 public class Arb {
 
-    public class Bookie {
+    public static class Bookie {
         private String name;
         private String oddType;
-        private String odd;
+        private Long odd;
         private String teamOneName;
         private String teamTwoName;
         private String category;
         private String subCategory;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        @JsonProperty("odd_type")
+        public String getOddType() {
+            return oddType;
+        }
+
+        public void setOddType(String oddType) {
+            this.oddType = oddType;
+        }
+
+        public Long getOdd() {
+            return odd;
+        }
+
+        public void setOdd(Long odd) {
+            this.odd = odd;
+        }
+
+        @JsonProperty("team_1_name")
+        public String getTeamOneName() {
+            return teamOneName;
+        }
+
+        public void setTeamOneName(String teamOneName) {
+            this.teamOneName = teamOneName;
+        }
+
+        @JsonProperty("team_2_name")
+        public String getTeamTwoName() {
+            return teamTwoName;
+        }
+
+        public void setTeamTwoName(String teamTwoName) {
+            this.teamTwoName = teamTwoName;
+        }
+
+        public String getCategory() {
+            return category;
+        }
+
+        public void setCategory(String category) {
+            this.category = category;
+        }
+
+        @JsonProperty("sub_category")
+        public String getSubCategory() {
+            return subCategory;
+        }
+
+        public void setSubCategory(String subCategory) {
+            this.subCategory = subCategory;
+        }
     }
+
+    private Double profit;
+
+    @JsonDeserialize(using = DateDeserializer.class)
+    private Date date;
+    private Long hostID;
+    private Long guestID;
+
+    @JsonProperty("bookie_1")
+    @JsonDeserialize(using = BookieDeserializer.class)
+    Bookie bookieOne;
+
+    @JsonProperty("bookie_2")
+    @JsonDeserialize(using = BookieDeserializer.class)
+    Bookie bookieTwo;
 
     /*
     {
@@ -43,12 +121,53 @@ public class Arb {
     }
     */
 
-    private Double profit;
-    private Date date;
-    private Long hostID;
-    private Long guestID;
+    public Double getProfit() {
+        return profit;
+    }
 
-    Bookie bookieOne;
-    Bookie bookieTwo;
+    public void setProfit(Double profit) {
+        this.profit = profit;
+    }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Long getHostID() {
+        return hostID;
+    }
+
+    public void setHostID(Long hostID) {
+        this.hostID = hostID;
+    }
+
+    public Long getGuestID() {
+        return guestID;
+    }
+
+    public void setGuestID(Long guestID) {
+        this.guestID = guestID;
+    }
+
+    @JsonProperty("bookie_1")
+    public Bookie getBookieOne() {
+        return bookieOne;
+    }
+
+    public void setBookieOne(Bookie bookieOne) {
+        this.bookieOne = bookieOne;
+    }
+
+    @JsonProperty("bookie_2")
+    public Bookie getBookieTwo() {
+        return bookieTwo;
+    }
+
+    public void setBookieTwo(Bookie bookieTwo) {
+        this.bookieTwo = bookieTwo;
+    }
 }
