@@ -3,15 +3,14 @@ package ge.shitbot.datasources.source;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ge.shitbot.datasources.datatypes.Arb;
 import com.fasterxml.jackson.core.type.TypeReference;
+import ge.shitbot.datasources.exceptions.DataSourceException;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,11 +20,17 @@ public class MainDataSource {
 
 
     public static void main(String[] args) throws Exception {
-        (new MainDataSource()).run();
+        (new MainDataSource()).getArbs();
     }
 
-    protected void run() throws Exception {
+    protected String getRawData() throws IOException, URISyntaxException {
 
+        Path path = Paths.get("/home/giga/Projects/shit-bot/DataSources/src/main/java/ge/shitbot/datasources/source/Arb.json");
+
+        return new String(Files.readAllBytes(path));
+    }
+
+    public List<Arb> getArbs() throws DataSourceException {
         ObjectMapper mapper = new ObjectMapper();
 
         String value = "{\n" +
@@ -52,18 +57,18 @@ public class MainDataSource {
                 "      \"sub_category\": \"ევროპის ლიგა\"\n" +
                 "    }}";
 
-        value = getRawData();
 
-        List<Arb> arbs = mapper.readValue(value, new TypeReference<List<Arb>>(){});
-        //Arb arb = mapper.readValue(value, Arb.class);
+        List<Arb> arbs = null;
+        try {
+            value = getRawData();
+
+            arbs = mapper.readValue(value, new TypeReference<List<Arb>>(){});
+        } catch (Exception e) {
+            throw new DataSourceException("Could not get data.");
+        }
 
         System.out.println(arbs.size());
-    }
 
-    protected String getRawData() throws IOException, URISyntaxException {
-
-        Path path = Paths.get("/home/giga/Projects/ShitBot/DataSources/src/main/java/ge/shitbot/datasources/source/Arb.json");
-
-        return new String(Files.readAllBytes(path));
+        return arbs;
     }
 }
