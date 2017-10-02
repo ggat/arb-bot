@@ -6,6 +6,7 @@ import ge.shitbot.datasources.source.MainDataSource;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -18,15 +19,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 /**
@@ -97,10 +96,61 @@ public class Main extends Application {
 
         table = new TableView();
 
+        TableColumn action = new TableColumn("Action");
+
+        Callback<TableColumn<Arb, String>, TableCell<Arb, String>> cellFactory
+                = //
+                new Callback<TableColumn<Arb, String>, TableCell<Arb, String>>() {
+                    @Override
+                    public TableCell call(final TableColumn<Arb, String> param) {
+                        final TableCell<Arb, String> cell = new TableCell<Arb, String>() {
+
+                            final Button btn = new Button("Bet");
+
+                            @Override
+                            public void updateItem(String item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty) {
+                                    setGraphic(null);
+                                    setText(null);
+                                } else {
+                                    btn.setOnAction(event -> {
+                                        Arb arb = getTableView().getItems().get(getIndex());
+                                        System.out.println(arb.getProfit());
+                                    });
+                                    setGraphic(btn);
+                                    setText(null);
+                                }
+                            }
+                        };
+                        return cell;
+                    }
+                };
+
+        action.setCellFactory(cellFactory);
+
+        TableColumn myProfit = new TableColumn("My Profit");
+
+        myProfit.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Arb, Double>, StringExpression>() {
+            @Override
+            public StringExpression call(TableColumn.CellDataFeatures<Arb, Double> cellDataFeatures) {
+
+                Double profit = Calc.profit(cellDataFeatures.getValue().getBookieOne().getOdd(),
+                        cellDataFeatures.getValue().getBookieTwo().getOdd());
+
+                return Bindings.format("%.2f", profit);
+            }
+        });
+
         TableColumn profit = new TableColumn("Profit");
         TableColumn date = new TableColumn("Date");
+
         TableColumn hostID = new TableColumn("HostID");
+        hostID.setVisible(false);
+
         TableColumn guestID = new TableColumn("GuestID");
+        guestID.setVisible(false);
+
         TableColumn bookeOne = new TableColumn("Bookie One");
         finalizeBookieColumn(bookeOne, "bookie_1");
 
@@ -118,7 +168,7 @@ public class Main extends Application {
         hostID.setCellValueFactory(new PropertyValueFactory<Arb, Long>("hostID"));
         guestID.setCellValueFactory(new PropertyValueFactory<Arb, Long>("guestID"));
 
-        table.getColumns().addAll(profit,date, hostID, guestID, bookeOne, bookieTwo);
+        table.getColumns().addAll(action, myProfit, profit,date, hostID, guestID, bookeOne, bookieTwo);
 
         try {
             table.setItems(getArbs());
@@ -144,7 +194,7 @@ public class Main extends Application {
         return FXCollections.observableArrayList(source.getArbs());
     }
 
-    //Helper class to avoid checking which bookie to use every time ve add nested property factory for arb.
+    //Helper class to avoid checking which bookie to use every time we add nested property factory for arb.
     private abstract class MyCallback<FT> implements Callback<TableColumn.CellDataFeatures<Arb, FT>, ObservableValue> {
 
         String bookieId;
@@ -172,7 +222,7 @@ public class Main extends Application {
     private void finalizeBookieColumn(TableColumn col, String bookie) {
 
         TableColumn name = new TableColumn("Name");
-        TableColumn oddType = new TableColumn("Odd type");
+        TableColumn oddType = new TableColumn("Odd\ntype");
         TableColumn odd = new TableColumn("Odd");
         TableColumn teamOneName = new TableColumn("Team one");
         TableColumn teamTwoName = new TableColumn("Team two");
@@ -210,7 +260,7 @@ public class Main extends Application {
 
             @Override
             protected ObservableValue<Number> getPropertyValue(){
-                return new SimpleLongProperty(bookie.getOdd());
+                return new SimpleDoubleProperty(bookie.getOdd());
             }
         });
 

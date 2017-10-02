@@ -13,7 +13,7 @@ public class Arb {
     public static class Bookie {
         private String name;
         private String oddType;
-        private Long odd;
+        private Double odd;
         private String teamOneName;
         private String teamTwoName;
         private String category;
@@ -36,11 +36,11 @@ public class Arb {
             this.oddType = oddType;
         }
 
-        public Long getOdd() {
+        public Double getOdd() {
             return odd;
         }
 
-        public void setOdd(Long odd) {
+        public void setOdd(Double odd) {
             this.odd = odd;
         }
 
