@@ -17,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -69,6 +70,11 @@ public class Main extends Application {
 
         //pane.getChildren().addAll(btnAlpha, btnBeta, response, currentWidth, currentHeight);
 
+        //MainPane
+        SplitPane splitPane = new SplitPane();
+        splitPane.setOrientation(Orientation.HORIZONTAL);
+        splitPane.setPrefSize(300, 200);
+
         Scene scene = new Scene(pane, 800, 600);
 
         // Add resize listeners
@@ -86,7 +92,10 @@ public class Main extends Application {
             }
         });
 
+
+
         addTableView(pane);
+        addDetailsPanel(pane);
 
         stage.setScene(scene);
         stage.show();
@@ -98,7 +107,7 @@ public class Main extends Application {
 
         TableColumn action = new TableColumn("Action");
 
-        Callback<TableColumn<Arb, String>, TableCell<Arb, String>> cellFactory
+        Callback<TableColumn<Arb, String>, TableCell<Arb, String>> buttonCellFactory
                 = //
                 new Callback<TableColumn<Arb, String>, TableCell<Arb, String>>() {
                     @Override
@@ -127,7 +136,49 @@ public class Main extends Application {
                     }
                 };
 
-        action.setCellFactory(cellFactory);
+        action.setCellFactory(buttonCellFactory);
+
+        TableColumn stake = new TableColumn("Stake");
+
+        Callback<TableColumn<Arb, String>, TableCell<Arb, String>> textFieldCellFactory
+                = //
+                new Callback<TableColumn<Arb, String>, TableCell<Arb, String>>() {
+                    @Override
+                    public TableCell call(final TableColumn<Arb, String> param) {
+                        final TableCell<Arb, String> cell = new TableCell<Arb, String>() {
+
+                            TextField field = new TextField("100");
+
+                            @Override
+                            public void updateItem(String item, boolean empty) {
+                                field.setPrefColumnCount(2);
+
+                                super.updateItem(item, empty);
+                                if (empty) {
+                                    setGraphic(null);
+                                    setText(null);
+                                } else {
+                                    field.setOnAction(new EventHandler<ActionEvent>() {
+                                        @Override
+                                        public void handle(ActionEvent event) {
+
+                                        }
+                                    });
+
+                                    /*btn.setOnAction(event -> {
+                                        Arb arb = getTableView().getItems().get(getIndex());
+                                        System.out.println(arb.getProfit());
+                                    });*/
+                                    setGraphic(field);
+                                    setText(null);
+                                }
+                            }
+                        };
+                        return cell;
+                    }
+                };
+
+        stake.setCellFactory(textFieldCellFactory);
 
         TableColumn myProfit = new TableColumn("My Profit");
 
@@ -168,7 +219,7 @@ public class Main extends Application {
         hostID.setCellValueFactory(new PropertyValueFactory<Arb, Long>("hostID"));
         guestID.setCellValueFactory(new PropertyValueFactory<Arb, Long>("guestID"));
 
-        table.getColumns().addAll(action, myProfit, profit,date, hostID, guestID, bookeOne, bookieTwo);
+        table.getColumns().addAll(action, myProfit, stake, profit,date, hostID, guestID, bookeOne, bookieTwo);
 
         try {
             table.setItems(getArbs());
@@ -295,5 +346,25 @@ public class Main extends Application {
                 return new SimpleStringProperty(bookie.getSubCategory());
             }
         });
+    }
+
+    ArbDetailsPanel arbDetailsPanel;
+
+    protected void addDetailsPanel(Pane pane) {
+        final VBox vBox = new VBox();
+        vBox.setSpacing(5);
+        vBox.setPadding(new Insets(10, 20, 10, 20));
+        //vBox.getChildren().addAll(label, table);
+
+        GridPane.setHgrow(vBox, Priority.ALWAYS);
+        GridPane.setVgrow(vBox, Priority.ALWAYS);
+
+        arbDetailsPanel = new ArbDetailsPanel();
+        arbDetailsPanel.getEventOne().setBookie("Aliosha");
+
+        vBox.getChildren().add(arbDetailsPanel);
+
+        pane.getChildren().add(vBox);
+
     }
 }

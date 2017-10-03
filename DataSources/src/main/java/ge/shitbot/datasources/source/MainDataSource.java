@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by giga on 9/27/17.
  */
-public class MainDataSource {
+public class MainDataSource<T extends Arb> {
 
 
     public static void main(String[] args) throws Exception {
@@ -25,12 +25,12 @@ public class MainDataSource {
 
     protected String getRawData() throws IOException, URISyntaxException {
 
-        Path path = Paths.get("/home/giga/Projects/shit-bot/DataSources/src/main/java/ge/shitbot/datasources/source/Arb.json");
+        Path path = Paths.get("/home/giga/Projects/ShitBot/DataSources/src/main/java/ge/shitbot/datasources/source/Arb.json");
 
         return new String(Files.readAllBytes(path));
     }
 
-    public List<Arb> getArbs() throws DataSourceException {
+    public List<T> getArbs() throws DataSourceException {
         ObjectMapper mapper = new ObjectMapper();
 
         String value = "{\n" +
@@ -58,13 +58,13 @@ public class MainDataSource {
                 "    }}";
 
 
-        List<Arb> arbs = null;
+        List<T> arbs = null;
         try {
             value = getRawData();
 
-            arbs = mapper.readValue(value, new TypeReference<List<Arb>>(){});
+            arbs = mapper.readValue(value, new TypeReference<List<T>>(){});
         } catch (Exception e) {
-            throw new DataSourceException("Could not get data.");
+            throw new DataSourceException("Could not get data.", e);
         }
 
         System.out.println(arbs.size());

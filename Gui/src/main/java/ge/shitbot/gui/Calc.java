@@ -46,12 +46,20 @@ public class Calc {
         return new Pair<>(stakeA, stakeB);
     }
 
-    /*public static Pair<Double> wins(Double a, Double b) {
-        return new Pair<>()
-    }*/
+    public static Pair<Double> wins(Double totalStake, Double a, Double b) {
+        Pair<Double> stakes = stakes(totalStake, a, b);
+
+        return new Pair<>((stakes.a * a) - totalStake, (stakes.b * b) - totalStake);
+    }
 
     public static void main(String[] args) {
 
-        System.out.printf("result: %f", profit(3.3, 1.45));
+        Double a, b;
+        a = 1.45;
+        b = 5.5;
+
+        System.out.printf("profit: %f\n", profit(a, b));
+        System.out.printf("stakes: %f - %f\n", stakes(100.0, a, b).a, stakes(100.0, a, b).b);
+        System.out.printf("wins: %f - %f\n", wins(100.0, a, b).a, wins(100.0, a, b).b);
     }
 }
