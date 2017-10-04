@@ -3,8 +3,10 @@ package drivers.bookies;
 import drivers.AbstractBookieDriver;
 import drivers.BookieDriver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -19,6 +21,18 @@ public class AdjaraBetDriver extends AbstractBookieDriver implements BookieDrive
 
     public AdjaraBetDriver(WebDriver webDriver) {
         super(webDriver);
+
+        // Sometimes there is a popup. That is restricting us to click on it.
+        // This is attempt to remove it.
+        try {
+            JavascriptExecutor js;
+            if (webDriver instanceof JavascriptExecutor) {
+                js = (JavascriptExecutor) webDriver;
+                js.executeScript("return document.getElementsByClassName('pop-up-root').remove();");
+            }
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
     }
 
     protected void goToMainPage() {

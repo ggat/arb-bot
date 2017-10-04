@@ -7,7 +7,6 @@ import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,10 +14,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.scene.Parent;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -26,7 +24,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 
 /**
@@ -72,10 +69,11 @@ public class Main extends Application {
 
         //MainPane
         SplitPane splitPane = new SplitPane();
-        splitPane.setOrientation(Orientation.HORIZONTAL);
+        splitPane.setOrientation(Orientation.VERTICAL);
         splitPane.setPrefSize(300, 200);
 
-        Scene scene = new Scene(pane, 800, 600);
+        //Scene scene = new Scene(pane, 800, 600);
+        Scene scene = new Scene(splitPane, 800, 600);
 
         // Add resize listeners
         scene.widthProperty().addListener(new ChangeListener<Number>() {
@@ -92,16 +90,54 @@ public class Main extends Application {
             }
         });
 
+        TableView tableView = createTableView();
+        tableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        tableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Arb>() {
+            @Override
+            public void changed(ObservableValue<? extends Arb> observable, Arb oldValue, Arb newValue) {
+                if(newValue != null) {
+                    arbDetailsPanel.getFirstCriteria().setBookie(newValue.getBookieOne().getName());
+                    arbDetailsPanel.getFirstCriteria().setOddType(newValue.getBookieOne().getOddType());
+                    arbDetailsPanel.getFirstCriteria().setOdd(newValue.getBookieOne().getOdd().toString());
+                    arbDetailsPanel.getFirstCriteria().setTeamName(newValue.getBookieOne().getTeamOneName());
+                } else {
+                    arbDetailsPanel.getSecondCriteria().setBookie(newValue.getBookieTwo().getName());
+                    arbDetailsPanel.getSecondCriteria().setOddType(newValue.getBookieTwo().getOddType());
+                    arbDetailsPanel.getSecondCriteria().setOdd(newValue.getBookieTwo().getOdd().toString());
+                    arbDetailsPanel.getSecondCriteria().setTeamName(newValue.getBookieTwo().getTeamTwoName());
+                }
+            }
+        } /*(obs, oldSelection, newSelection) -> {
 
+            if(newSelection != null) {
+                Arb selectedArb = (Arb) newSelection;
 
-        addTableView(pane);
-        addDetailsPanel(pane);
+                System.out.println("newSelection class: " + newSelection.getClass().getName());
+                arbDetailsPanel.getFirstCriteria().setBookie(selectedArb.getBookieOne().getName());
+            } else {
+                arbDetailsPanel.getFirstCriteria().setBookie("Unknown");
+            }
+        }*/);
+
+        ArbDetailsPanel detailsPanel = createDetailsPanel();
+        splitPane.getItems().addAll(wrapWithVBox(tableView), wrapWithVBox(detailsPanel));
 
         stage.setScene(scene);
         stage.show();
     }
 
-    protected void addTableView(Pane pane) {
+    /*protected void arbSelectedListener(ObservableValue obs, Arb oldSelection, Arb newSelection) {
+        if(newSelection != null) {
+            Arb selectedArb = (Arb) newSelection;
+
+            System.out.println("newSelection class: " + newSelection.getClass().getName());
+            arbDetailsPanel.getFirstCriteria().setBookie(selectedArb.getBookieOne().getName());
+        } else {
+            arbDetailsPanel.getFirstCriteria().setBookie("Unknown");
+        }
+    }*/
+
+    protected TableView createTableView() {
 
         table = new TableView();
 
@@ -227,7 +263,7 @@ public class Main extends Application {
             e.printStackTrace();
         }
 
-        final Label label = new Label("Address Book");
+        /*final Label label = new Label("Address Book");
 
         final VBox vBox = new VBox();
         vBox.setSpacing(5);
@@ -235,9 +271,10 @@ public class Main extends Application {
         vBox.getChildren().addAll(label, table);
 
         GridPane.setHgrow(vBox, Priority.ALWAYS);
-        GridPane.setVgrow(vBox, Priority.ALWAYS);
+        GridPane.setVgrow(vBox, Priority.ALWAYS);*/
 
-        pane.getChildren().add(vBox);
+        //pane.getChildren().add(vBox);
+        return table;
     }
 
     protected ObservableList<Arb> getArbs() throws DataSourceException {
@@ -350,7 +387,26 @@ public class Main extends Application {
 
     ArbDetailsPanel arbDetailsPanel;
 
-    protected void addDetailsPanel(Pane pane) {
+    protected ArbDetailsPanel createDetailsPanel() {
+        arbDetailsPanel = new ArbDetailsPanel();
+        arbDetailsPanel.getFirstCriteria().setBookie("CrystalBet");
+        arbDetailsPanel.getFirstCriteria().setOdd("1.45");
+        arbDetailsPanel.getFirstCriteria().setOddType("1");
+        arbDetailsPanel.getFirstCriteria().setTeamName("Real Madrid");
+        arbDetailsPanel.getFirstCriteria().setStake("79");
+        arbDetailsPanel.getFirstCriteria().setStake("114.55");
+
+        arbDetailsPanel.getSecondCriteria().setBookie("BetLive");
+        arbDetailsPanel.getSecondCriteria().setOdd("5.5");
+        arbDetailsPanel.getSecondCriteria().setOddType("X2");
+        arbDetailsPanel.getSecondCriteria().setTeamName("Barca");
+        arbDetailsPanel.getSecondCriteria().setStake("21");
+        arbDetailsPanel.getSecondCriteria().setStake("115.5");
+
+        return arbDetailsPanel;
+    }
+
+    protected VBox wrapWithVBox(Node node) {
         final VBox vBox = new VBox();
         vBox.setSpacing(5);
         vBox.setPadding(new Insets(10, 20, 10, 20));
@@ -359,12 +415,8 @@ public class Main extends Application {
         GridPane.setHgrow(vBox, Priority.ALWAYS);
         GridPane.setVgrow(vBox, Priority.ALWAYS);
 
-        arbDetailsPanel = new ArbDetailsPanel();
-        arbDetailsPanel.getEventOne().setBookie("Aliosha");
+        vBox.getChildren().add(node);
 
-        vBox.getChildren().add(arbDetailsPanel);
-
-        pane.getChildren().add(vBox);
-
+        return vBox;
     }
 }

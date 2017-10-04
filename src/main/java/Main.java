@@ -27,7 +27,12 @@ public class Main {
         for(BookieDriver driver : bookieDrivers) {
 
             try {
-                totalBalance += driver.getBalance();
+
+                Long balance = driver.getBalance();
+
+                System.out.println(driver.getClass().getName() + ": " + balance);
+
+                totalBalance += balance;
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
                 break;

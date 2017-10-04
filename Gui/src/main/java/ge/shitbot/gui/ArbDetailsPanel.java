@@ -1,7 +1,13 @@
 package ge.shitbot.gui;
 
+import javafx.geometry.HPos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 
 /**
  * Created by giga on 10/3/17.
@@ -18,8 +24,43 @@ public class ArbDetailsPanel extends GridPane {
         final Label totalWin = new Label();
 
         Event(){
+
+            Font defaultFont = Font.getDefault();
+            Font h1 = Font.font(defaultFont.getName(), FontWeight.BOLD, 24);
+            Font h2 = Font.font(defaultFont.getName(), 20);
+            Font h3 = Font.font(defaultFont.getName(), 16);
+
+            bookie.setFont(h1);
+            oddType.setFont(h3);
+            teamName.setFont(Font.font(defaultFont.getName(), FontWeight.BOLD, 14));
+            //odd.setFont(h2);
+            //stake.setFont(h2);
+            //win.setFont(h2);
+
+            /*
+            bookie.setStyle("-fx-background-color: #CCCCCC;");
+            oddType.setStyle("-fx-background-color: #CCCCCC;");*/
+
             this.add(bookie, 0, 0);
-            this.add(oddType, 0, 0);
+            this.add(oddType, 0, 1);
+            this.add(teamName, 0, 2);
+            this.add(odd, 0, 3);
+            this.add(stake, 0, 4);
+            this.add(win, 0, 5);
+            this.add(totalWin, 0, 5);
+        }
+
+        Event(HPos alignment){
+
+            this();
+
+            GridPane.setHalignment(bookie, alignment);
+            GridPane.setHalignment(oddType, alignment);
+            GridPane.setHalignment(odd, alignment);
+            GridPane.setHalignment(teamName, alignment);
+            GridPane.setHalignment(stake, alignment);
+            GridPane.setHalignment(win, alignment);
+            GridPane.setHalignment(totalWin, alignment);
         }
 
         public String getBookie() {
@@ -79,15 +120,18 @@ public class ArbDetailsPanel extends GridPane {
         }
     }
 
-    Event eventOne = new Event();
+    Event eventOne = new Event(HPos.RIGHT);
     Event eventTwo = new Event();
 
     ArbDetailsPanel(){
         this.add(eventOne, 0, 0);
-        this.add(eventTwo, 0, 1);
+        this.add(eventTwo, 1, 0);
+
+        this.setHgap(10);
+        this.setVgap(10);
     }
 
-    public Event getEventOne() {
+    public Event getFirstCriteria() {
         return eventOne;
     }
 
@@ -95,7 +139,7 @@ public class ArbDetailsPanel extends GridPane {
         this.eventOne = eventOne;
     }
 
-    public Event getEventTwo() {
+    public Event getSecondCriteria() {
         return eventTwo;
     }
 
