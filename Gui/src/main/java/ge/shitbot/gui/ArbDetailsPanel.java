@@ -1,7 +1,9 @@
 package ge.shitbot.gui;
 
 import javafx.geometry.HPos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
@@ -122,10 +124,17 @@ public class ArbDetailsPanel extends GridPane {
 
     Event eventOne = new Event(HPos.RIGHT);
     Event eventTwo = new Event();
+    NumberField stakeField = new NumberField();
+    Button makeStakeButton = new Button("Create stakes");
 
     ArbDetailsPanel(){
         this.add(eventOne, 0, 0);
         this.add(eventTwo, 1, 0);
+
+        this.add(stakeField, 2, 0);
+        stakeField.setPromptText("Total stake");
+
+        this.add(makeStakeButton, 2, 1);
 
         this.setHgap(10);
         this.setVgap(10);
