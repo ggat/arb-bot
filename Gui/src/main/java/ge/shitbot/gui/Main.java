@@ -2,6 +2,7 @@ package ge.shitbot.gui;
 
 import ge.shitbot.datasources.datatypes.Arb;
 import ge.shitbot.datasources.exceptions.DataSourceException;
+import ge.shitbot.datasources.source.ArbDataSource;
 import ge.shitbot.datasources.source.MainDataSource;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
@@ -278,7 +279,7 @@ public class Main extends Application {
     }
 
     protected ObservableList<Arb> getArbs() throws DataSourceException {
-        MainDataSource source = new MainDataSource();
+        ArbDataSource<Arb> source = new MainDataSource<>();
         return FXCollections.observableArrayList(source.getArbs());
     }
 
