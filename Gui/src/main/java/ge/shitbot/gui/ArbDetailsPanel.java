@@ -1,15 +1,23 @@
 package ge.shitbot.gui;
 
+import ge.shitbot.datasources.datatypes.Arb;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+
+import java.text.DecimalFormat;
 
 /**
  * Created by giga on 10/3/17.
@@ -49,7 +57,7 @@ public class ArbDetailsPanel extends GridPane {
             this.add(odd, 0, 3);
             this.add(stake, 0, 4);
             this.add(win, 0, 5);
-            this.add(totalWin, 0, 5);
+            this.add(totalWin, 0, 6);
         }
 
         Event(HPos alignment){
@@ -122,37 +130,106 @@ public class ArbDetailsPanel extends GridPane {
         }
     }
 
-    Event eventOne = new Event(HPos.RIGHT);
-    Event eventTwo = new Event();
+    Event firstCriteria = new Event(HPos.RIGHT);
+    Event secondCriteria = new Event();
     NumberField stakeField = new NumberField();
     Button makeStakeButton = new Button("Create stakes");
+    Arb arb;
+
+    //User input feed from stakeField.
+    Long totalStake = 100L;
 
     ArbDetailsPanel(){
-        this.add(eventOne, 0, 0);
-        this.add(eventTwo, 1, 0);
+        this.add(firstCriteria, 0, 0);
+        this.add(secondCriteria, 1, 0);
 
         this.add(stakeField, 2, 0);
         stakeField.setPromptText("Total stake");
 
+        stakeField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+                if(newValue.equals(null) || newValue.equals("")){
+                    return;
+                }
+
+                try{
+                    totalStake = Long.parseLong(newValue);
+                } catch (NumberFormatException e) {
+                    return;
+                }
+
+                recalucalte();
+            }
+        });
+
         this.add(makeStakeButton, 2, 1);
+
+        makeStakeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+            }
+        });
 
         this.setHgap(10);
         this.setVgap(10);
     }
 
-    public Event getFirstCriteria() {
-        return eventOne;
+    public Arb getArb() {
+        return arb;
     }
 
-    public void setEventOne(Event eventOne) {
-        this.eventOne = eventOne;
+    public void setArb(Arb arb) {
+
+        this.getFirstCriteria().setBookie(arb.getBookieOne().getName());
+        this.getFirstCriteria().setOddType(arb.getBookieOne().getOddType());
+        this.getFirstCriteria().setOdd(arb.getBookieOne().getOdd().toString());
+        this.getFirstCriteria().setTeamName(arb.getBookieOne().getTeamOneName());
+
+        this.getSecondCriteria().setBookie(arb.getBookieTwo().getName());
+        this.getSecondCriteria().setOddType(arb.getBookieTwo().getOddType());
+        this.getSecondCriteria().setOdd(arb.getBookieTwo().getOdd().toString());
+        this.getSecondCriteria().setTeamName(arb.getBookieOne().getTeamTwoName());
+
+        this.arb = arb;
+
+        recalucalte();
+    }
+
+    protected void recalucalte() {
+
+        if(arb == null) {
+            return;
+        }
+
+        Calc.Pair<Double> wins = Calc.wins(new Double(totalStake), arb.getBookieOne().getOdd(), arb.getBookieTwo().getOdd());
+
+        this.getFirstCriteria().setWin(presentDouble(wins.getA()));
+        this.getSecondCriteria().setWin(presentDouble(wins.getB()));
+
+        this.getFirstCriteria().setTotalWin(presentDouble(wins.getA() + totalStake));
+        this.getSecondCriteria().setTotalWin(presentDouble(wins.getB() + totalStake));
+    }
+
+    private String presentDouble(Double value){
+        return (new DecimalFormat("#0.00")).format(value);
+    }
+
+    public Event getFirstCriteria() {
+        return firstCriteria;
+    }
+
+    public void setFirstCriteria(Event firstCriteria) {
+        this.firstCriteria = firstCriteria;
     }
 
     public Event getSecondCriteria() {
-        return eventTwo;
+        return secondCriteria;
     }
 
-    public void setEventTwo(Event eventTwo) {
-        this.eventTwo = eventTwo;
+    public void setSecondCriteria(Event secondCriteria) {
+        this.secondCriteria = secondCriteria;
     }
 }

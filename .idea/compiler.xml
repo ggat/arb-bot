@@ -12,9 +12,9 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
-      <module name="DataSources" target="1.8" />
-      <module name="Gui" target="1.8" />
-      <module name="ShitBot" target="1.8" />
+      <module name="DataSources" target="1.5" />
+      <module name="Gui" target="1.5" />
+      <module name="ShitBot" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -15,6 +15,22 @@ public class Calc {
             this.a = a;
             this.b = b;
         }
+
+        public T getA() {
+            return a;
+        }
+
+        public void setA(T a) {
+            this.a = a;
+        }
+
+        public T getB() {
+            return b;
+        }
+
+        public void setB(T b) {
+            this.b = b;
+        }
     }
 
     //TODO: Use big decimals for precision.

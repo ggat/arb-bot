@@ -95,16 +95,9 @@ public class Main extends Application {
         tableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Arb>() {
             @Override
             public void changed(ObservableValue<? extends Arb> observable, Arb oldValue, Arb newValue) {
-                if(newValue != null) {
-                    arbDetailsPanel.getFirstCriteria().setBookie(newValue.getBookieOne().getName());
-                    arbDetailsPanel.getFirstCriteria().setOddType(newValue.getBookieOne().getOddType());
-                    arbDetailsPanel.getFirstCriteria().setOdd(newValue.getBookieOne().getOdd().toString());
-                    arbDetailsPanel.getFirstCriteria().setTeamName(newValue.getBookieOne().getTeamOneName());
-                } else {
-                    arbDetailsPanel.getSecondCriteria().setBookie(newValue.getBookieTwo().getName());
-                    arbDetailsPanel.getSecondCriteria().setOddType(newValue.getBookieTwo().getOddType());
-                    arbDetailsPanel.getSecondCriteria().setOdd(newValue.getBookieTwo().getOdd().toString());
-                    arbDetailsPanel.getSecondCriteria().setTeamName(newValue.getBookieTwo().getTeamTwoName());
+
+                if(newValue != null){
+                    arbDetailsPanel.setArb(newValue);
                 }
             }
         } /*(obs, oldSelection, newSelection) -> {
