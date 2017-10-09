@@ -4,30 +4,66 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ge.shitbot.datasources.datatypes.Arb;
 import com.fasterxml.jackson.core.type.TypeReference;
 import ge.shitbot.datasources.exceptions.DataSourceException;
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpHeaders;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by giga on 9/27/17.
  */
-public class MainDataSource<T extends Arb> {
+public class MainDataSource<T extends Arb> implements ArbDataSource {
 
 
     public static void main(String[] args) throws Exception {
         (new MainDataSource()).getArbs();
     }
 
-    protected String getRawData() throws IOException, URISyntaxException {
+    public String getRawData() throws DataSourceException {
 
+        return fromHttpService();
+    }
+
+    private String fromFile() throws DataSourceException {
         Path path = Paths.get("/home/giga/Projects/ShitBot/DataSources/src/main/java/ge/shitbot/datasources/source/Arb.json");
 
-        return new String(Files.readAllBytes(path));
+        String data = null;
+        try {
+            data = new String(Files.readAllBytes(path));
+        } catch (IOException e) {
+            throw new DataSourceException(e);
+        }
+
+        return data;
+    }
+
+    private String fromHttpService() throws DataSourceException {
+
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        ObjectMapper mapper = new ObjectMapper();
+
+        HttpGet request = new HttpGet("http://134.119.177.191:8000/Api/Totalizator/GetProfitData");
+
+        //request.setEntity(new StringEntity(mapper.writeValueAsString(params)));
+
+        request.setHeader(HttpHeaders.ACCEPT, "application/json");
+
+        try {
+            HttpResponse response = httpClient.execute(request);
+
+            return IOUtils.toString(response.getEntity().getContent());
+
+        } catch (IOException e) {
+            throw new DataSourceException(e);
+        }
     }
 
     public List<T> getArbs() throws DataSourceException {
@@ -64,7 +100,8 @@ public class MainDataSource<T extends Arb> {
 
             arbs = mapper.readValue(value, new TypeReference<List<T>>(){});
         } catch (Exception e) {
-            throw new DataSourceException("Could not get data.", e);
+            throw ((e instanceof DataSourceException) ? (DataSourceException) e :
+                    new DataSourceException("Could not get data.", e));
         }
 
         System.out.println(arbs.size());

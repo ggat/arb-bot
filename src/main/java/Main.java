@@ -18,7 +18,7 @@ public class Main {
 
         List<BookieDriver> bookieDrivers = new ArrayList<BookieDriver>();
 
-        bookieDrivers.add(new EuropeBetDriver(new ChromeDriver()));
+        //bookieDrivers.add(new EuropeBetDriver(new ChromeDriver()));
         bookieDrivers.add(new AdjaraBetDriver(new ChromeDriver()));
         bookieDrivers.add(new BetLiveDriver(new ChromeDriver()));
         bookieDrivers.add(new LiderBetDriver(new ChromeDriver()));
