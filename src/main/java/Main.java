@@ -1,3 +1,4 @@
+import drivers.AbstractBookieDriver;
 import drivers.bookies.*;
 import drivers.BookieDriver;
 import org.openqa.selenium.WebDriver;
@@ -41,7 +42,7 @@ public class Main {
 
         System.out.println("End balance: " + totalBalance);*/
 
-        CrystalBetDriver crystalBetDriver = new CrystalBetDriver(new ChromeDriver());
+        AdjaraBetDriver crystalBetDriver = new AdjaraBetDriver(new ChromeDriver());
 
         crystalBetDriver.createBet("ესპანეთი", "ლა ლიგა", "ჟირონა", "ვილიარეალი", 1.65);
 

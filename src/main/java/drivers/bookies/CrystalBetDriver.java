@@ -12,7 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 /**
  * Created by giga on 9/13/17.
  */
-public class CrystalBetDriver extends AbstractBookieDriver implements BookieDriver {
+public class CrystalBetDriver extends BookieDriverGeneral implements BookieDriver {
 
     String baseUrl = "https://www.crystalbet.com/Pages/StartPage.aspx";
     String user = "zurabinio";
@@ -98,33 +98,4 @@ public class CrystalBetDriver extends AbstractBookieDriver implements BookieDriv
 
     }
 
-    protected WebElement presenceOfElementLocated(By by) {
-        return (new WebDriverWait(webDriver, 10))
-                .until(ExpectedConditions.presenceOfElementLocated(by));
-    }
-
-    protected void ensureClick(By by) {
-        ensureClick(by, 1500L);
-    }
-
-    protected void ensureClick(By by, Long timeout) {
-        try {
-            // nav სპორტი
-            WebElement element = presenceOfElementLocated(by);
-
-            try {
-                Thread.sleep(timeout);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            element.click();
-
-            // It seems we find element before page refreshes after login and then it not in current DOM anymore
-            // so we try to find it again.
-        } catch (StaleElementReferenceException e) {
-
-            presenceOfElementLocated(by).click();
-        }
-    }
 }

@@ -13,7 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 /**
  * Created by giga on 9/13/17.
  */
-public class AdjaraBetDriver extends AbstractBookieDriver implements BookieDriver {
+public class AdjaraBetDriver extends BookieDriverGeneral implements BookieDriver {
 
     String baseUrl = "https://www.adjarabet.com/ka";
     String user = "ggat";
@@ -74,6 +74,45 @@ public class AdjaraBetDriver extends AbstractBookieDriver implements BookieDrive
         }
 
         return true;
+    }
+
+    public void createBet(String category, String subCategory, String teamOneName, String teamTwoName, Double oddConfirmation) {
+
+        if(!isLoggedIn()) {
+            login();
+        }
+
+        //nav სპორტი
+        //NOTE: string(.) is used to get entire child nodes as string.
+        presenceOfElementLocated(By.xpath("/html/body/my-app/my-header/div/adj-list/a[contains(string(.), 'სპორტი')]")).click();
+
+        //aside ფეხბურთი
+        presenceOfElementLocated(By.xpath("//*[@id=\"Cat27\" and contains(string(.), 'ფეხბურთი')]")).click();
+
+
+        //TODO: Here we should go deeper and ten return up. cause there may be tow ესპანეთი.
+        //aside ფეხბურთი
+        presenceOfElementLocated(By.xpath("//*[@id=\"Cat27\" and contains(string(.), 'ფეხბურთი')]/following-sibling::div/ul/li/a/span[contains(@class, 'category') and contains(text(), 'ესპანეთი')]")).click();
+
+        //aside ფეხბურთი
+        presenceOfElementLocated(By.xpath("//*[@id=\"Cat27\" and contains(string(.), 'ფეხბურთი')]/following-sibling::div/ul/li/a/span[contains(@class, 'category') and contains(text(), 'ესპანეთი')]/parent::a/following-sibling::ul/li/a[contains(text(), 'ლა ლიგა')]")).click();
+
+        //System.out.println(element.getText());
+
+        /*// nav სპორტი
+        ensureClick(By.xpath("//a[@id=\"ctl00_hlSports\"]"));
+        // cat ფეხბურთი
+        presenceOfElementLocated(By.xpath("/*//*[@id=\"x_menu_items_block\"]/a[contains(@onclick, 'DoSportTypePostBack(16)')]")).click();
+        // category
+
+        //FIXME: If team names are too short or empty it will match lot of odd rows, most probably first row will be selected
+        //FIXME: Currently we choose odds using td index which may change in future.
+        //TODO: Add event date confirmation
+        // rowWithOdds
+        presenceOfElementLocated(By.xpath("//div[contains(@class, 'x_loop_title_bg') and contains(text(), '"+category+"') and contains(text(), '"+ subCategory +"')]/parent::div/following-sibling::div[contains(@class, 'x_loop_list')]/table/tbody/tr[contains(@class, 'x_loop_game_title_block')]/td[contains(@class, 'x_game_title')]//span[contains(text(), '"+teamOneName+"') and contains(text(), '"+teamTwoName+"')]/parent::td/parent::tr/td[6]")).click();
+
+        //TODO: Add odd confirmation.*/
+
     }
 
     public Long getBalance() {
