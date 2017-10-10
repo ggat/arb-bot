@@ -14,7 +14,7 @@ public class Main {
 
     public static void main(String[] args) throws Throwable {
 
-        Long totalBalance = 0L;
+        /*Long totalBalance = 0L;
 
         List<BookieDriver> bookieDrivers = new ArrayList<BookieDriver>();
 
@@ -39,7 +39,11 @@ public class Main {
             }
         }
 
-        System.out.println("End balance: " + totalBalance);
+        System.out.println("End balance: " + totalBalance);*/
+
+        CrystalBetDriver crystalBetDriver = new CrystalBetDriver(new ChromeDriver());
+
+        crystalBetDriver.createBet("ესპანეთი", "ლა ლიგა", "ჟირონა", "ვილიარეალი", 1.65);
 
         /*BookieDriver europe = new EuropeBetDriver(new ChromeDriver());
         BookieDriver adjara = new AdjaraBetDriver(new ChromeDriver());
