@@ -78,6 +78,11 @@ public class AdjaraBetDriver extends BookieDriverGeneral implements BookieDriver
 
     public void createBet(String category, String subCategory, String teamOneName, String teamTwoName, Double oddConfirmation) {
 
+        //FIXME: If team names are too short or empty it will match lot of odd rows, most probably first row will be selected
+        //FIXME: Currently we choose odds using td index which may change in future.
+        //TODO: Add event date confirmation
+        //TODO: Add odd confirmation.*/
+
         if(!isLoggedIn()) {
             login();
         }
@@ -92,26 +97,13 @@ public class AdjaraBetDriver extends BookieDriverGeneral implements BookieDriver
 
         //TODO: Here we should go deeper and ten return up. cause there may be tow ესპანეთი.
         //aside ფეხბურთი
-        presenceOfElementLocated(By.xpath("//*[@id=\"Cat27\" and contains(string(.), 'ფეხბურთი')]/following-sibling::div/ul/li/a/span[contains(@class, 'category') and contains(text(), 'ესპანეთი')]")).click();
+        presenceOfElementLocated(By.xpath("//*[@id=\"Cat27\" and contains(string(.), 'ფეხბურთი')]/following-sibling::div/ul/li/a/span[contains(@class, 'category') and contains(text(), '"+ category +"')]")).click();
 
         //aside ფეხბურთი
-        presenceOfElementLocated(By.xpath("//*[@id=\"Cat27\" and contains(string(.), 'ფეხბურთი')]/following-sibling::div/ul/li/a/span[contains(@class, 'category') and contains(text(), 'ესპანეთი')]/parent::a/following-sibling::ul/li/a[contains(text(), 'ლა ლიგა')]")).click();
+        presenceOfElementLocated(By.xpath("//*[@id=\"Cat27\" and contains(string(.), 'ფეხბურთი')]/following-sibling::div/ul/li/a/span[contains(@class, 'category') and contains(text(), '"+ category +"')]/parent::a/following-sibling::ul/li/a[contains(text(), '"+ subCategory +"')]")).click();
 
-        //System.out.println(element.getText());
-
-        /*// nav სპორტი
-        ensureClick(By.xpath("//a[@id=\"ctl00_hlSports\"]"));
-        // cat ფეხბურთი
-        presenceOfElementLocated(By.xpath("/*//*[@id=\"x_menu_items_block\"]/a[contains(@onclick, 'DoSportTypePostBack(16)')]")).click();
-        // category
-
-        //FIXME: If team names are too short or empty it will match lot of odd rows, most probably first row will be selected
-        //FIXME: Currently we choose odds using td index which may change in future.
-        //TODO: Add event date confirmation
-        // rowWithOdds
-        presenceOfElementLocated(By.xpath("//div[contains(@class, 'x_loop_title_bg') and contains(text(), '"+category+"') and contains(text(), '"+ subCategory +"')]/parent::div/following-sibling::div[contains(@class, 'x_loop_list')]/table/tbody/tr[contains(@class, 'x_loop_game_title_block')]/td[contains(@class, 'x_game_title')]//span[contains(text(), '"+teamOneName+"') and contains(text(), '"+teamTwoName+"')]/parent::td/parent::tr/td[6]")).click();
-
-        //TODO: Add odd confirmation.*/
+        //actually picking a bet
+        presenceOfElementLocated(By.xpath("//*[@id=\"Sport27\"]/div/div[contains(@class, 'games-container')]/div/div[contains(@class, 'collapsible-header')]/h3[contains(string(.), '"+ subCategory +"') and contains(string(.), '" + category +  "')]/parent::div/following-sibling::div[contains(@class, 'collapsible-body')]//tbody/tr/td[contains(@class, 'cell-pair') and contains(string(.), '"+teamOneName+"') and contains(string(.), '"+teamTwoName+"')]/parent::tr/td["+ 6 +"]")).click();
 
     }
 
