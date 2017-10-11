@@ -44,7 +44,7 @@ public class Main {
 
         EuropeBetDriver crystalBetDriver = new EuropeBetDriver(new ChromeDriver());
 
-        crystalBetDriver.createBet("ესპანეთი", "სეგუნდა დივიზიონი", "ლორკა", "სარაგოსა", 1.65);
+        crystalBetDriver.createBet("გერმანია", "ბუნდესლიგა", "ჰოფენჰაიმი", "აუგსბურგი", 1.65);
 
         /*BookieDriver europe = new EuropeBetDriver(new ChromeDriver());
         BookieDriver adjara = new AdjaraBetDriver(new ChromeDriver());

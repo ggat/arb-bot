@@ -1,5 +1,8 @@
 package ge.shitbot.gui;
 
+import drivers.BookieDriver;
+import drivers.BookieDriverRegistry;
+import exceptions.BookieDriverNotFoundException;
 import ge.shitbot.datasources.datatypes.Arb;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -169,7 +172,20 @@ public class ArbDetailsPanel extends GridPane {
         makeStakeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                Arb.Bookie bookie1 = arb.getBookieOne();
+                Arb.Bookie bookie2 = arb.getBookieTwo();
 
+                try {
+                    BookieDriver bookieDriver1 = BookieDriverRegistry.getDriver(bookie1.getName());
+                    BookieDriver bookieDriver2 = BookieDriverRegistry.getDriver(bookie2.getName());
+
+                    bookieDriver1.createBet(bookie1.getCategory(), bookie1.getSubCategory(), bookie1.getTeamOneName(), bookie1.getTeamTwoName(), 1.0);
+                    bookieDriver2.createBet(bookie2.getCategory(), bookie2.getSubCategory(), bookie2.getTeamOneName(), bookie2.getTeamTwoName(), 1.0);
+
+                } catch (BookieDriverNotFoundException e) {
+                    //TODO: Show message about this situation to GUI.
+                    e.printStackTrace();
+                }
             }
         });
 

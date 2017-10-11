@@ -138,7 +138,8 @@ public class EuropeBetDriver extends BookieDriverGeneral implements BookieDriver
             sportCategoryButton.click();
         }
 
-        presenceOfElementLocated(By.xpath("//*[@id=\"category-tree-container-1\"]/div/div[contains(@class, 'category-container')]/div[contains(@class, 'category2-title pointer') and contains(string(.), '"+ category +"')]/following-sibling::div[contains(@class, 'cat3-row') and contains(string(.), '"+ subCategory +"')]")).click();
+        //Final span is important here we must click on span instead of its div with class cat3-row*, cause click on div may not work.
+        presenceOfElementLocated(By.xpath("//*[@id=\"category-tree-container-1\"]/div/div[contains(@class, 'category-container')]/div[contains(@class, 'category2-title pointer') and contains(string(.), '"+ category +"')]/following-sibling::div[contains(@class, 'cat3-row')]/span[contains(string(.), '"+ subCategory +"')]")).click();
 
         presenceOfElementLocated(By.xpath("//div[@id=\"category-page\"]//div[contains(@class, 'events-table')]//div[contains(@id, 'c-level3-header') and contains(string(.), '" + category + "') and contains(string(.), '" + subCategory + "')]/following-sibling::div[contains(@id, 'c-level3-row')]/div[2][contains(string(.), '"+ teamOneName +"') and contains(string(.), '" + teamTwoName + "')]/following-sibling::div[contains(@class, 'outcome-row')]/div[contains(@id, 'outcome-')][6]")).click();
 
