@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 /**
  * Created by giga on 9/13/17.
  */
-public class EuropeBetDriver extends AbstractBookieDriver implements BookieDriver {
+public class EuropeBetDriver extends BookieDriverGeneral implements BookieDriver {
 
     String baseUrl = "https://www.europebet.com/ka";
     String user = "i.gatenashvili";
@@ -114,5 +114,33 @@ public class EuropeBetDriver extends AbstractBookieDriver implements BookieDrive
                     "/div[1]/div/div[2]/div/div[contains(@class, 'bonustamount')]")).getText().trim().replaceAll(",", ".");
 
         return Math.round(Double.parseDouble(stringAmount) * 100);
+    }
+
+    public void createBet(String category, String subCategory, String teamOneName, String teamTwoName, Double oddConfirmation) {
+
+        //FIXME: If team names are too short or empty it will match lot of odd rows, most probably first row will be selected
+        //FIXME: Currently we choose odds using td index which may change in future.
+        //TODO: Add event date confirmation
+        //TODO: Add odd confirmation.*/
+
+        if(!isLoggedIn()) {
+            login();
+        }
+
+        ensureClick(By.xpath("//*[@id=\"site\"]/header/nav/div/div/ul[contains(@class, 'topmenu')]/li/a[contains(text(), 'სპორტი')]"));
+
+        webDriver.switchTo().frame("gameIFrame");
+
+        WebElement sportCategoryButton = presenceOfElementLocated(By.xpath("//*[@id=\"select-sports-panel-placeholder\"]/div[contains(@class, 'select-sports-panel')]//div/span[contains(@class, 'sport-name') and contains(text(), 'ფეხბურთი')]/ancestor::div[contains(@class, 'subcategory-buttons-row')][1]/div"));
+
+        // Sport category may be already selected
+        if( ! sportCategoryButton.getAttribute("class").contains("active")){
+            sportCategoryButton.click();
+        }
+
+        presenceOfElementLocated(By.xpath("//*[@id=\"category-tree-container-1\"]/div/div[contains(@class, 'category-container')]/div[contains(@class, 'category2-title pointer') and contains(string(.), '"+ category +"')]/following-sibling::div[contains(@class, 'cat3-row') and contains(string(.), '"+ subCategory +"')]")).click();
+
+        presenceOfElementLocated(By.xpath("//div[@id=\"category-page\"]//div[contains(@class, 'events-table')]//div[contains(@id, 'c-level3-header') and contains(string(.), '" + category + "') and contains(string(.), '" + subCategory + "')]/following-sibling::div[contains(@id, 'c-level3-row')]/div[2][contains(string(.), '"+ teamOneName +"') and contains(string(.), '" + teamTwoName + "')]/following-sibling::div[contains(@class, 'outcome-row')]/div[contains(@id, 'outcome-')][6]")).click();
+
     }
 }

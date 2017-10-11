@@ -42,9 +42,9 @@ public class Main {
 
         System.out.println("End balance: " + totalBalance);*/
 
-        AdjaraBetDriver crystalBetDriver = new AdjaraBetDriver(new ChromeDriver());
+        EuropeBetDriver crystalBetDriver = new EuropeBetDriver(new ChromeDriver());
 
-        crystalBetDriver.createBet("ესპანეთი", "ლა ლიგა", "ჟირონა", "ვილიარეალი", 1.65);
+        crystalBetDriver.createBet("ესპანეთი", "სეგუნდა დივიზიონი", "ლორკა", "სარაგოსა", 1.65);
 
         /*BookieDriver europe = new EuropeBetDriver(new ChromeDriver());
         BookieDriver adjara = new AdjaraBetDriver(new ChromeDriver());

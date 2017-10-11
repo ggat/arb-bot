@@ -1,10 +1,7 @@
 package drivers.bookies;
 
 import drivers.AbstractBookieDriver;
-import org.openqa.selenium.By;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -18,7 +15,10 @@ public class BookieDriverGeneral extends AbstractBookieDriver {
     }
 
     protected WebElement presenceOfElementLocated(By by) {
-        return (new WebDriverWait(webDriver, 10))
+        return presenceOfElementLocated(10L, by);
+    }
+    protected WebElement presenceOfElementLocated(Long timeOut, By by) {
+        return (new WebDriverWait(webDriver, timeOut))
                 .until(ExpectedConditions.presenceOfElementLocated(by));
     }
 
@@ -45,5 +45,10 @@ public class BookieDriverGeneral extends AbstractBookieDriver {
 
             presenceOfElementLocated(by).click();
         }
+    }
+
+    protected void windowScroll(Long x, Long y) {
+        JavascriptExecutor jse = (JavascriptExecutor)webDriver;
+        jse.executeScript("window.scrollBy(" + x + ", " + y + ")", "");
     }
 }
