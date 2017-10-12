@@ -167,6 +167,10 @@ public class EuropeBetDriver extends BookieDriverGeneral implements BookieDriver
 
         int index = Arrays.asList(arr).indexOf(oddType);
 
-        return index == -1 ? -1 : index + 1;
+        if( index == -1 ) {
+            throw new UnknownOddTypeException("Odd type [" + oddType + "]");
+        }
+
+        return index + 1;
     }
 }

@@ -16,7 +16,7 @@ import java.util.HashMap;
 /**
  * Created by giga on 9/13/17.
  */
-public class BetLiveDriver extends AbstractBookieDriver implements BookieDriver {
+public class BetLiveDriver extends BookieDriverGeneral implements BookieDriver {
 
     String baseUrl = "https://www.betlive.com/ka";
     String user = "i.gatenashvili";
@@ -76,7 +76,9 @@ public class BetLiveDriver extends AbstractBookieDriver implements BookieDriver 
         return Math.round(Double.parseDouble(rawBalance) * 100);
     }
 
-    public void createBet(String category, String subcategory, String teamOneName, String teamTwoName, String oddType, Double amount, Double oddConfirmation) {
+    public void createBet(String category, String subcategory, String teamOneName, String teamTwoName, String oddType, Double amount, Double oddConfirmation) throws UnknownOddTypeException {
+
+        int oddTypeIndex = getOddTypeIndex(oddType);
 
         login();
 
@@ -108,24 +110,10 @@ public class BetLiveDriver extends AbstractBookieDriver implements BookieDriver 
 
         String rowSelector = "//*[@id='main_grid_container']/div[2]/div[1]/div[2]/table/tbody/tr//span[contains(@class, 'event_name') and contains(@title, '"+teamOneName+"') and contains(@title, '"+teamTwoName+"')]/parent::td/parent::tr";
 
-        WebElement row = (new WebDriverWait(webDriver, 10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath(rowSelector)));
-
         //TODO: check if this date matches to our date.
-        String date = row.findElement(By.xpath("//td[contains(@class, 'lg_date')]")).getText();
+        String date = presenceOfElementLocated(By.xpath(rowSelector + "/td[contains(@class, 'lg_date')]")).getText();
 
-        HashMap<String, String> oddTypeMatchers = new HashMap<>();
-
-        oddTypeMatchers.put("1", "1");
-        oddTypeMatchers.put("X", "X");
-        oddTypeMatchers.put("2", "2");
-
-        //TODO: We shoul find odd type <TD> positions to ensure they have same indexes as before.
-        String headerRowSelector = "//*[@id=\"main_grid_container\"]/div[2]/div[1]/div[2]/table/tbody/tr[contains(@class, 'lg_table_row') and contains(@class, 'header')]";
-
-        row.findElement(By.xpath("//*[@id='main_grid_container']/div[2]/div[1]/div[2]/table/tbody/tr//span[contains(@class, 'event_name') and contains(@title, '"+teamOneName+"') and contains(@title, '"+teamTwoName+"')]/parent::td/parent::tr/td[3]")).click();
-
-        WebElement odd = row.findElement(By.xpath("//td[3]"));
+        WebElement odd = presenceOfElementLocated(By.xpath(rowSelector + "/td[contains(@class, 'oddItem')]["+ oddTypeIndex +"]"));
         try {
             Thread.sleep(3000L);
         } catch (InterruptedException e) {
@@ -134,17 +122,23 @@ public class BetLiveDriver extends AbstractBookieDriver implements BookieDriver 
 
         odd.click();
 
-        //row.click();
+        WebElement stakeInput = presenceOfElementLocated(By.xpath("//*[@id=\"betslip_control\"]/div[contains(@class, 'betslip_stake') and contains(string(.), 'ფსონი')]/input"));
+        stakeInput.clear();
+        stakeInput.sendKeys(presentDouble(amount));
     }
 
     //Non-zero based index
     protected int getOddTypeIndex(String oddType) throws UnknownOddTypeException {
 
-        String[] arr = {"1", "", "2", "1X", "", "X2", "", "", "Yes", "No"};
+        String[] arr = {"1", "", "2", "1X", "", "X2", "", "", "", "", "Yes", "No"};
 
         int index = Arrays.asList(arr).indexOf(oddType);
 
-        return index == -1 ? -1 : index + 1;
+        if( index == -1 ) {
+            throw new UnknownOddTypeException("Odd type [" + oddType + "]");
+        }
+
+        return index + 1;
     }
 
     public void close(){
