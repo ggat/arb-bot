@@ -3,6 +3,7 @@ package ge.shitbot.gui;
 import drivers.BookieDriver;
 import drivers.BookieDriverRegistry;
 import exceptions.BookieDriverNotFoundException;
+import exceptions.UnknownOddTypeException;
 import ge.shitbot.datasources.datatypes.Arb;
 import ge.shitbot.gui.service.BotService;
 import javafx.beans.value.ChangeListener;
@@ -184,7 +185,7 @@ public class ArbDetailsPanel extends GridPane {
                     botService.createBet(bookie1, stakes.getA());
                     botService.createBet(bookie2, stakes.getB());
 
-                } catch (BookieDriverNotFoundException e) {
+                } catch (BookieDriverNotFoundException | UnknownOddTypeException e) {
                     //TODO: Show message about this situation to GUI.
                     e.printStackTrace();
                 }

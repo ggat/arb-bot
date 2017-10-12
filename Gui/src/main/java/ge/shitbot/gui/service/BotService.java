@@ -3,6 +3,7 @@ package ge.shitbot.gui.service;
 import drivers.BookieDriver;
 import drivers.BookieDriverRegistry;
 import exceptions.BookieDriverNotFoundException;
+import exceptions.UnknownOddTypeException;
 import ge.shitbot.datasources.datatypes.Arb;
 
 /**
@@ -10,11 +11,11 @@ import ge.shitbot.datasources.datatypes.Arb;
  */
 public class BotService {
 
-    public void createBet(Arb.Bookie bookie, Double amount) throws BookieDriverNotFoundException {
+    public void createBet(Arb.Bookie bookie, Double amount) throws BookieDriverNotFoundException, UnknownOddTypeException {
 
         BookieDriver bookieDriver = BookieDriverRegistry.getDriver(bookie.getName());
 
         bookieDriver.createBet(bookie.getCategory(), bookie.getSubCategory(), bookie.getTeamOneName(),
-                bookie.getTeamTwoName(), amount, bookie.getOdd());
+                bookie.getTeamTwoName(), bookie.getOddType(), amount, bookie.getOdd());
     }
 }
