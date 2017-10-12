@@ -62,7 +62,7 @@ public class LiderBetDriver extends BookieDriverGeneral implements BookieDriver 
         return Math.round(Double.parseDouble(rawBalance) * 100);
     }
 
-    public void createBet(String category, String subCategory, String teamOneName, String teamTwoName, Double oddConfirmation) {
+    public void createBet(String category, String subCategory, String teamOneName, String teamTwoName, Double amount, Double oddConfirmation) {
 
         //FIXME: If team names are too short or empty it will match lot of odd rows, most probably first row will be selected
         //FIXME: Currently we choose odds using td index which may change in future.

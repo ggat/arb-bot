@@ -74,7 +74,7 @@ public class BetLiveDriver extends AbstractBookieDriver implements BookieDriver 
         return Math.round(Double.parseDouble(rawBalance) * 100);
     }
 
-    public void createBet(String category, String subcategory, String teamOneName, String teamTwoName, Double oddConfirmation) {
+    public void createBet(String category, String subcategory, String teamOneName, String teamTwoName, Double amount, Double oddConfirmation) {
 
         login();
 

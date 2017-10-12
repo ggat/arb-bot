@@ -4,6 +4,7 @@ import drivers.BookieDriver;
 import drivers.BookieDriverRegistry;
 import exceptions.BookieDriverNotFoundException;
 import ge.shitbot.datasources.datatypes.Arb;
+import ge.shitbot.gui.service.BotService;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -172,15 +173,16 @@ public class ArbDetailsPanel extends GridPane {
         makeStakeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+
+                BotService botService = new BotService();
                 Arb.Bookie bookie1 = arb.getBookieOne();
                 Arb.Bookie bookie2 = arb.getBookieTwo();
 
-                try {
-                    BookieDriver bookieDriver1 = BookieDriverRegistry.getDriver(bookie1.getName());
-                    BookieDriver bookieDriver2 = BookieDriverRegistry.getDriver(bookie2.getName());
+                Calc.Pair<Double> stakes = Calc.stakes(new Double(totalStake), bookie1.getOdd(), bookie2.getOdd());
 
-                    bookieDriver1.createBet(bookie1.getCategory(), bookie1.getSubCategory(), bookie1.getTeamOneName(), bookie1.getTeamTwoName(), 1.0);
-                    bookieDriver2.createBet(bookie2.getCategory(), bookie2.getSubCategory(), bookie2.getTeamOneName(), bookie2.getTeamTwoName(), 1.0);
+                try {
+                    botService.createBet(bookie1, stakes.getA());
+                    botService.createBet(bookie2, stakes.getB());
 
                 } catch (BookieDriverNotFoundException e) {
                     //TODO: Show message about this situation to GUI.
@@ -220,7 +222,11 @@ public class ArbDetailsPanel extends GridPane {
             return;
         }
 
+        Calc.Pair<Double> stakes = Calc.stakes(new Double(totalStake), arb.getBookieOne().getOdd(), arb.getBookieTwo().getOdd());
         Calc.Pair<Double> wins = Calc.wins(new Double(totalStake), arb.getBookieOne().getOdd(), arb.getBookieTwo().getOdd());
+
+        this.getFirstCriteria().setStake(presentDouble(stakes.getA()));
+        this.getSecondCriteria().setStake(presentDouble(stakes.getB()));
 
         this.getFirstCriteria().setWin(presentDouble(wins.getA()));
         this.getSecondCriteria().setWin(presentDouble(wins.getB()));
