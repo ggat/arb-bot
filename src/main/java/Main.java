@@ -42,7 +42,7 @@ public class Main {
 
         System.out.println("End balance: " + totalBalance);*/
 
-        BetLiveDriver crystalBetDriver = new BetLiveDriver(new ChromeDriver());
+        CrystalBetDriver crystalBetDriver = new CrystalBetDriver(new ChromeDriver());
 
         crystalBetDriver.createBet("ესპანეთი", "ლა ლიგა 2", "ოსასუნა", "ალბასეტე", "Yes", 24.0, 1.65);
 

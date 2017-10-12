@@ -2,12 +2,15 @@ package drivers.bookies;
 
 import drivers.AbstractBookieDriver;
 import drivers.BookieDriver;
+import exceptions.UnknownOddTypeException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.Arrays;
 
 /**
  * Created by giga on 9/13/17.
@@ -73,7 +76,10 @@ public class CrystalBetDriver extends BookieDriverGeneral implements BookieDrive
         return Math.round(Double.parseDouble(rawBalance) * 100);
     }
 
-    public void createBet(String category, String subCategory, String teamOneName, String teamTwoName, String oddType, Double amount, Double oddConfirmation) {
+    public void createBet(String category, String subCategory, String teamOneName, String teamTwoName, String oddType, Double amount, Double oddConfirmation) throws UnknownOddTypeException {
+
+        // +2 cause first is TD is 'date' and second is 'team names'
+        int oddTypeIndex = getOddTypeIndex(oddType) + 2;
 
         if(!isLoggedIn()) {
             login();
@@ -92,10 +98,30 @@ public class CrystalBetDriver extends BookieDriverGeneral implements BookieDrive
         //FIXME: Currently we choose odds using td index which may change in future.
         //TODO: Add event date confirmation
         // rowWithOdds
-        presenceOfElementLocated(By.xpath("//div[contains(@class, 'x_loop_title_bg') and contains(text(), '"+category+"') and contains(text(), '"+ subCategory +"')]/parent::div/following-sibling::div[contains(@class, 'x_loop_list')]/table/tbody/tr[contains(@class, 'x_loop_game_title_block')]/td[contains(@class, 'x_game_title')]//span[contains(text(), '"+teamOneName+"') and contains(text(), '"+teamTwoName+"')]/parent::td/parent::tr/td[6]")).click();
+        presenceOfElementLocated(By.xpath("//div[contains(@class, 'x_loop_title_bg') and contains(text(), '"+category+"') and contains(text(), '"+ subCategory +"')]/parent::div/following-sibling::div[contains(@class, 'x_loop_list')]/table/tbody/tr[contains(@class, 'x_loop_game_title_block')]/td[contains(@class, 'x_game_title')]//span[contains(text(), '"+teamOneName+"') and contains(text(), '"+teamTwoName+"')]/parent::td/parent::tr/td["+oddTypeIndex+"]")).click();
+
+        WebElement stakeInput = presenceOfElementLocated(By.xpath("//*[@id=\"TextBoxAmount\"]"));
+
+        stakeInput.clear();
+
+        stakeInput.sendKeys(presentDouble(amount));
 
         //TODO: Add odd confirmation.
 
+    }
+
+    //Non-zero based index
+    protected int getOddTypeIndex(String oddType) throws UnknownOddTypeException {
+
+        String[] arr = {"1", "", "2", "1X", "X2", "", "", "", "", "", "Yes", "No"};
+
+        int index = Arrays.asList(arr).indexOf(oddType);
+
+        if( index == -1 ) {
+            throw new UnknownOddTypeException("Odd type [" + oddType + "]");
+        }
+
+        return index + 1;
     }
 
 }
