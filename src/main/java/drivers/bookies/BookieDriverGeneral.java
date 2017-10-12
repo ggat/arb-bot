@@ -5,6 +5,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by giga on 10/10/17.
  */
@@ -50,5 +52,9 @@ public class BookieDriverGeneral extends AbstractBookieDriver {
     protected void windowScroll(Long x, Long y) {
         JavascriptExecutor jse = (JavascriptExecutor)webDriver;
         jse.executeScript("window.scrollBy(" + x + ", " + y + ")", "");
+    }
+
+    protected String presentDouble(Double value){
+        return (new DecimalFormat("#0.00")).format(value);
     }
 }

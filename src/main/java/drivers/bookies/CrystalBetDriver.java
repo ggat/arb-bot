@@ -73,7 +73,7 @@ public class CrystalBetDriver extends BookieDriverGeneral implements BookieDrive
         return Math.round(Double.parseDouble(rawBalance) * 100);
     }
 
-    public void createBet(String category, String subCategory, String teamOneName, String teamTwoName, Double amount, Double oddConfirmation) {
+    public void createBet(String category, String subCategory, String teamOneName, String teamTwoName, String oddType, Double amount, Double oddConfirmation) {
 
         if(!isLoggedIn()) {
             login();

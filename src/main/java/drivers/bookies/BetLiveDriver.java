@@ -3,12 +3,14 @@ package drivers.bookies;
 import drivers.AbstractBookieDriver;
 import drivers.BookieDriver;
 import exceptions.BookieDriverException;
+import exceptions.UnknownOddTypeException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -74,7 +76,7 @@ public class BetLiveDriver extends AbstractBookieDriver implements BookieDriver 
         return Math.round(Double.parseDouble(rawBalance) * 100);
     }
 
-    public void createBet(String category, String subcategory, String teamOneName, String teamTwoName, Double amount, Double oddConfirmation) {
+    public void createBet(String category, String subcategory, String teamOneName, String teamTwoName, String oddType, Double amount, Double oddConfirmation) {
 
         login();
 
@@ -133,6 +135,16 @@ public class BetLiveDriver extends AbstractBookieDriver implements BookieDriver 
         odd.click();
 
         //row.click();
+    }
+
+    //Non-zero based index
+    protected int getOddTypeIndex(String oddType) throws UnknownOddTypeException {
+
+        String[] arr = {"1", "", "2", "1X", "", "X2", "", "", "Yes", "No"};
+
+        int index = Arrays.asList(arr).indexOf(oddType);
+
+        return index == -1 ? -1 : index + 1;
     }
 
     public void close(){

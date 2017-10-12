@@ -76,7 +76,7 @@ public class AdjaraBetDriver extends BookieDriverGeneral implements BookieDriver
         return true;
     }
 
-    public void createBet(String category, String subCategory, String teamOneName, String teamTwoName, Double amount, Double oddConfirmation) {
+    public void createBet(String category, String subCategory, String teamOneName, String teamTwoName, String oddType, Double amount, Double oddConfirmation) {
 
         //FIXME: If team names are too short or empty it will match lot of odd rows, most probably first row will be selected
         //FIXME: Currently we choose odds using td index which may change in future.

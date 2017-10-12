@@ -2,11 +2,17 @@ package drivers.bookies;
 
 import drivers.AbstractBookieDriver;
 import drivers.BookieDriver;
+import exceptions.UnknownOddTypeException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by giga on 9/13/17.
@@ -116,12 +122,15 @@ public class EuropeBetDriver extends BookieDriverGeneral implements BookieDriver
         return Math.round(Double.parseDouble(stringAmount) * 100);
     }
 
-    public void createBet(String category, String subCategory, String teamOneName, String teamTwoName, Double amount, Double oddConfirmation) {
+    public void createBet(String category, String subCategory, String teamOneName, String teamTwoName, String oddType,
+                          Double amount, Double oddConfirmation) throws UnknownOddTypeException {
 
         //FIXME: If team names are too short or empty it will match lot of odd rows, most probably first row will be selected
         //FIXME: Currently we choose odds using td index which may change in future.
         //TODO: Add event date confirmation
         //TODO: Add odd confirmation.*/
+
+        int oddTypeIndex = getOddTypeIndex(oddType);
 
         if(!isLoggedIn()) {
             login();
@@ -141,7 +150,23 @@ public class EuropeBetDriver extends BookieDriverGeneral implements BookieDriver
         //Final span is important here we must click on span instead of its div with class cat3-row*, cause click on div may not work.
         presenceOfElementLocated(By.xpath("//*[@id=\"category-tree-container-1\"]/div/div[contains(@class, 'category-container')]/div[contains(@class, 'category2-title pointer') and contains(string(.), '"+ category +"')]/following-sibling::div[contains(@class, 'cat3-row')]/span[contains(string(.), '"+ subCategory +"')]")).click();
 
-        presenceOfElementLocated(By.xpath("//div[@id=\"category-page\"]//div[contains(@class, 'events-table')]//div[contains(@id, 'c-level3-header') and contains(string(.), '" + category + "') and contains(string(.), '" + subCategory + "')]/following-sibling::div[contains(@id, 'c-level3-row')]/div[2][contains(string(.), '"+ teamOneName +"') and contains(string(.), '" + teamTwoName + "')]/following-sibling::div[contains(@class, 'outcome-row')]/div[contains(@id, 'outcome-')][6]")).click();
+        presenceOfElementLocated(By.xpath("//div[@id=\"category-page\"]//div[contains(@class, 'events-table')]//div[contains(@id, 'c-level3-header') and contains(string(.), '" + category + "') and contains(string(.), '" + subCategory + "')]/following-sibling::div[contains(@id, 'c-level3-row')]/div[2][contains(string(.), '"+ teamOneName +"') and contains(string(.), '" + teamTwoName + "')]/following-sibling::div[contains(@class, 'outcome-row')]/div[contains(@id, 'outcome-')][" + oddTypeIndex + "]")).click();
 
+        WebElement stakeInput = presenceOfElementLocated(By.xpath("//*[@id=\"simple-stake\"]"));
+
+        stakeInput.clear();
+
+        stakeInput.sendKeys(presentDouble(amount));
+
+    }
+
+    //Non-zero based index
+    protected int getOddTypeIndex(String oddType) throws UnknownOddTypeException {
+
+        String[] arr = {"1", "", "2", "1X", "", "X2", "", "", "Yes", "No"};
+
+        int index = Arrays.asList(arr).indexOf(oddType);
+
+        return index == -1 ? -1 : index + 1;
     }
 }

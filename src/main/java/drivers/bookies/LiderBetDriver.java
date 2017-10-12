@@ -2,12 +2,15 @@ package drivers.bookies;
 
 import drivers.AbstractBookieDriver;
 import drivers.BookieDriver;
+import exceptions.UnknownOddTypeException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.Arrays;
 
 /**
  * Created by giga on 9/13/17.
@@ -62,12 +65,14 @@ public class LiderBetDriver extends BookieDriverGeneral implements BookieDriver 
         return Math.round(Double.parseDouble(rawBalance) * 100);
     }
 
-    public void createBet(String category, String subCategory, String teamOneName, String teamTwoName, Double amount, Double oddConfirmation) {
+    public void createBet(String category, String subCategory, String teamOneName, String teamTwoName, String oddType, Double amount, Double oddConfirmation) throws UnknownOddTypeException {
 
         //FIXME: If team names are too short or empty it will match lot of odd rows, most probably first row will be selected
         //FIXME: Currently we choose odds using td index which may change in future.
         //TODO: Add event date confirmation
         //TODO: Add odd confirmation.*/
+
+        int oddTypeIndex = getOddTypeIndex(oddType);
 
         if(!isLoggedIn()) {
             login();
@@ -85,7 +90,23 @@ public class LiderBetDriver extends BookieDriverGeneral implements BookieDriver 
         windowScroll(0L, 1000L);
 
         //Prick particular odd by confirming category/subCategory/event
-        presenceOfElementLocated(By.xpath("//div[contains(@class, 'game-category-list')]/div[contains(@class, 'category_wraper')]/div[contains(@class, 'category_wraper_line')]/div[contains(@class, 'category_wraper_title') and contains(string(.), '"+category+"') and contains(string(.), '"+subCategory+"')]/parent::div/following-sibling::div[contains(@class, 'game-list')]//div[contains(@class, 'match-list')]/div/div/div/div[contains(@class, 'game_ev') and contains(text(), '"+teamOneName+"') and contains(text(), '"+teamTwoName+"')]/parent::div/parent::div/following-sibling::div/table/tbody/tr/td[4]")).click();
+        presenceOfElementLocated(By.xpath("//div[contains(@class, 'game-category-list')]/div[contains(@class, 'category_wraper')]/div[contains(@class, 'category_wraper_line')]/div[contains(@class, 'category_wraper_title') and contains(string(.), '"+category+"') and contains(string(.), '"+subCategory+"')]/parent::div/following-sibling::div[contains(@class, 'game-list')]//div[contains(@class, 'match-list')]/div/div/div/div[contains(@class, 'game_ev') and contains(text(), '"+teamOneName+"') and contains(text(), '"+teamTwoName+"')]/parent::div/parent::div/following-sibling::div/table/tbody/tr/td["+oddTypeIndex+"]")).click();
 
+        WebElement stakeInput = presenceOfElementLocated(By.xpath("/html/body/table/tbody/tr/td/div/div/div[contains(@class, 'ticket_bottom_panel')]/table/tbody/tr/td/div/div[contains(@class, 'fsoni1_wraper')]/following-sibling::input[contains(@class, 'fsoni') and contains(@onkeyup, 'calc_bet_1')]"));
+
+        stakeInput.clear();
+
+        stakeInput.sendKeys(presentDouble(amount));
+
+    }
+
+    //Non-zero based index
+    protected int getOddTypeIndex(String oddType) throws UnknownOddTypeException {
+
+        String[] arr = {"1", "", "2", "1X", "X2", "", "", "", "", "", "", "Yes", "No"};
+
+        int index = Arrays.asList(arr).indexOf(oddType);
+
+        return index == -1 ? -1 : index + 1;
     }
 }
