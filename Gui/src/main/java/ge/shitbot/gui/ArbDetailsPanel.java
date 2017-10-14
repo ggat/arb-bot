@@ -1,9 +1,7 @@
 package ge.shitbot.gui;
 
-import drivers.BookieDriver;
-import drivers.BookieDriverRegistry;
-import exceptions.BookieDriverNotFoundException;
-import exceptions.UnknownOddTypeException;
+import ge.shitbot.bot.exceptions.BookieDriverNotFoundException;
+import ge.shitbot.bot.exceptions.UnknownOddTypeException;
 import ge.shitbot.datasources.datatypes.Arb;
 import ge.shitbot.gui.service.BotService;
 import javafx.beans.value.ChangeListener;
@@ -12,15 +10,10 @@ import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
 
 import java.text.DecimalFormat;
 

@@ -1,4 +1,4 @@
-package drivers;
+package ge.shitbot.bot.drivers;
 
 import org.openqa.selenium.WebDriver;
 

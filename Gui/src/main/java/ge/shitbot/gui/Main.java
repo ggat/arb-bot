@@ -4,6 +4,8 @@ import ge.shitbot.datasources.datatypes.Arb;
 import ge.shitbot.datasources.exceptions.DataSourceException;
 import ge.shitbot.datasources.source.ArbDataSource;
 import ge.shitbot.datasources.source.MainDataSource;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
@@ -24,6 +26,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.Duration;
 
 import java.sql.Date;
 
@@ -251,11 +254,20 @@ public class Main extends Application {
 
         table.getColumns().addAll(action, myProfit, stake, profit,date, hostID, guestID, bookeOne, bookieTwo);
 
-        try {
-            table.setItems(getArbs());
-        } catch (DataSourceException e) {
-            e.printStackTrace();
-        }
+        Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("this is called every 5 seconds on UI thread");
+                try {
+                    table.setItems(getArbs());
+                } catch (DataSourceException e) {
+                    e.printStackTrace();
+                }
+            }
+        }));
+        fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
+        fiveSecondsWonder.play();
 
         /*final Label label = new Label("Address Book");
 

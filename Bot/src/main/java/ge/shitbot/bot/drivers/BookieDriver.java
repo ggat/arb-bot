@@ -1,6 +1,6 @@
-package drivers;
+package ge.shitbot.bot.drivers;
 
-import exceptions.UnknownOddTypeException;
+import ge.shitbot.bot.exceptions.UnknownOddTypeException;
 
 import java.io.Closeable;
 

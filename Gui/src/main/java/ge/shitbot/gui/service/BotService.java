@@ -1,9 +1,9 @@
 package ge.shitbot.gui.service;
 
-import drivers.BookieDriver;
-import drivers.BookieDriverRegistry;
-import exceptions.BookieDriverNotFoundException;
-import exceptions.UnknownOddTypeException;
+import ge.shitbot.bot.drivers.BookieDriver;
+import ge.shitbot.bot.drivers.BookieDriverRegistry;
+import ge.shitbot.bot.exceptions.BookieDriverNotFoundException;
+import ge.shitbot.bot.exceptions.UnknownOddTypeException;
 import ge.shitbot.datasources.datatypes.Arb;
 
 /**

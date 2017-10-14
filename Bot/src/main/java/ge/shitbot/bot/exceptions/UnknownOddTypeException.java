@@ -1,4 +1,4 @@
-package exceptions;
+package ge.shitbot.bot.exceptions;
 
 /**
  * Created by giga on 9/30/17.

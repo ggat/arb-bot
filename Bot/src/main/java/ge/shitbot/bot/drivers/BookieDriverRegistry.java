@@ -1,10 +1,8 @@
-package drivers;
+package ge.shitbot.bot.drivers;
 
-import drivers.bookies.*;
-import exceptions.BookieDriverNotFoundException;
+import ge.shitbot.bot.drivers.bookies.*;
+import ge.shitbot.bot.exceptions.BookieDriverNotFoundException;
 import org.openqa.selenium.chrome.ChromeDriver;
-
-import java.util.*;
 
 /**
  * Created by giga on 10/11/17.
@@ -47,6 +45,6 @@ public class BookieDriverRegistry {
             e.printStackTrace();
         }
 
-        //System.out.println(drivers.get("BetLive"));
+        //System.out.println(ge.shitbot.bot.drivers.get("BetLive"));
     }
 }

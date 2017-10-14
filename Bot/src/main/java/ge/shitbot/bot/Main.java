@@ -1,12 +1,7 @@
-import drivers.AbstractBookieDriver;
-import drivers.bookies.*;
-import drivers.BookieDriver;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+package ge.shitbot.bot;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import ge.shitbot.bot.drivers.bookies.AdjaraBetDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 /**
  * Created by giga on 9/13/17.

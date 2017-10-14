@@ -1,9 +1,7 @@
-package drivers.bookies;
+package ge.shitbot.bot.drivers.bookies;
 
-import drivers.AbstractBookieDriver;
-import drivers.BookieDriver;
-import exceptions.BookieDriverException;
-import exceptions.UnknownOddTypeException;
+import ge.shitbot.bot.drivers.BookieDriver;
+import ge.shitbot.bot.exceptions.UnknownOddTypeException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,7 +9,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * Created by giga on 9/13/17.

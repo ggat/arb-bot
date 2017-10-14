@@ -6,15 +6,19 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="Bot" />
         <module name="DataSources" />
         <module name="Gui" />
         <module name="shit-bot-gui" />
+        <module name="shitbot-bot" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
+      <module name="Bot" target="1.8" />
       <module name="DataSources" target="1.8" />
       <module name="Gui" target="1.8" />
       <module name="ShitBot" target="1.8" />
+      <module name="shitbot-bot" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

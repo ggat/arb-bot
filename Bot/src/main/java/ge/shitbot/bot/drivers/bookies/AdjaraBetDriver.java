@@ -1,8 +1,7 @@
-package drivers.bookies;
+package ge.shitbot.bot.drivers.bookies;
 
-import drivers.AbstractBookieDriver;
-import drivers.BookieDriver;
-import exceptions.UnknownOddTypeException;
+import ge.shitbot.bot.drivers.BookieDriver;
+import ge.shitbot.bot.exceptions.UnknownOddTypeException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
