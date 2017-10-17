@@ -2,7 +2,7 @@ package ge.shitbot.bot.drivers.bookies;
 
 import ge.shitbot.bot.drivers.BookieDriver;
 import ge.shitbot.bot.exceptions.UnknownOddTypeException;
-import org.openqa.selenium.By;
+import ge.shitbot.bot.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -66,7 +66,7 @@ public class BetLiveDriver extends BookieDriverGeneral implements BookieDriver {
         login();
 
         WebElement balanceElement = (new WebDriverWait(webDriver, 10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/header/div/div[1]/div[1]/div[2]/div[3]/span[contains(@class, 'userBalanceVal')]")));
+                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/header/div/div[1]/div[1]/div[2]/div[3]/span[hasClass('userBalanceVal')]")));
 
         String rawBalance = balanceElement.getText().trim().replaceAll("GEL", "").replaceAll(",", ".").trim();
 
