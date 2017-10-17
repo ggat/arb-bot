@@ -1,9 +1,9 @@
 package ge.shitbot.bot.drivers.bookies;
 
 import ge.shitbot.bot.drivers.BookieDriver;
+import ge.shitbot.bot.drivers.BookieDriverGeneral;
 import ge.shitbot.bot.exceptions.UnknownOddTypeException;
 import org.openqa.selenium.By;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;

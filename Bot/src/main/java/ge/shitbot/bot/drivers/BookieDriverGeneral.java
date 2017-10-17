@@ -1,4 +1,4 @@
-package ge.shitbot.bot.drivers.bookies;
+package ge.shitbot.bot.drivers;
 
 import ge.shitbot.bot.drivers.AbstractBookieDriver;
 import org.openqa.selenium.*;

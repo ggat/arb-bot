@@ -41,12 +41,13 @@ public class Main {
 
         System.out.println("End balance: " + totalBalance);*/
 
-        BookieDriver bookieDriver = new BetLiveDriver(new ChromeDriver());
+        //BookieDriver bookieDriver = new BetLiveDriver(new ChromeDriver());
+        BookieDriver bookieDriver = new CrocoBetDriver(new ChromeDriver());
 
-        //crystalBetDriver.createBet("ესპანეთი", "ლა ლიგა 2", "ოსასუნა", "ალბასეტე", "Yes", 24.0, 1.65);
-        Long balance = bookieDriver.getBalance();
+        bookieDriver.createBet("ესპანეთი", "ლა ლიგა 2", "ოსასუნა", "ალბასეტე", "Yes", 24.0, 1.65);
+        //Long balance = bookieDriver.getBalance();
 
-        System.out.printf("Balance: " + balance);
+        //System.out.printf("Balance: " + balance);
 
         /*BookieDriver europe = new EuropeBetDriver(new ChromeDriver());
         BookieDriver adjara = new AdjaraBetDriver(new ChromeDriver());

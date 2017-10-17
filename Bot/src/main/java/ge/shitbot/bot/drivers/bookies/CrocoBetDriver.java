@@ -1,13 +1,11 @@
 package ge.shitbot.bot.drivers.bookies;
 
 import ge.shitbot.bot.drivers.BookieDriver;
+import ge.shitbot.bot.drivers.BookieDriverGeneral;
 import ge.shitbot.bot.exceptions.UnknownOddTypeException;
 import ge.shitbot.bot.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Arrays;
 
@@ -87,10 +85,13 @@ public class CrocoBetDriver extends BookieDriverGeneral implements BookieDriver 
 
         //TODO: Here we should go deeper and ten return up. cause there may be tow ესპანეთი.
         //aside ფეხბურთი
-        presenceOfElementLocated(By.xpath("//*[@id=\"Cat27\" and contains(string(.), 'ფეხბურთი')]/following-sibling::div/ul/li/a/span[contains(@class, 'category') and contains(text(), '"+ category +"')]")).click();
+        /*WebElement webElement = */presenceOfElementLocated(By.xpath("/html/body/div/div[contains(@class, 'main-content')]//div[contains(@class, 'sport-categories-box')]/div/div/ul[havingClass('sport-list') and havingClass('subcategory')]//span[havingClass('categoryName') and contains(string(.), 'ესპანეთი')]/ancestor::li[1]")).click();
+        /*WebElement subCategoryMenu = */presenceOfElementLocated(By.xpath("//*[contains(@id, 'categoryId_') and not(contains(@style, 'display: none'))]/li/span[contains(string(.), 'ლა ლიგა')]/ancestor::li[1]")).click();
 
-        //aside ფეხბურთი
-        presenceOfElementLocated(By.xpath("//*[@id=\"Cat27\" and contains(string(.), 'ფეხბურთი')]/following-sibling::div/ul/li/a/span[contains(@class, 'category') and contains(text(), '"+ category +"')]/parent::a/following-sibling::ul/li/a[contains(text(), '"+ subCategory +"')]")).click();
+        //Specific event row
+        presenceOfElementLocated(By.xpath("//*[@id=\"sport-content\"]//div[contains(@class, 'country-level')]//div[contains(@class, 'panel-body')]//div[contains(@class, 'league-level')]//span[contains(string(.), 'ესპანეთი') and contains(string(.), 'ლა ლიგა') ]/ancestor::div[contains(@class, 'league-level')]/following-sibling::div//div[contains(@class, 'panel-body')]/ul/li[contains(@class, 'single-event')]//li[contains(@class, 'period-item')]/div[havingClass('event') and havingClass('name') and contains(string(.), 'ლევანტე') and contains(string(.), 'ხეტაფე')]")).click();
+
+        //NOTE: After this line we need to finish.
 
         //actually picking a bet
         presenceOfElementLocated(By.xpath("//*[@id=\"Sport27\"]/div/div[contains(@class, 'games-container')]/div/div[contains(@class, 'collapsible-header')]/h3[contains(string(.), '"+ subCategory +"') and contains(string(.), '" + category +  "')]/parent::div/following-sibling::div[contains(@class, 'collapsible-body')]//tbody/tr/td[contains(@class, 'cell-pair') and contains(string(.), '"+teamOneName+"') and contains(string(.), '"+teamTwoName+"')]/parent::tr/td["+oddTypeIndex+"]")).click();
