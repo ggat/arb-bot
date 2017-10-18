@@ -1,5 +1,6 @@
 package ge.shitbot.bot.drivers.bookies;
 
+import ge.shitbot.bot.OddType;
 import ge.shitbot.bot.drivers.BookieDriver;
 import ge.shitbot.bot.drivers.BookieDriverGeneral;
 import ge.shitbot.bot.exceptions.UnknownOddTypeException;
@@ -124,14 +125,16 @@ public class CrocoBetDriver extends BookieDriverGeneral implements BookieDriver 
         HashMap<String, Poin> index = new HashMap<>();
 
         //String[] arr = {"1", "", "2", "1X", "", "X2", "", "", "", "", "Yes", "No"};
-        index.put("1", Poin.t(1,1));
-        index.put("X", Poin.t(1,2));
-        index.put("2", Poin.t(1,3));
-        index.put("1X", Poin.t(2,1));
-        index.put("12", Poin.t(2,2));
-        index.put("X2", Poin.t(2,3));
-        index.put("Yes", Poin.t(4,1));
-        index.put("No", Poin.t(4,2));
+        index.put(OddType.Win, Poin.t(1,1));
+        index.put(OddType.Draw, Poin.t(1,2));
+        index.put(OddType.Loose, Poin.t(1,3));
+        index.put(OddType.WinOrDraw, Poin.t(2,1));
+        index.put(OddType.WinOrLoose, Poin.t(2,2));
+        index.put(OddType.DrawOrLoose, Poin.t(2,3));
+        index.put(OddType.Under25, Poin.t(3,1));
+        index.put(OddType.Over25, Poin.t(3,3));
+        index.put(OddType.Yes, Poin.t(4,1));
+        index.put(OddType.No, Poin.t(4,2));
 
         if( !index.containsKey(oddType) ) {
             throw new UnknownOddTypeException("Odd type [" + oddType + "]");
