@@ -1,5 +1,6 @@
 package ge.shitbot.bot.drivers.bookies;
 
+import ge.shitbot.bot.OddType;
 import ge.shitbot.bot.drivers.BookieDriver;
 import ge.shitbot.bot.drivers.BookieDriverGeneral;
 import ge.shitbot.bot.exceptions.UnknownOddTypeException;
@@ -112,7 +113,19 @@ public class CrystalBetDriver extends BookieDriverGeneral implements BookieDrive
     //Non-zero based index
     protected int getOddTypeIndex(String oddType) throws UnknownOddTypeException {
 
-        String[] arr = {"1", "", "2", "1X", "X2", "", "", "", "", "", "Yes", "No"};
+        String[] arr = {
+                OddType.Win,
+                OddType.Draw,
+                OddType.Loose,
+                OddType.WinOrDraw,
+                OddType.DrawOrLoose,
+                OddType.WinOrLoose,
+                "",
+                "",
+                OddType.Under25,
+                OddType.Over25,
+                OddType.Yes,
+                OddType.No};
 
         int index = Arrays.asList(arr).indexOf(oddType);
 
