@@ -1,9 +1,9 @@
-package ge.shitbot.gui;
-
 import ge.shitbot.datasources.datatypes.Arb;
 import ge.shitbot.datasources.exceptions.DataSourceException;
 import ge.shitbot.datasources.source.ArbDataSource;
 import ge.shitbot.datasources.source.MainDataSource;
+import ge.shitbot.gui.ArbDetailsPanel;
+import ge.shitbot.gui.Calc;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;

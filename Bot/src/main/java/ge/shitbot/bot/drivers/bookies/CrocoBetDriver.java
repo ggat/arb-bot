@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Created by giga on 9/13/17.
@@ -25,6 +26,7 @@ public class CrocoBetDriver extends BookieDriverGeneral implements BookieDriver 
     protected void goToMainPage() {
 
         webDriver.get(baseUrl);
+        webDriver.manage().window().maximize();
     }
 
     protected void goToAccountPage() {
@@ -69,7 +71,7 @@ public class CrocoBetDriver extends BookieDriverGeneral implements BookieDriver 
         //TODO: Add event date confirmation
         //TODO: Add odd confirmation.*/
 
-        int oddTypeIndex = getOddTypeIndex(oddType) + 3;
+        Poin oddTypeIndex = getOddTypeIndex(oddType);
 
         if(!isLoggedIn()) {
             login();
@@ -85,18 +87,16 @@ public class CrocoBetDriver extends BookieDriverGeneral implements BookieDriver 
 
         //TODO: Here we should go deeper and ten return up. cause there may be tow ესპანეთი.
         //aside ფეხბურთი
-        /*WebElement webElement = */presenceOfElementLocated(By.xpath("/html/body/div/div[contains(@class, 'main-content')]//div[contains(@class, 'sport-categories-box')]/div/div/ul[havingClass('sport-list') and havingClass('subcategory')]//span[havingClass('categoryName') and contains(string(.), 'ესპანეთი')]/ancestor::li[1]")).click();
-        /*WebElement subCategoryMenu = */presenceOfElementLocated(By.xpath("//*[contains(@id, 'categoryId_') and not(contains(@style, 'display: none'))]/li/span[contains(string(.), 'ლა ლიგა')]/ancestor::li[1]")).click();
+        /*WebElement webElement = */presenceOfElementLocated(By.xpath("/html/body/div/div[contains(@class, 'main-content')]//div[contains(@class, 'sport-categories-box')]/div/div/ul[havingClass('sport-list') and havingClass('subcategory')]//span[havingClass('categoryName') and contains(string(.), '"+category+"')]/ancestor::li[1]")).click();
+        /*WebElement subCategoryMenu = */presenceOfElementLocated(By.xpath("//*[contains(@id, 'categoryId_') and not(contains(@style, 'display: none'))]/li/span[contains(string(.), '"+ subCategory +"')]/ancestor::li[1]")).click();
+
+        windowScroll(0L, 1000L);
 
         //Specific event row
-        presenceOfElementLocated(By.xpath("//*[@id=\"sport-content\"]//div[contains(@class, 'country-level')]//div[contains(@class, 'panel-body')]//div[contains(@class, 'league-level')]//span[contains(string(.), 'ესპანეთი') and contains(string(.), 'ლა ლიგა') ]/ancestor::div[contains(@class, 'league-level')]/following-sibling::div//div[contains(@class, 'panel-body')]/ul/li[contains(@class, 'single-event')]//li[contains(@class, 'period-item')]/div[havingClass('event') and havingClass('name') and contains(string(.), 'ლევანტე') and contains(string(.), 'ხეტაფე')]")).click();
+        presenceOfElementLocated(By.xpath("//*[@id=\"sport-content\"]//div[contains(@class, 'country-level')]//div[contains(@class, 'panel-body')]//div[contains(@class, 'league-level')]//span[contains(string(.), '"+ category +"') and contains(string(.), '"+ subCategory +"') ]/ancestor::div[contains(@class, 'league-level')]/following-sibling::div//div[contains(@class, 'panel-body')]/ul/li[contains(@class, 'single-event')]//li[contains(@class, 'period-item')]/div[contains(concat(' ', normalize-space(@class), ' '), 'event' ) and contains(concat(' ', normalize-space(@class), ' '), 'name' ) and contains(string(.), '" + teamOneName + "') and contains(string(.), '" + teamTwoName + "')]/following-sibling::div[havingClass('buttons-holder') and havingClass('main-holder')]/div["+ oddTypeIndex.x +"]/button["+ oddTypeIndex.y +"]")).click();
 
-        //NOTE: After this line we need to finish.
 
-        //actually picking a bet
-        presenceOfElementLocated(By.xpath("//*[@id=\"Sport27\"]/div/div[contains(@class, 'games-container')]/div/div[contains(@class, 'collapsible-header')]/h3[contains(string(.), '"+ subCategory +"') and contains(string(.), '" + category +  "')]/parent::div/following-sibling::div[contains(@class, 'collapsible-body')]//tbody/tr/td[contains(@class, 'cell-pair') and contains(string(.), '"+teamOneName+"') and contains(string(.), '"+teamTwoName+"')]/parent::tr/td["+oddTypeIndex+"]")).click();
-
-        WebElement stakeInput = presenceOfElementLocated(By.xpath("//*[@id=\"StakeValue\"]"));
+        WebElement stakeInput = presenceOfElementLocated(By.xpath("//*[@id=\"betslip-stake\"]"));
 
         stakeInput.clear();
 
@@ -104,18 +104,40 @@ public class CrocoBetDriver extends BookieDriverGeneral implements BookieDriver 
 
     }
 
+    private static class Poin{
+        int x;
+        int y;
+
+        public Poin(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public static Poin t(int x, int y) {
+            return new Poin(x, y);
+        }
+    }
+
     //Non-zero based index
-    protected int getOddTypeIndex(String oddType) throws UnknownOddTypeException {
+    protected Poin getOddTypeIndex(String oddType) throws UnknownOddTypeException {
 
-        String[] arr = {"1", "", "2", "1X", "", "X2", "", "", "", "", "Yes", "No"};
+        HashMap<String, Poin> index = new HashMap<>();
 
-        int index = Arrays.asList(arr).indexOf(oddType);
+        //String[] arr = {"1", "", "2", "1X", "", "X2", "", "", "", "", "Yes", "No"};
+        index.put("1", Poin.t(1,1));
+        index.put("X", Poin.t(1,2));
+        index.put("2", Poin.t(1,3));
+        index.put("1X", Poin.t(2,1));
+        index.put("12", Poin.t(2,2));
+        index.put("X2", Poin.t(2,3));
+        index.put("Yes", Poin.t(4,1));
+        index.put("No", Poin.t(4,2));
 
-        if( index == -1 ) {
+        if( !index.containsKey(oddType) ) {
             throw new UnknownOddTypeException("Odd type [" + oddType + "]");
         }
 
-        return index + 1;
+        return index.get(oddType);
     }
 
     public Long getBalance() {

@@ -137,7 +137,7 @@ public class ArbDetailsPanel extends GridPane {
     //User input feed from stakeField.
     Long totalStake = 100L;
 
-    ArbDetailsPanel(){
+    public ArbDetailsPanel(){
         this.add(firstCriteria, 0, 0);
         this.add(secondCriteria, 1, 0);
 

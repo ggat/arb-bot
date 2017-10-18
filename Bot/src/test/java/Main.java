@@ -1,10 +1,5 @@
-package ge.shitbot.bot;
-
 import ge.shitbot.bot.drivers.BookieDriver;
-import ge.shitbot.bot.drivers.bookies.AdjaraBetDriver;
-import ge.shitbot.bot.drivers.bookies.BetLiveDriver;
 import ge.shitbot.bot.drivers.bookies.CrocoBetDriver;
-import ge.shitbot.bot.drivers.bookies.LiderBetDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 /**
@@ -44,7 +39,7 @@ public class Main {
         //BookieDriver bookieDriver = new BetLiveDriver(new ChromeDriver());
         BookieDriver bookieDriver = new CrocoBetDriver(new ChromeDriver());
 
-        bookieDriver.createBet("ესპანეთი", "ლა ლიგა 2", "ოსასუნა", "ალბასეტე", "Yes", 24.0, 1.65);
+        bookieDriver.createBet("ესპანეთი", "ლა ლიგა", "ბეტისი", "ალავესი", "Yes", 24.0, 1.65);
         //Long balance = bookieDriver.getBalance();
 
         //System.out.printf("Balance: " + balance);

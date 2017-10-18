@@ -30,6 +30,9 @@ public class BookieDriverRegistry {
             case "LiderBet":
                 created = new LiderBetDriver(new ChromeDriver());
             break;
+            case "CrocoBet":
+                created = new CrocoBetDriver(new ChromeDriver());
+            break;
             default:
                 throw new BookieDriverNotFoundException("Driver not found for bookie with name " + name);
         }
