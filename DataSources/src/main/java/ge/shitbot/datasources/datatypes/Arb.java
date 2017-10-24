@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * Created by giga on 9/27/17.
@@ -83,7 +84,7 @@ public class Arb {
     private Double profit;
 
     @JsonDeserialize(using = DateDeserializer.class)
-    private Date date;
+    private Timestamp date;
     private Long hostID;
     private Long guestID;
 
@@ -129,11 +130,11 @@ public class Arb {
         this.profit = profit;
     }
 
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 

@@ -29,6 +29,7 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * Created by giga on 9/13/17.
@@ -226,6 +227,31 @@ public class Main extends Application {
             }
         });
 
+        TableColumn score = new TableColumn("Score");
+
+        score.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Arb, Double>, StringExpression>() {
+            @Override
+            public StringExpression call(TableColumn.CellDataFeatures<Arb, Double> cellDataFeatures) {
+
+                Double profit = Calc.profit(cellDataFeatures.getValue().getBookieOne().getOdd(),
+                        cellDataFeatures.getValue().getBookieTwo().getOdd());
+
+                Timestamp date = cellDataFeatures.getValue().getDate();
+
+                long diff = Math.abs(date.getTime() - System.currentTimeMillis());
+
+                double score = 0;
+
+                if(profit - 0.5 > 0 && diff > (30 * 60 * 1000)) {
+                    double diffDays = new Double(diff) / (24 * 60 * 60 * 1000);
+
+                    score = profit / diffDays;
+                }
+
+                return Bindings.format("%.2f", score);
+            }
+        });
+
         TableColumn profit = new TableColumn("Profit");
         TableColumn date = new TableColumn("Date");
 
@@ -252,8 +278,13 @@ public class Main extends Application {
         hostID.setCellValueFactory(new PropertyValueFactory<Arb, Long>("hostID"));
         guestID.setCellValueFactory(new PropertyValueFactory<Arb, Long>("guestID"));
 
-        table.getColumns().addAll(action, myProfit, stake, profit,date, hostID, guestID, bookeOne, bookieTwo);
+        table.getColumns().addAll(action, myProfit, score, stake, profit,date, hostID, guestID, bookeOne, bookieTwo);
 
+        try {
+            table.setItems(getArbs());
+        } catch (DataSourceException e) {
+            e.printStackTrace();
+        }
         Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(20), new EventHandler<ActionEvent>() {
 
             @Override
