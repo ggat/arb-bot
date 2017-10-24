@@ -76,7 +76,7 @@ public class CrystalBetDriver extends BookieDriverGeneral implements BookieDrive
         return Math.round(Double.parseDouble(rawBalance) * 100);
     }
 
-    public void createBet(String category, String subCategory, String teamOneName, String teamTwoName, String oddType, Double amount, Double oddConfirmation) throws UnknownOddTypeException {
+    protected void createBetImpl(String category, String subCategory, String teamOneName, String teamTwoName, String oddType, Double amount, Double oddConfirmation) throws UnknownOddTypeException {
 
         // +2 cause first is TD is 'date' and second is 'team names'
         int oddTypeIndex = getOddTypeIndex(oddType) + 2;

@@ -10,7 +10,7 @@ import java.text.DecimalFormat;
 /**
  * Created by giga on 10/10/17.
  */
-public class BookieDriverGeneral extends AbstractBookieDriver {
+public abstract class BookieDriverGeneral extends AbstractBookieDriver {
 
     public BookieDriverGeneral(WebDriver webDriver) {
         super(webDriver);

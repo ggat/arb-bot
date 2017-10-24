@@ -75,7 +75,7 @@ public class BetLiveDriver extends BookieDriverGeneral implements BookieDriver {
         return Math.round(Double.parseDouble(rawBalance) * 100);
     }
 
-    public void createBet(String category, String subcategory, String teamOneName, String teamTwoName, String oddType, Double amount, Double oddConfirmation) throws UnknownOddTypeException {
+    protected void createBetImpl(String category, String subcategory, String teamOneName, String teamTwoName, String oddType, Double amount, Double oddConfirmation) throws UnknownOddTypeException {
 
         int oddTypeIndex = getOddTypeIndex(oddType);
 

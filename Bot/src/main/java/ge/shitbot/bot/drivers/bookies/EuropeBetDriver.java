@@ -120,7 +120,7 @@ public class EuropeBetDriver extends BookieDriverGeneral implements BookieDriver
         return Math.round(Double.parseDouble(stringAmount) * 100);
     }
 
-    public void createBet(String category, String subCategory, String teamOneName, String teamTwoName, String oddType,
+    protected void createBetImpl(String category, String subCategory, String teamOneName, String teamTwoName, String oddType,
                           Double amount, Double oddConfirmation) throws UnknownOddTypeException {
 
         //FIXME: If team names are too short or empty it will match lot of odd rows, most probably first row will be selected

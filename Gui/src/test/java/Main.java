@@ -254,7 +254,7 @@ public class Main extends Application {
 
         table.getColumns().addAll(action, myProfit, stake, profit,date, hostID, guestID, bookeOne, bookieTwo);
 
-        Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>() {
+        Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(20), new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
