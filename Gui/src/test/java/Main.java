@@ -30,6 +30,8 @@ import javafx.util.Duration;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.util.Comparator;
 
 /**
  * Created by giga on 9/13/17.
@@ -227,6 +229,15 @@ public class Main extends Application {
             }
         });
 
+        myProfit.setComparator(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                Double d1 = Double.parseDouble(o1);
+                Double d2 = Double.parseDouble(o2);
+                return Double.compare(d1,d2);
+            }
+        });
+
         TableColumn score = new TableColumn("Score");
 
         score.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Arb, Double>, StringExpression>() {
@@ -242,13 +253,22 @@ public class Main extends Application {
 
                 double score = 0;
 
-                if(profit - 0.5 > 0 && diff > (30 * 60 * 1000)) {
+                //if(profit - 0.5 > 0 && diff > (30 * 60 * 1000)) {
                     double diffDays = new Double(diff) / (24 * 60 * 60 * 1000);
 
-                    score = profit / diffDays;
-                }
+                    score = profit * profit / diffDays;
+                //}
 
                 return Bindings.format("%.2f", score);
+            }
+        });
+
+        score.setComparator(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                Double d1 = Double.parseDouble(o1);
+                Double d2 = Double.parseDouble(o2);
+                return Double.compare(d2,d1);
             }
         });
 
@@ -280,8 +300,11 @@ public class Main extends Application {
 
         table.getColumns().addAll(action, myProfit, score, stake, profit,date, hostID, guestID, bookeOne, bookieTwo);
 
+
         try {
             table.setItems(getArbs());
+            table.getSortOrder().addAll(score);
+            table.sort();
         } catch (DataSourceException e) {
             e.printStackTrace();
         }
@@ -292,6 +315,8 @@ public class Main extends Application {
                 System.out.println("this is called every 5 seconds on UI thread");
                 try {
                     table.setItems(getArbs());
+                    table.getSortOrder().addAll(score);
+                    table.sort();
                 } catch (DataSourceException e) {
                     e.printStackTrace();
                 }

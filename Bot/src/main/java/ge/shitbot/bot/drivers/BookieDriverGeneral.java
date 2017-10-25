@@ -19,9 +19,19 @@ public abstract class BookieDriverGeneral extends AbstractBookieDriver {
     protected WebElement presenceOfElementLocated(By by) {
         return presenceOfElementLocated(10L, by);
     }
+
     protected WebElement presenceOfElementLocated(Long timeOut, By by) {
         return (new WebDriverWait(webDriver, timeOut))
                 .until(ExpectedConditions.presenceOfElementLocated(by));
+    }
+
+    protected WebElement visibilityOfElementLocated(Long timeOut, By by) {
+        return (new WebDriverWait(webDriver, timeOut))
+                .until(ExpectedConditions.visibilityOfElementLocated(by));
+    }
+
+    protected WebElement visibilityOfElementLocated(By by) {
+        return visibilityOfElementLocated(10L, by);
     }
 
     protected void ensureClick(By by) {

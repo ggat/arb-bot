@@ -89,7 +89,9 @@ public class CrocoBetDriver extends BookieDriverGeneral implements BookieDriver 
         //TODO: Here we should go deeper and ten return up. cause there may be tow ესპანეთი.
         //aside ფეხბურთი
         /*WebElement webElement = */presenceOfElementLocated(By.xpath("/html/body/div/div[contains(@class, 'main-content')]//div[contains(@class, 'sport-categories-box')]/div/div/ul[havingClass('sport-list') and havingClass('subcategory')]//span[havingClass('categoryName') and contains(string(.), '"+category+"')]/ancestor::li[1]")).click();
-        /*WebElement subCategoryMenu = */presenceOfElementLocated(By.xpath("//*[contains(@id, 'categoryId_') and not(contains(@style, 'display: none'))]/li/span[contains(string(.), '"+ subCategory +"')]/ancestor::li[1]")).click();
+        WebElement subCategoryMenuItem = visibilityOfElementLocated(By.xpath("//*[contains(@id, 'categoryId_') and not(contains(@style, 'display: none'))]/li/span[contains(string(.), '"+ subCategory +"')]/ancestor::li[1]"));
+        subCategoryMenuItem.click();
+        //subCategoryMenuItem = visibilityOfElementLocated(By.xpath("//*[contains(@id, 'categoryId_') and not(contains(@style, 'display: none'))]/li/span[contains(string(.), '"+ subCategory +"')]/ancestor::li[1]"));
 
         windowScroll(0L, 1000L);
 
