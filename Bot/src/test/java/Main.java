@@ -1,4 +1,5 @@
 import ge.shitbot.bot.drivers.BookieDriver;
+import ge.shitbot.bot.drivers.bookies.AdjaraBetDriver;
 import ge.shitbot.bot.drivers.bookies.CrocoBetDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -37,9 +38,9 @@ public class Main {
         System.out.println("End balance: " + totalBalance);*/
 
         //BookieDriver bookieDriver = new BetLiveDriver(new ChromeDriver());
-        BookieDriver bookieDriver = new CrocoBetDriver(new ChromeDriver());
+        BookieDriver bookieDriver = new AdjaraBetDriver(new ChromeDriver());
 
-        bookieDriver.createBet("ესპანეთი", "ლა ლიგა", "ბეტისი", "ალავესი", "Yes", 24.0, 1.65);
+        bookieDriver.createBet("ინგლისი", "პრემიერლიგა", "არსენალი", "სუონსი სიტი", "Yes", 24.0, 1.65);
         //Long balance = bookieDriver.getBalance();
 
         //System.out.printf("Balance: " + balance);

@@ -26,6 +26,10 @@ public abstract class AbstractBookieDriver implements Closeable {
         teamTwoName = teamTwoName.trim();
         oddType = oddType.trim();
 
+        //FIXME: Tmp this is required due to Vakho failure.
+        category = category.replace("\n", " ").replace("\r", " ").replace("\r\n", " ");
+        subCategory = subCategory.replace("\n", " ").replace("\r", " ").replace("\r\n", " ");
+
         createBetImpl(category, subCategory, teamOneName, teamTwoName, oddType, amount, oddConfirmation);
     }
 

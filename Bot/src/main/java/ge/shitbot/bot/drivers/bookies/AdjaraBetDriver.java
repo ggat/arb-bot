@@ -62,7 +62,7 @@ public class AdjaraBetDriver extends BookieDriverGeneral implements BookieDriver
         //Input user name
         webDriver.findElement(By.xpath("//*[@id=\"username\"]")).sendKeys(user);
         webDriver.findElement(By.xpath("//*[@id=\"password\"]")).sendKeys(password);
-        webDriver.findElement(By.xpath("/html/body/my-app/my-header/div/adj-login/div/form/button[@type='submit']")).click();
+        webDriver.findElement(By.xpath("/html/body/my-app//adj-login//button[@type='submit']")).click();
 
     }
 
@@ -71,7 +71,7 @@ public class AdjaraBetDriver extends BookieDriverGeneral implements BookieDriver
         goToMainPage();
 
         try{
-            webDriver.findElement(By.xpath("/html/body/my-app/my-header/div/adj-login/div/button[contains(text(), 'გასვლა')]")).isDisplayed();
+            webDriver.findElement(By.xpath("//adj-account-dropdown")).isDisplayed();
         } catch (Throwable e) {
             return false;
         }
@@ -95,7 +95,7 @@ public class AdjaraBetDriver extends BookieDriverGeneral implements BookieDriver
 
         //nav სპორტი
         //NOTE: string(.) is used to get entire child nodes as string.
-        presenceOfElementLocated(By.xpath("/html/body/my-app/my-header/div/adj-list/a[contains(string(.), 'სპორტი')]")).click();
+        presenceOfElementLocated(By.xpath("/html/body/my-app/adj-item/adj-grid/div/adj-item/adj-grid/adj-item/a[contains(string(.), 'სპორტი')]")).click();
 
         //aside ფეხბურთი
         presenceOfElementLocated(By.xpath("//*[@id=\"Cat27\" and contains(string(.), 'ფეხბურთი')]")).click();
