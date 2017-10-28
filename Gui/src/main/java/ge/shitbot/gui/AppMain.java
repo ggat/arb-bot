@@ -1,3 +1,5 @@
+package ge.shitbot.gui;
+
 import ge.shitbot.datasources.datatypes.Arb;
 import ge.shitbot.datasources.exceptions.DataSourceException;
 import ge.shitbot.datasources.source.ArbDataSource;
@@ -35,7 +37,7 @@ import java.util.Comparator;
 /**
  * Created by giga on 9/13/17.
  */
-public class Main extends Application {
+public class AppMain extends javafx.application.Application {
 
     Label response;
     Label currentWidth;

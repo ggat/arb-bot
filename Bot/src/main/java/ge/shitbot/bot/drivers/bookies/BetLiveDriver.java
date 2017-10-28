@@ -124,6 +124,8 @@ public class BetLiveDriver extends BookieDriverGeneral implements BookieDriver {
         WebElement stakeInput = presenceOfElementLocated(By.xpath("//*[@id=\"betslip_control\"]/div[contains(@class, 'betslip_stake') and contains(string(.), 'ფსონი')]/input"));
         stakeInput.clear();
         stakeInput.sendKeys(presentDouble(amount));
+
+        webDriver.switchTo().defaultContent();
     }
 
     //Non-zero based index

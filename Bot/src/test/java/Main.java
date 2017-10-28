@@ -40,7 +40,7 @@ public class Main {
         //BookieDriver bookieDriver = new BetLiveDriver(new ChromeDriver());
         BookieDriver bookieDriver = new AdjaraBetDriver(new ChromeDriver());
 
-        bookieDriver.createBet("ინგლისი", "პრემიერლიგა", "არსენალი", "სუონსი სიტი", "Yes", 24.0, 1.65);
+        bookieDriver.createBet("ინგლისი", "პრემიერლიგა", "ნიუკასლი", "ბორნმუტი", "Yes", 24.0, 1.65);
         //Long balance = bookieDriver.getBalance();
 
         //System.out.printf("Balance: " + balance);

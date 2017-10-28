@@ -97,6 +97,8 @@ public class AdjaraBetDriver extends BookieDriverGeneral implements BookieDriver
         //NOTE: string(.) is used to get entire child nodes as string.
         presenceOfElementLocated(By.xpath("/html/body/my-app/adj-item/adj-grid/div/adj-item/adj-grid/adj-item/a[contains(string(.), 'სპორტი')]")).click();
 
+        webDriver.switchTo().frame("CustomSBContainer");
+
         //aside ფეხბურთი
         presenceOfElementLocated(By.xpath("//*[@id=\"Cat27\" and contains(string(.), 'ფეხბურთი')]")).click();
 
@@ -117,6 +119,7 @@ public class AdjaraBetDriver extends BookieDriverGeneral implements BookieDriver
 
         stakeInput.sendKeys(presentDouble(amount));
 
+        webDriver.switchTo().defaultContent();
     }
 
     //Non-zero based index
