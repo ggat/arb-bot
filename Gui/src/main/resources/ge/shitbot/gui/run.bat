@@ -1,0 +1,1 @@
+java -jar -Dfile.encoding=utf-8 shitbot-gui-0.3-bin.jar > all.log 2>&1

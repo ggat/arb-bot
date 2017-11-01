@@ -12,7 +12,6 @@
         <module>Gui</module>
         <module>DataSources</module>
         <module>Bot</module>
-        <module>Distribution</module>
     </modules>
 
     <properties>

@@ -4,11 +4,8 @@ import ge.shitbot.datasources.datatypes.Arb;
 import ge.shitbot.datasources.exceptions.DataSourceException;
 import ge.shitbot.datasources.source.ArbDataSource;
 import ge.shitbot.datasources.source.MainDataSource;
-import ge.shitbot.gui.ArbDetailsPanel;
-import ge.shitbot.gui.Calc;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -30,6 +27,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
 
+import java.net.URL;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Comparator;
@@ -82,6 +80,10 @@ public class AppMain extends javafx.application.Application {
 
         //Scene scene = new Scene(pane, 800, 600);
         Scene scene = new Scene(splitPane, 800, 600);
+
+        URL url = getClass().getResource("application.css");
+
+        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
         // Add resize listeners
         scene.widthProperty().addListener(new ChangeListener<Number>() {
