@@ -18,13 +18,5 @@
             <artifactId>selenium-server</artifactId>
             <version>3.0.1</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>5.2.11.Final</version>
-        </dependency>
-
     </dependencies>
 </project>
