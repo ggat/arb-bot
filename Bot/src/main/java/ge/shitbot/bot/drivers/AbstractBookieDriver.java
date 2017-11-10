@@ -1,6 +1,7 @@
 package ge.shitbot.bot.drivers;
 
 import ge.shitbot.bot.exceptions.UnknownOddTypeException;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 
 import java.io.Closeable;
@@ -30,7 +31,11 @@ public abstract class AbstractBookieDriver implements Closeable {
         category = category.replace("\r\n", " ").replace("\n", " ").replace("\r", " ");
         subCategory = subCategory.replace("\r\n", " ").replace("\n", " ").replace("\r", " ");
 
-        createBetImpl(category, subCategory, teamOneName, teamTwoName, oddType, amount, oddConfirmation);
+        try {
+            createBetImpl(category, subCategory, teamOneName, teamTwoName, oddType, amount, oddConfirmation);
+        } catch (NoSuchElementException e) {
+
+        }
     }
 
     protected abstract void createBetImpl(String category, String subCategory, String teamOneName, String teamTwoName,
