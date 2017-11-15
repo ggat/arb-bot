@@ -6,6 +6,8 @@ import ge.shitbot.bot.exceptions.UnknownOddTypeException;
 import ge.shitbot.datasources.datatypes.Arb;
 import ge.shitbot.datasources.exceptions.DataSourceException;
 import ge.shitbot.datasources.source.MainDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
  */
 public class DriverTests {
 
+    Logger logger = LoggerFactory.getLogger(DriverTests.class);
+
     Map<String, BookieStatus> statuses = new HashMap<>();
 
     private enum BookieStatus {
@@ -25,6 +29,9 @@ public class DriverTests {
     }
 
     public void testAllBookies() {
+
+        logger.info("Going to run tests for all bookies.");
+
         MainDataSource<Arb> arbMainDataSource = new MainDataSource<>();
 
         statuses.clear();
@@ -33,19 +40,21 @@ public class DriverTests {
             List<Arb> arbs = arbMainDataSource.getArbs();
 
             testBookieAndSaveStatus(BookieNames.AJARA_BET, arbs);
-            /*testBookieAndSaveStatus(BookieNames.EUROPE_BET, arbs);
+            testBookieAndSaveStatus(BookieNames.EUROPE_BET, arbs);
             testBookieAndSaveStatus(BookieNames.LIDER_BET, arbs);
             testBookieAndSaveStatus(BookieNames.BET_LIVE, arbs);
             testBookieAndSaveStatus(BookieNames.CRYSTAL_BET, arbs);
-            testBookieAndSaveStatus(BookieNames.CROCO_BET, arbs);*/
+            testBookieAndSaveStatus(BookieNames.CROCO_BET, arbs);
 
             statuses.forEach((k, v) -> {
                 System.out.println(k + ": " + v);
             });
 
         } catch (DataSourceException ex) {
-            System.out.println("ERROR: Could not get data from datasource: " + ex);
-            //TODO: add logs here
+
+            ex.printStackTrace();
+
+            logger.error("Could not get data from datasource: ", ex.getMessage());
         }
     }
 
