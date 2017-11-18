@@ -1,6 +1,5 @@
-package ge.shitbot.datasources.scrapers;
+package ge.shitbot.scraper.bookies;
 
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,7 +15,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by giga on 11/12/17.

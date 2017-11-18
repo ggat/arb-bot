@@ -1,10 +1,10 @@
 package ge.shitbot.bot.drivers.bookies;
 
+import ge.shitbot.bot.exceptions.UnknownOddTypeException;
+import ge.shitbot.bot.selenium.By;
 import ge.shitbot.bot.OddType;
 import ge.shitbot.bot.drivers.BookieDriver;
 import ge.shitbot.bot.drivers.BookieDriverGeneral;
-import ge.shitbot.bot.exceptions.UnknownOddTypeException;
-import ge.shitbot.bot.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;

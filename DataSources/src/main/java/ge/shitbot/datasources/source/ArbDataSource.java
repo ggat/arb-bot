@@ -1,7 +1,7 @@
 package ge.shitbot.datasources.source;
 
-import ge.shitbot.datasources.datatypes.Arb;
 import ge.shitbot.datasources.exceptions.DataSourceException;
+import ge.shitbot.core.datatypes.Arb;
 
 import java.util.List;
 

@@ -1,7 +1,3 @@
-import ge.shitbot.bot.drivers.BookieDriver;
-import ge.shitbot.bot.drivers.bookies.AdjaraBetDriver;
-import ge.shitbot.bot.drivers.bookies.CrocoBetDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,9 +1,8 @@
-package ge.shitbot.datasources.datatypes;
+package ge.shitbot.core.datatypes;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 /**

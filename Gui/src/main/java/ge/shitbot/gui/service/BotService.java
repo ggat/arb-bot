@@ -4,7 +4,7 @@ import ge.shitbot.bot.drivers.BookieDriver;
 import ge.shitbot.bot.drivers.BookieDriverRegistry;
 import ge.shitbot.bot.exceptions.BookieDriverNotFoundException;
 import ge.shitbot.bot.exceptions.UnknownOddTypeException;
-import ge.shitbot.datasources.datatypes.Arb;
+import ge.shitbot.core.datatypes.Arb;
 
 /**
  * Created by giga on 10/12/17.

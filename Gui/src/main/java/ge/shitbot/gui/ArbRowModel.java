@@ -1,6 +1,6 @@
 package ge.shitbot.gui;
 
-import ge.shitbot.datasources.datatypes.Arb;
+import ge.shitbot.core.datatypes.Arb;
 
 /**
  * Created by giga on 10/3/17.

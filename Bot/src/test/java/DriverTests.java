@@ -3,13 +3,12 @@ import ge.shitbot.bot.drivers.BookieDriver;
 import ge.shitbot.bot.drivers.BookieDriverRegistry;
 import ge.shitbot.bot.exceptions.BookieDriverNotFoundException;
 import ge.shitbot.bot.exceptions.UnknownOddTypeException;
-import ge.shitbot.datasources.datatypes.Arb;
+import ge.shitbot.core.datatypes.Arb;
 import ge.shitbot.datasources.exceptions.DataSourceException;
 import ge.shitbot.datasources.source.MainDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

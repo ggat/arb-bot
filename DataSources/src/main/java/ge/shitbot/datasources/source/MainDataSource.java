@@ -1,9 +1,9 @@
 package ge.shitbot.datasources.source;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ge.shitbot.datasources.datatypes.Arb;
 import com.fasterxml.jackson.core.type.TypeReference;
 import ge.shitbot.datasources.exceptions.DataSourceException;
+import ge.shitbot.core.datatypes.Arb;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;

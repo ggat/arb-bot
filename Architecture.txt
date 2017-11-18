@@ -12,8 +12,8 @@
 - DataSources
     *Provide DataSource classes that have single interface and that 
     these classes can provide available arbs or scrapped data.
-    
-    There may be multiple sources
+
+    There may be multiple sources, one of them will be our daemon.
 
 - Scrapper
     *Provide scrapper implementation for each bookie.
@@ -26,12 +26,15 @@
 - Presist
     * Abstraction layer for data presistence.
 
-- Daemon [DataSources, Alert]
+- Daemon [DataAnalyzer, Alert]
     * Get new data
     * Save it.
     * Run DataAnalyzer and save data/analyzed data.
     * Provide HTTP api to get these data.
-
+    * BroadCast notifications.
+    
+- DataTypes
+    * Common place for data types like Arb, Bookie, Event.    
 
 - Alert
     * Send notifications on mobile.

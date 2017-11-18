@@ -1,6 +1,5 @@
 package ge.shitbot.bot.drivers;
 
-import ge.shitbot.bot.drivers.AbstractBookieDriver;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;

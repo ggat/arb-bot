@@ -1,7 +1,6 @@
 package ge.shitbot.bot.tools;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /// <summary>
 /// This class implements String comparison algorithm
