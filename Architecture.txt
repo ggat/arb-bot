@@ -1,0 +1,37 @@
+- Gui [Bot, DataSources]
+    *Show arb list
+    *Ability create stakes based on particular arb and parameters given from 
+    user like totalAmount and account to use.
+    *Maybe make simple analytics for arbs like what would be best arb to bet on.
+    
+- Bot [DataSources]
+    *Provide api for each bookie to createStakes when given neccessary 
+    parameters.
+    *Provide api to get bookieBalances.
+
+- DataSources
+    *Provide DataSource classes that have single interface and that 
+    these classes can provide available arbs or scrapped data.
+    
+    There may be multiple sources
+
+- Scrapper
+    *Provide scrapper implementation for each bookie.
+    
+- DataAnalyzer
+    *Analize data
+    *Find arbs.
+    *Match team names based on event time.
+    
+- Presist
+    * Abstraction layer for data presistence.
+
+- Daemon [DataSources, Alert]
+    * Get new data
+    * Save it.
+    * Run DataAnalyzer and save data/analyzed data.
+    * Provide HTTP api to get these data.
+
+
+- Alert
+    * Send notifications on mobile.
