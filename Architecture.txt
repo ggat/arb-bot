@@ -23,8 +23,8 @@
     *Find arbs.
     *Match team names based on event time.
     
-- Presist
-    * Abstraction layer for data presistence.
+- Persist
+    * Abstraction layer for data persistence.
 
 - Daemon [DataAnalyzer, Alert]
     * Get new data

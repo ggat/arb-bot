@@ -17,6 +17,7 @@
         <module>DataAnalyzer</module>
         <module>Daemon</module>
         <module>Alert</module>
+        <module>Persist</module>
     </modules>
 
     <dependencies>
