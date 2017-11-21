@@ -1,8 +1,9 @@
-package ge.shitbot.core.datatypes;
+package ge.shitbot.core.datatypes.deserialize;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import ge.shitbot.core.datatypes.Arb;
 
 import java.io.IOException;
 

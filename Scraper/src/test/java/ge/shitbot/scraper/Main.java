@@ -1,6 +1,7 @@
 package ge.shitbot.scraper;
 
 import ge.shitbot.scraper.bookies.CrystalBetScraper;
+import ge.shitbot.scraper.bookies.EuropeBetScraper;
 import ge.shitbot.scraper.datatypes.Category;
 import ge.shitbot.scraper.datatypes.Event;
 import ge.shitbot.scraper.exceptions.ScrapperException;
@@ -13,17 +14,17 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        CrystalBetScraper scraper = new CrystalBetScraper();
+        EuropeBetScraper scraper = new EuropeBetScraper();
 
         try {
-            List<Category> result =  scraper.getFreshData();
+            List<? extends Category> result =  scraper.getFreshData();
 
-            Event firstEvent = result.get(0).getSubCategories().get(0).getEvents().get(0);
+            /*Event firstEvent = result.get(0).getSubCategories().get(0).getEvents().get(0);
 
             System.out.println("First event sideOne: " + firstEvent.getSideOne());
             System.out.println("First event getSideTwo: " + firstEvent.getSideTwo());
             System.out.println("First event subCategory: " + firstEvent.getCategory().getName());
-            System.out.println("First event category: " + firstEvent.getCategory().getParent().getName());
+            System.out.println("First event category: " + firstEvent.getCategory().getParent().getName());*/
 
         } catch (ScrapperException e) {
             e.printStackTrace();

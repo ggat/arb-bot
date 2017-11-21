@@ -1,4 +1,4 @@
-package ge.shitbot.core.datatypes;
+package ge.shitbot.core.datatypes.deserialize;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 /**
  * Created by giga on 9/29/17.
  */
-public class DateDeserializer extends JsonDeserializer<Timestamp> {
+public class ArbDateDeserializer extends JsonDeserializer<Timestamp> {
 
     @Override
     public Timestamp deserialize(JsonParser jp, DeserializationContext ctx) throws IOException {
@@ -34,4 +34,5 @@ public class DateDeserializer extends JsonDeserializer<Timestamp> {
 
         return new Timestamp(ctx.parseDate(str).getTime());
     }
+
 }

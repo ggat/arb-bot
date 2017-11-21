@@ -10,6 +10,9 @@ public class Category {
     private Category parent;
     private List<Event> events = new ArrayList<>();
 
+    public Category() {
+    }
+
     public Category(String name, Integer id) {
         this.setName(name);
         this.setId(id);

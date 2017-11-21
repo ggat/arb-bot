@@ -134,7 +134,7 @@ public class CrystalBetScraper {
                 Element sideNames = row.selectFirst(".x_game_title > span").child(0);
 
                 if(sideNames == null) {
-                    logger.debug("Cannot get side names element");
+                    logger.error("Cannot get side names element");
                     throw new ScrapperException("Cannot get side names element");
                 }
 

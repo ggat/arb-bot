@@ -10,10 +10,13 @@ import java.util.Map;
 public class Event
 {
     private Category category;
-    private Date date;
-    private String sideOne;
-    private String sideTwo;
+    protected Date date;
+    protected String sideOne;
+    protected String sideTwo;
     private Map<String, Double> odds = new HashMap<>();
+
+    public Event() {
+    }
 
     public Event(Category category, Date date, String sideOne, String sideTwo) {
         this.category = category;

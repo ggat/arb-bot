@@ -2,6 +2,8 @@ package ge.shitbot.core.datatypes;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import ge.shitbot.core.datatypes.deserialize.BookieDeserializer;
+import ge.shitbot.core.datatypes.deserialize.ArbDateDeserializer;
 
 import java.sql.Timestamp;
 
@@ -82,7 +84,7 @@ public class Arb {
 
     private Double profit;
 
-    @JsonDeserialize(using = DateDeserializer.class)
+    @JsonDeserialize(using = ArbDateDeserializer.class)
     private Timestamp date;
     private Long hostID;
     private Long guestID;
