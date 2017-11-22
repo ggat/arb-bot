@@ -34,16 +34,16 @@ public class Category {
         this.id = id;
     }
 
-    public List<Category> getSubCategories() {
+    public final List<Category> getSubCategories() {
         return subCategories;
     }
 
-    public void addSubCategory(Category subCategory) {
+    public final void addSubCategory(Category subCategory) {
         this.getSubCategories().add(subCategory);
         subCategory.setParent(this);
     }
 
-    public void removeSubCategory(Category subCategory) {
+    public final void removeSubCategory(Category subCategory) {
         this.getSubCategories().remove(subCategory);
         subCategory.setParent(null);
     }
@@ -52,7 +52,7 @@ public class Category {
         return parent;
     }
 
-    public void setParent(Category parent) {
+    private void setParent(Category parent) {
         this.parent = parent;
     }
 

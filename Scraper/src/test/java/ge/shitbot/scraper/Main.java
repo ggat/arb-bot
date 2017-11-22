@@ -1,9 +1,9 @@
 package ge.shitbot.scraper;
 
-import ge.shitbot.scraper.bookies.CrystalBetScraper;
+import ge.shitbot.scraper.bookies.AdjaraBetScraper;
+import ge.shitbot.scraper.bookies.CrocoBetScraper;
 import ge.shitbot.scraper.bookies.EuropeBetScraper;
 import ge.shitbot.scraper.datatypes.Category;
-import ge.shitbot.scraper.datatypes.Event;
 import ge.shitbot.scraper.exceptions.ScrapperException;
 
 import java.util.List;
@@ -14,10 +14,12 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        EuropeBetScraper scraper = new EuropeBetScraper();
+        AdjaraBetScraper scraper = new AdjaraBetScraper();
 
         try {
             List<? extends Category> result =  scraper.getFreshData();
+
+            System.out.println("asdasd");
 
             /*Event firstEvent = result.get(0).getSubCategories().get(0).getEvents().get(0);
 
