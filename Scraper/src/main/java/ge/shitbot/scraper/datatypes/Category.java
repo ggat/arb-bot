@@ -53,13 +53,7 @@ public class Category {
     }
 
     public void setParent(Category parent) {
-        parent.getSubCategories().add(this);
         this.parent = parent;
-    }
-
-    public void unsetParent() {
-        this.parent.removeSubCategory(this);
-        this.parent = null;
     }
 
     public List<Event> getEvents() {
