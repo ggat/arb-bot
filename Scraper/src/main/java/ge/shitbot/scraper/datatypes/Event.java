@@ -1,5 +1,7 @@
 package ge.shitbot.scraper.datatypes;
 
+import ge.shitbot.core.datatypes.OddType;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +15,7 @@ public class Event
     protected Date date;
     protected String sideOne;
     protected String sideTwo;
-    private Map<String, Double> odds = new HashMap<>();
+    private Map<OddType, Double> odds = new HashMap<>();
 
     public Event() {
     }
@@ -57,11 +59,11 @@ public class Event
         this.sideTwo = sideTwo != null ? sideTwo.trim() : null;
     }
 
-    public Map<String, Double> getOdds() {
+    public Map<OddType, Double> getOdds() {
         return odds;
     }
 
-    public void setOdds(Map<String, Double> odds) {
+    public void setOdds(Map<OddType, Double> odds) {
         this.odds = odds;
     }
 
