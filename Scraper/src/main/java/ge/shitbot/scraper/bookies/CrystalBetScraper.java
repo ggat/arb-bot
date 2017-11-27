@@ -67,14 +67,14 @@ public class CrystalBetScraper {
         }
     }
 
-    protected List<Category> parseCategories(Document champ) throws IOException{
+    protected List<Category> parseCategories(Document champ) throws IOException {
 
         List<Category> categories = new ArrayList<>();
         int subCategoryCount = 0;
         int parsedEventCount = 0;
         Elements eventList = champ.select(".new_sport_country");
 
-        for(Element row : eventList) {
+        for (Element row : eventList) {
 
             String name = row.selectFirst(".new_sport_country1").textNodes().get(0).text();
             String id = row.selectFirst(".new_sport_country3").attr("onclick").split(":")[1].split("\"")[0];
@@ -121,7 +121,7 @@ public class CrystalBetScraper {
 
         Elements eventList = events.select(".x_loop_game_title_block");
 
-        for(Element row : eventList) {
+        for (Element row : eventList) {
 
             try {
                 Element dateCell = row.selectFirst(".x_game_date");
@@ -133,7 +133,7 @@ public class CrystalBetScraper {
 
                 Element sideNames = row.selectFirst(".x_game_title > span").child(0);
 
-                if(sideNames == null) {
+                if (sideNames == null) {
                     logger.error("Cannot get side names element");
                     throw new ScrapperException("Cannot get side names element");
                 }
@@ -143,7 +143,7 @@ public class CrystalBetScraper {
 
                 String[] names = eventTitle.split(" - ");
 
-                if(names.length != 2 ) {
+                if (names.length != 2) {
 
                     logger.debug("Could not parse side names for text={}", eventTitle);
                     throw new ScrapperException("Could not parse side names for text=" + eventTitle);
@@ -154,7 +154,7 @@ public class CrystalBetScraper {
                 logger.debug("Adding event {} to subCategory {}", event.toString(), surroundingCategory.getName());
                 surroundingCategory.addEvent(event);
 
-                for(Element oddCell : oddCells) {
+                for (Element oddCell : oddCells) {
                     //System.out.print(" " + oddCell.text());
                 }
             } catch (ParseException e) {
@@ -197,7 +197,7 @@ public class CrystalBetScraper {
 
             HttpPost post = new HttpPost(target);
             post.setHeader("Content-Type", "multipart/form-data; boundary=----WebKitFormBoundaryeJBitNTLRtons1Vx");
-            post.setHeader("Cookie", "last.login=zurabinio; ASP.NET_SessionId="+ sessionId +"; _ga=GA1.2.1803994248.1502804140; _gid=GA1.2.527046321.1511168820");
+            post.setHeader("Cookie", "last.login=zurabinio; ASP.NET_SessionId=" + sessionId + "; _ga=GA1.2.1803994248.1502804140; _gid=GA1.2.527046321.1511168820");
             post.setEntity(new ByteArrayEntity(payload.getBytes(), ContentType.DEFAULT_BINARY));
 
             HttpResponse response = client.execute(post);
@@ -228,9 +228,9 @@ public class CrystalBetScraper {
         List<String> lineList = new ArrayList<>(Arrays.asList(lines));
 
         lineList.remove(0);
-        lineList.remove(lineList.size()-1);
-        lineList.remove(lineList.size()-1);
-        lineList.remove(lineList.size()-1);
+        lineList.remove(lineList.size() - 1);
+        lineList.remove(lineList.size() - 1);
+        lineList.remove(lineList.size() - 1);
 
         String[] newLines = lineList.toArray(new String[lineList.size()]);
 

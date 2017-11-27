@@ -32,6 +32,20 @@
             <artifactId>jackson-annotations</artifactId>
             <version>2.9.1</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.5.3</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.3</version>
+        </dependency>
     </dependencies>
 
 </project>

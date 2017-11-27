@@ -3,10 +3,13 @@ package ge.shitbot.scraper;
 import ge.shitbot.scraper.bookies.AdjaraBetScraper;
 import ge.shitbot.scraper.bookies.CrocoBetScraper;
 import ge.shitbot.scraper.bookies.EuropeBetScraper;
+import ge.shitbot.scraper.bookies.LiderBetScraper;
 import ge.shitbot.scraper.datatypes.Category;
+import ge.shitbot.scraper.datatypes.Event;
 import ge.shitbot.scraper.exceptions.ScrapperException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by giga on 11/21/17.
@@ -14,9 +17,14 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        AdjaraBetScraper scraper = new AdjaraBetScraper();
+        LiderBetScraper scraper = new LiderBetScraper();
+
+        //Map<Long, List<Event>> events = scraper.getAllEventsForSport();
 
         try {
+
+            //scraper.getAllEventsForSport();
+
             List<? extends Category> result =  scraper.getFreshData();
 
             System.out.println("asdasd");
