@@ -79,7 +79,7 @@ public class CrystalBetScraper {
             String name = row.selectFirst(".new_sport_country1").textNodes().get(0).text();
             String id = row.selectFirst(".new_sport_country3").attr("onclick").split(":")[1].split("\"")[0];
 
-            Category category = new Category(name, Integer.parseInt(id));
+            Category category = new Category(name, Long.parseLong(id));
             Elements subcategoryDiv = row.parent().select(".new_sport_div > .new_sport");
 
             logger.debug("Start parsing of subCategories for category: {} id={}", category.getName(), category.getId());
@@ -88,7 +88,7 @@ public class CrystalBetScraper {
 
                 //Create subcategory POJO from this html element
                 String subCategoryName = subCategoryElement.selectFirst(".new_sport1").textNodes().get(0).text();
-                Integer subCategoryId = Integer.parseInt(subcategoryDiv.attr("championat-data"));
+                Long subCategoryId = Long.parseLong(subcategoryDiv.attr("championat-data"));
                 Category subCategory = new Category(subCategoryName, subCategoryId);
 
                 //Add this subCategory to category

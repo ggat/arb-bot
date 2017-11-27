@@ -1,5 +1,6 @@
 package ge.shitbot.scraper.bookies;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
@@ -75,6 +76,7 @@ public class AdjaraBetScraper {
         public List<S> s;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     protected static class LocalEvent extends Event {
 
         @JsonProperty("h")
@@ -104,7 +106,7 @@ public class AdjaraBetScraper {
         }
     }
 
-    class LocalEventOddsDeserializer extends JsonDeserializer<Map<OddType, Double>> {
+    protected static class LocalEventOddsDeserializer extends JsonDeserializer<Map<OddType, Double>> {
 
         @Override
         public Map<OddType, Double> deserialize(JsonParser jp, DeserializationContext ctx) throws IOException {
@@ -119,6 +121,7 @@ public class AdjaraBetScraper {
             adjaraOddNameMapping.put("12", OddType._12);
             adjaraOddNameMapping.put("X2", OddType._X2);
             adjaraOddNameMapping.put("Under", OddType._UNDER_25);
+            adjaraOddNameMapping.put("Over", OddType._OVER_25);
             adjaraOddNameMapping.put("Yes", OddType._YES);
             adjaraOddNameMapping.put("No", OddType._NO);
 
@@ -167,44 +170,48 @@ public class AdjaraBetScraper {
         logger.info("Start scraping");
 
         try {
-            List<? extends Category> result = parseCategories();
-            logger.info("End scraping");
-
-            return result;
-
-        } catch (Exception e) {
-
-            logger.error("Scraping failed {}", e);
-            e.printStackTrace();
+            return parseCategories();
+        } catch (IOException e) {
+            logger.error("Error while trying to parse categories {}", e);
             throw new ScrapperException(e);
         }
     }
 
-    protected List<? extends Category> parseCategories() throws IOException {
-        String sportBookTree = executeGet("https://bookmakersapi.adjarabet.com/sportsbook/rest/public/sportbookTree?ln=ka");
+    protected List<? extends Category> parseCategories() throws ScrapperException, IOException {
+        String sportBookTree = executeGet("https://bookmakersapi.adjarabet.com/sportsbook/rest/public/sportbookTree?ln=en");
 
         ObjectMapper mapper = new ObjectMapper();
         AdjarabetTree adjarabetTree = mapper.readValue(sportBookTree, AdjarabetTree.class);
 
+        ArrayList<Category> categories = new ArrayList<>();
+
         long categoriesParsed = 0;
         long subCategoryCount = 0;
-        long parsedEventCount = 0;
 
         // Sports
         for (S sport : adjarabetTree.s) {
 
             // Parse only Soccer
-            if (sport.id != 27) {
+            if (!sport.id.equals(SOCCER_ID)) {
                 break;
             }
 
             // Categories
             for (C category : sport.c) {
 
+                // Create native Category from Adjara's category
+                Category nativeCategory = new Category(category.n, category.id);
+                categories.add(nativeCategory);
+
                 categoriesParsed++;
 
                 // Subcategory - League
                 for (L subCategory : category.l) {
+
+                    // Create native Category from Adjara's category
+                    Category nativeSubCategory = new Category(subCategory.n, subCategory.id);
+
+                    nativeCategory.addSubCategory(nativeSubCategory);
 
                     subCategoryCount++;
 
@@ -219,23 +226,56 @@ public class AdjaraBetScraper {
             }
         }
 
+        Map<Long, List<LocalEvent>> events = getAllEventsForSport();
+
         logger.info("Categories parsed: {}", categoriesParsed);
         logger.info("Subcategories parsed: {}", subCategoryCount);
-        logger.info("Events parsed: {}", parsedEventCount);
+        logger.info("Events parsed: {}", events.size());
 
-        return new ArrayList<>();
+        return mapEventsToCategories(categories, events);
     }
 
-    /*protected ArrayList<Event> getAllEventsForSport() throws IOException {
+    protected Map<Long, List<LocalEvent>> getAllEventsForSport() throws ScrapperException {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        String executeString = executeGet("https://bookmakersapi.adjarabet.com/sportsbook/rest/public/sportMatches?ln=en&id=" + SOCCER_ID);
+        Map<Long, List<LocalEvent>> events = null;
+        try {
+            String executeString = executeGet("https://bookmakersapi.adjarabet.com/sportsbook/rest/public/sportMatches?ln=en&id=" + SOCCER_ID);
 
-        //CONTINUE
-        mapper.readValue(executeString, new TypeReference<Map<Long, LocalEvent>>() {});
+            //CONTINUE
+            events = mapper.readValue(executeString, new TypeReference<Map<Long, List<LocalEvent>>>() {});
+        } catch (IOException e) {
+            logger.error("Cannot get event list, http request failed or could not deserialize data. {}", e);
+            throw new ScrapperException(e);
+        }
 
-    }*/
+        return events;
+    }
+
+    protected List<? extends Category> mapEventsToCategories(List<? extends Category> categories, Map<Long, List<LocalEvent>> events) {
+
+        for (Category category : categories) {
+            for (Category subCategory : category.getSubCategories()) {
+
+                try {
+
+                    //Filter events for this subCategory
+                    List<LocalEvent> subCategoryEvents = events.get(subCategory.getId());
+
+                    //Add these events to this subCategory
+                    for (LocalEvent event : subCategoryEvents) {
+                        subCategory.addEvent(event);
+                    }
+
+                } catch (NullPointerException ex) {
+                    logger.warn("No events found for subCategory.n={} subCategory.id={}", subCategory.getName(), subCategory.getId());
+                }
+            }
+        }
+
+        return categories;
+    }
 
     protected String executeGet(String url) throws IOException {
         HttpGet get = null;

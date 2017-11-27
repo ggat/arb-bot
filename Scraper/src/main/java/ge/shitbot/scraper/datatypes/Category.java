@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Category {
     private String name;
-    private Integer id;
+    private Long id;
     private List<Category> subCategories = new ArrayList<>();
     private Category parent;
     private List<Event> events = new ArrayList<>();
@@ -13,7 +13,7 @@ public class Category {
     public Category() {
     }
 
-    public Category(String name, Integer id) {
+    public Category(String name, Long id) {
         this.setName(name);
         this.setId(id);
     }
@@ -26,11 +26,11 @@ public class Category {
         this.name = name != null ? name.trim() : null;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

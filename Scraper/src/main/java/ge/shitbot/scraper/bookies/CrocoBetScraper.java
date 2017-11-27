@@ -19,7 +19,7 @@ public class CrocoBetScraper extends AbstractEuropeCrocoScraper {
     }
 
     @Override
-    public String getEventsUrl(Integer subCategoryId) {
+    public String getEventsUrl(Long subCategoryId) {
 
         return "https://www.crocobet.com/rest/market/categories/multi/"+ subCategoryId +"/events";
     }

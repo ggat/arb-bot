@@ -44,29 +44,29 @@ public abstract class AbstractEuropeCrocoScraper {
 
     public abstract String getSearchUrl();
 
-    public abstract String getEventsUrl(Integer subCategoryId);
+    public abstract String getEventsUrl(Long subCategoryId);
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class LocalCategory extends Category {
 
-        Integer localParentId;
-        Integer localLevel;
+        Long localParentId;
+        Long localLevel;
 
-        public Integer getLocalLevel() {
+        public Long getLocalLevel() {
             return localLevel;
         }
 
         @JsonProperty("level")
-        public void setLocalLevel(Integer localLevel) {
+        public void setLocalLevel(Long localLevel) {
             this.localLevel = localLevel;
         }
 
-        public Integer getLocalParentId() {
+        public Long getLocalParentId() {
             return localParentId;
         }
 
         @JsonProperty("parentCategory")
-        public void setLocalParentId(Integer localParentId) {
+        public void setLocalParentId(Long localParentId) {
             this.localParentId = localParentId;
         }
 
@@ -78,7 +78,7 @@ public abstract class AbstractEuropeCrocoScraper {
 
         @Override
         @JsonProperty("categoryId")
-        public void setId(Integer id) {
+        public void setId(Long id) {
             super.setId(id);
         }
     }
