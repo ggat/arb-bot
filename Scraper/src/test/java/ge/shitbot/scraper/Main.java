@@ -1,9 +1,6 @@
 package ge.shitbot.scraper;
 
-import ge.shitbot.scraper.bookies.AdjaraBetScraper;
-import ge.shitbot.scraper.bookies.CrocoBetScraper;
-import ge.shitbot.scraper.bookies.EuropeBetScraper;
-import ge.shitbot.scraper.bookies.LiderBetScraper;
+import ge.shitbot.scraper.bookies.*;
 import ge.shitbot.scraper.datatypes.Category;
 import ge.shitbot.scraper.datatypes.Event;
 import ge.shitbot.scraper.exceptions.ScrapperException;
@@ -17,7 +14,7 @@ import java.util.Map;
 public class Main {
 
     public static void main(String[] args) {
-        LiderBetScraper scraper = new LiderBetScraper();
+        BetLiveScraper scraper = new BetLiveScraper();
 
         //Map<Long, List<Event>> events = scraper.getAllEventsForSport();
 
