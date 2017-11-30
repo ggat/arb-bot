@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import ge.shitbot.core.datatypes.OddType;
 import ge.shitbot.core.datatypes.deserialize.AbstractDateDeserializer;
 import ge.shitbot.core.datatypes.util.http.Http;
+import ge.shitbot.scraper.BookieScraper;
 import ge.shitbot.scraper.datatypes.Category;
 import ge.shitbot.scraper.datatypes.Event;
 import ge.shitbot.scraper.exceptions.ScrapperException;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 /**
  * Created by giga on 11/22/17.
  */
-public class LiderBetScraper {
+public class LiderBetScraper implements BookieScraper {
 
     private static Logger logger = LoggerFactory.getLogger(LiderBetScraper.class);
 
@@ -272,8 +273,6 @@ public class LiderBetScraper {
         }).collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
 
         for (Map.Entry<Long, LocalSubCategory> subCategory : subCategories.entrySet()) {
-
-            System.out.println("asdasdsad");
 
             Long subCategoryParentId = subCategory.getValue().getLocalParentId();
 

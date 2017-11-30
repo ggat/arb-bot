@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import ge.shitbot.core.datatypes.deserialize.AbstractDateDeserializer;
+import ge.shitbot.scraper.BookieScraper;
 import ge.shitbot.scraper.datatypes.Category;
 import ge.shitbot.scraper.datatypes.Event;
 import ge.shitbot.scraper.exceptions.ScrapperException;
@@ -30,7 +31,7 @@ import java.util.stream.Collectors;
 /**
  * Created by giga on 11/12/17.
  */
-public abstract class AbstractEuropeCrocoScraper {
+public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
 
     private static Logger logger = LoggerFactory.getLogger(AbstractEuropeCrocoScraper.class);
 

@@ -1,5 +1,6 @@
 package ge.shitbot.scraper.bookies;
 
+import ge.shitbot.scraper.BookieScraper;
 import ge.shitbot.scraper.datatypes.Category;
 import ge.shitbot.scraper.datatypes.Event;
 import ge.shitbot.scraper.exceptions.ScrapperException;
@@ -11,6 +12,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.HttpClients;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.UncheckedIOException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -31,7 +33,7 @@ import java.util.*;
 /**
  * Created by giga on 11/12/17.
  */
-public class CrystalBetScraper {
+public class CrystalBetScraper implements BookieScraper {
 
     private static Logger logger = LoggerFactory.getLogger(CrystalBetScraper.class);
 
@@ -59,7 +61,7 @@ public class CrystalBetScraper {
 
             return result;
 
-        } catch (Exception e) {
+        } catch (Exception | UncheckedIOException e) {
 
             logger.error("Scrapping of CrystalBet failed {}", e);
             e.printStackTrace();
@@ -93,10 +95,15 @@ public class CrystalBetScraper {
 
                 //Add this subCategory to category
                 category.addSubCategory(subCategory);
+                Document events = null;
 
-                //Get events html data using subCategory id.
-                Document events = Jsoup.connect(searchUrl).cookie("ASP.NET_SessionId", sessionId)
-                        .requestBody(postData.replace("REPLACE_MEEEE", subCategory.getId().toString())).post();
+                try {
+                    //Get events html data using subCategory id.
+                    events = Jsoup.connect(searchUrl).cookie("ASP.NET_SessionId", sessionId)
+                            .requestBody(postData.replace("REPLACE_MEEEE", subCategory.getId().toString())).post();
+                } catch (IOException | UncheckedIOException e) {
+                    e.printStackTrace();
+                }
 
                 logger.debug("Start parsing of events for subcategory: {} id={}", subCategory.getName(), subCategory.getId());
 

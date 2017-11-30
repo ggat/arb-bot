@@ -14,15 +14,17 @@ import java.util.Map;
 public class Main {
 
     public static void main(String[] args) {
-        BetLiveScraper scraper = new BetLiveScraper();
+        //BetLiveScraper scraper = new BetLiveScraper();
 
         //Map<Long, List<Event>> events = scraper.getAllEventsForSport();
 
-        try {
+        //try {
 
             //scraper.getAllEventsForSport();
 
-            List<? extends Category> result =  scraper.getFreshData();
+            //List<? extends Category> result =  scraper.getFreshData();
+
+            Map<String, List<? extends Category>> allCategories = BulkRunner.getCategories();
 
             System.out.println("asdasd");
 
@@ -33,8 +35,8 @@ public class Main {
             System.out.println("First event subCategory: " + firstEvent.getCategory().getName());
             System.out.println("First event category: " + firstEvent.getCategory().getParent().getName());*/
 
-        } catch (ScrapperException e) {
+        /*} catch (ScrapperException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }

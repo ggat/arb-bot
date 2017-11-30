@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import ge.shitbot.core.datatypes.OddType;
 import ge.shitbot.core.datatypes.deserialize.AbstractDateDeserializer;
 import ge.shitbot.core.datatypes.util.http.Http;
+import ge.shitbot.scraper.BookieScraper;
 import ge.shitbot.scraper.datatypes.Category;
 import ge.shitbot.scraper.datatypes.Event;
 import ge.shitbot.scraper.exceptions.ScrapperException;
@@ -36,7 +37,7 @@ import java.util.*;
 /**
  * Created by giga on 11/22/17.
  */
-public class BetLiveScraper {
+public class BetLiveScraper implements BookieScraper {
 
     private static Logger logger = LoggerFactory.getLogger(BetLiveScraper.class);
 
