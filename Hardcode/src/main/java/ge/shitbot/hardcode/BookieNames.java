@@ -1,4 +1,4 @@
-package ge.shitbot.bot;
+package ge.shitbot.hardcode;
 
 /**
  * Created by giga on 11/10/17.

@@ -1,4 +1,4 @@
-import ge.shitbot.bot.BookieNames;
+import ge.shitbot.hardcode.BookieNames;
 import ge.shitbot.bot.drivers.BookieDriver;
 import ge.shitbot.bot.drivers.BookieDriverRegistry;
 import ge.shitbot.bot.exceptions.BookieDriverNotFoundException;
