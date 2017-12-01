@@ -69,4 +69,18 @@ public class Category {
         this.getEvents().remove(event);
         event.setCategory(null);
     }
+
+    //TODO: look at fixme
+    //FIXME: Some strange recursion or something like that is happening here
+    /*@Override
+    public String toString() {
+        return "Category{" +
+                "name='" + name + '\'' +
+                ", id=" + id +
+                //WARNING: Following two can cause subString recursion
+                ", subCategories=" + subCategories.size() +
+                ", parent=" + parent.getId() +
+                ", events=" + events.size() +
+                '}';
+    }*/
 }

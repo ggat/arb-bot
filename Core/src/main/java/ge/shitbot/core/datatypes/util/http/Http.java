@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by giga on 11/27/17.
@@ -21,6 +23,10 @@ public class Http {
     private static Logger logger = LoggerFactory.getLogger(Http.class);
 
     public static String get(String url) throws IOException {
+        return get(url, new HashMap<>());
+    }
+
+    public static String get(String url, Map<String, String> headers) throws IOException {
         HttpGet get = null;
         try {
             get = new HttpGet(new URI(url));
@@ -28,6 +34,10 @@ public class Http {
 
             logger.error("Bad URI syntax: " + e);
             e.printStackTrace();
+        }
+
+        for (Map.Entry<String, String> header : headers.entrySet()) {
+            get.setHeader(header.getKey(), header.getValue());
         }
 
         //get.setHeader("Request-Language", "en");
@@ -38,4 +48,5 @@ public class Http {
 
         return StringUtils.fromStream(inputStream);
     }
+
 }

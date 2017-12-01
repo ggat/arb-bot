@@ -102,7 +102,9 @@ public class CrystalBetScraper implements BookieScraper {
                     events = Jsoup.connect(searchUrl).cookie("ASP.NET_SessionId", sessionId)
                             .requestBody(postData.replace("REPLACE_MEEEE", subCategory.getId().toString())).post();
                 } catch (IOException | UncheckedIOException e) {
-                    e.printStackTrace();
+
+                    logger.error("Request for events html data of subCategory={} id={} failed.", subCategory.getName(),
+                            subCategory.getId());
                 }
 
                 logger.debug("Start parsing of events for subcategory: {} id={}", subCategory.getName(), subCategory.getId());
@@ -133,12 +135,27 @@ public class CrystalBetScraper implements BookieScraper {
             try {
                 Element dateCell = row.selectFirst(".x_game_date");
 
-                String eventDate = dateCell.selectFirst("font").text();
-                String eventTime = dateCell.selectFirst("span.time").text();
+                Element dateElement = dateCell.selectFirst("font");
+                Element timeElement = dateCell.selectFirst("span.time");
+
+                if(dateElement == null || timeElement == null) {
+                    logger.info("This event has no date or time, so we skip it.");
+                    continue;
+                }
+
+                String eventDate = dateElement.text();
+                String eventTime = timeElement.text();
 
                 Date eventDateTime = getDate(eventDate + " " + eventTime);
 
-                Element sideNames = row.selectFirst(".x_game_title > span").child(0);
+                Element sideNames = row.selectFirst(".x_game_title > span");
+
+                if(sideNames == null) {
+                    logger.info("This event has no name element, so we skip it.");
+                    continue;
+                }
+
+                sideNames = sideNames.child(0);
 
                 if (sideNames == null) {
                     logger.error("Cannot get side names element");
@@ -158,7 +175,7 @@ public class CrystalBetScraper implements BookieScraper {
 
                 Event event = new Event(surroundingCategory, eventDateTime, names[0], names[1]);
 
-                logger.debug("Adding event {} to subCategory {}", event.toString(), surroundingCategory.getName());
+                logger.trace("Adding event {} to subCategory {}", event.toString(), surroundingCategory.getName());
                 surroundingCategory.addEvent(event);
 
                 for (Element oddCell : oddCells) {
@@ -166,7 +183,7 @@ public class CrystalBetScraper implements BookieScraper {
                 }
             } catch (ParseException e) {
 
-                logger.error("Parsing for date time failed for subcategory: {} e={}", surroundingCategory, e);
+                logger.error("Parsing for date time failed for subcategory: {} id={} e={}", surroundingCategory.getName(), e);
 
                 e.printStackTrace();
             } catch (Exception e) {

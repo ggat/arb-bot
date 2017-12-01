@@ -4,6 +4,8 @@ import ge.shitbot.scraper.bookies.*;
 import ge.shitbot.scraper.datatypes.Category;
 import ge.shitbot.scraper.datatypes.Event;
 import ge.shitbot.scraper.exceptions.ScrapperException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -13,12 +15,19 @@ import java.util.Map;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    private static Logger logger = LoggerFactory.getLogger(Main.class);
+
+    public static void main(String[] args) throws ScrapperException {
+
+        BookieScraper scraper = new EuropeBetScraper();
+
         //BetLiveScraper scraper = new BetLiveScraper();
 
         //Map<Long, List<Event>> events = scraper.getAllEventsForSport();
 
         //try {
+
+        logger.warn("My own logger.");
 
             //scraper.getAllEventsForSport();
 

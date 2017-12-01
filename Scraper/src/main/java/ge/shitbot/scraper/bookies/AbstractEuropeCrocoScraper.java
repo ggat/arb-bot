@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import ge.shitbot.core.datatypes.deserialize.AbstractDateDeserializer;
+import ge.shitbot.core.datatypes.util.http.Http;
 import ge.shitbot.scraper.BookieScraper;
 import ge.shitbot.scraper.datatypes.Category;
 import ge.shitbot.scraper.datatypes.Event;
@@ -20,6 +21,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.tidy.StreamIn;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -147,7 +149,7 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
     }
 
     protected String getJsonDataNodeFromUrl(String url) throws IOException {
-        HttpGet get = null;
+        /*HttpGet get = null;
         try {
             get = new HttpGet(new URI(url));
         } catch (URISyntaxException e) {
@@ -164,13 +166,23 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
 
         JsonFactory factory = new JsonFactory();
         JsonParser jp = factory.createParser(inputStream);
+        jp.setCodec(new ObjectMapper());*/
+
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Request-Language", "en");
+
+        String response = Http.get(url, headers);
+
+        JsonFactory factory = new JsonFactory();
+        JsonParser jp = factory.createParser(response);
         jp.setCodec(new ObjectMapper());
+
         TreeNode root = jp.readValueAsTree();
         TreeNode dataNode = root.get("data");
         return dataNode.toString();
     }
 
-    protected List<? extends Category> parseCategories() throws IOException {
+    protected List<? extends Category> parseCategories() throws IOException, ScrapperException {
 
         ObjectMapper mapper = new ObjectMapper();
         String data = getJsonDataNodeFromUrl(getSearchUrl());
@@ -179,14 +191,20 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
 
         //Filter only top categories - Sports
         List<LocalCategory> sports = allCategories.stream()
-                .filter(elem -> elem.getLocalParentId().equals(0)  && elem.getLocalLevel().equals(1)
-                        // Take football
-                        && elem.getId().equals(1))
+                .filter((LocalCategory elem) -> {
+                    return elem.getLocalParentId().equals(0L) && elem.getLocalLevel().equals(1L)
+                            // Take football
+                            && elem.getId().equals(1L);
+                })
                 .collect(Collectors.toList());
 
-        long categoriesParsed = sports.stream().filter(el -> el.getLocalLevel().equals(2)).count();
-        long subCategoryCount = sports.stream().filter(el -> el.getLocalLevel().equals(3)).count();
-        long parsedEventCount = sports.stream().filter(el -> el.getLocalLevel().equals(4)).count();
+        if(sports.size() < 1) {
+            throw new ScrapperException("Sport list is less than 1 probably soccer id changed.");
+        }
+
+        long categoriesParsed = sports.stream().filter(el -> el.getLocalLevel().equals(2L)).count();
+        long subCategoryCount = sports.stream().filter(el -> el.getLocalLevel().equals(3L)).count();
+        long parsedEventCount = sports.stream().filter(el -> el.getLocalLevel().equals(4L)).count();
 
         //Add categories to each sport
         sports.stream().forEach(sport -> {
@@ -194,7 +212,7 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
             allCategories.stream().forEach(category -> {
 
                 //If current items parent id matches current sporsId. Add category to sport
-               if(category.getLocalParentId().equals(sport.getId()) && category.getLocalLevel().equals(2)) {
+               if(category.getLocalParentId().equals(sport.getId()) && category.getLocalLevel().equals(2L)) {
 
                    sport.addSubCategory(category);
 
@@ -202,7 +220,7 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
                    allCategories.stream().forEach(subCategory -> {
 
                        // If current ite
-                       if(subCategory.getLocalParentId().equals(category.getId()) && subCategory.getLocalLevel().equals(3)) {
+                       if(subCategory.getLocalParentId().equals(category.getId()) && subCategory.getLocalLevel().equals(3L)) {
                            category.addSubCategory(subCategory);
 
                            try {
