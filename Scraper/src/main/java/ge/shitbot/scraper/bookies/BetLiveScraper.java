@@ -12,26 +12,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import ge.shitbot.core.datatypes.OddType;
-import ge.shitbot.core.datatypes.deserialize.AbstractDateDeserializer;
 import ge.shitbot.core.datatypes.util.http.Http;
 import ge.shitbot.scraper.BookieScraper;
 import ge.shitbot.scraper.datatypes.Category;
 import ge.shitbot.scraper.datatypes.Event;
-import ge.shitbot.scraper.exceptions.ScrapperException;
+import ge.shitbot.scraper.exceptions.ScraperException;
 import ge.shitbot.scraper.exceptions.UncheckedScrapperException;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.*;
 
 /**
@@ -101,7 +91,7 @@ public class BetLiveScraper implements BookieScraper {
         public void setDate(Date date) { super.setDate(date); }
 
         @JsonProperty("eventName")
-        public void setSideNames(String eventName) throws ScrapperException {
+        public void setSideNames(String eventName) throws ScraperException {
 
             eventName = eventName.trim();
             String names[] = eventName.split(" - ");
@@ -109,7 +99,7 @@ public class BetLiveScraper implements BookieScraper {
             if(names.length != 2 ) {
 
                 logger.error("Could not parse side names for eventName={} split_length={}", eventName, names.length);
-                throw new ScrapperException("Could not parse side eventName for event=" + eventName);
+                throw new ScraperException("Could not parse side eventName for event=" + eventName);
             }
 
             super.setSideOne(names[0]);
@@ -161,7 +151,7 @@ public class BetLiveScraper implements BookieScraper {
 
             if(!root.isObject()) {
                 logger.error("Event list node was expected to be object node, but it is not.");
-                throw new IOException(new ScrapperException("Event list node was expected to be object node, but it is not."));
+                throw new IOException(new ScraperException("Event list node was expected to be object node, but it is not."));
             }
 
             JsonNode innerNode = null;
@@ -177,7 +167,7 @@ public class BetLiveScraper implements BookieScraper {
 
             if(innerNode == null) {
                 logger.error("Could not get inner node");
-                throw new IOException(new ScrapperException("Could not get inner node"));
+                throw new IOException(new ScraperException("Could not get inner node"));
             }
 
             ObjectNode eventList = (ObjectNode) innerNode.get("events");
@@ -258,18 +248,18 @@ public class BetLiveScraper implements BookieScraper {
 
     }
 
-    public List<? extends Category> getFreshData() throws ScrapperException {
+    public List<? extends Category> getFreshData() throws ScraperException {
         logger.info("Start scraping");
 
         try {
             return parseCategories();
         } catch (IOException e) {
             logger.error("Error while trying to parse categories {}", e);
-            throw new ScrapperException(e);
+            throw new ScraperException(e);
         }
     }
 
-    protected List<? extends Category> parseCategories() throws ScrapperException, IOException {
+    protected List<? extends Category> parseCategories() throws ScraperException, IOException {
         String sportBookTree = Http.get("https://sport.betlive.com/en-US/api/category/getSportCountryCategories?languageId=1&sportId=" + SOCCER_ID + "&time=100");
 
         ObjectMapper mapper = new ObjectMapper();
@@ -285,8 +275,10 @@ public class BetLiveScraper implements BookieScraper {
                         subCategory.addEvent(event);
                     });
 
-                } catch (ScrapperException e) {
-                    throw new UncheckedScrapperException(e);
+                } catch (ScraperException e) {
+                    logger.warn("Could not parse events for subCategory {}", subCategory.getName());
+
+                    //throw new UncheckedScrapperException(e);
                 }
             });
         });
@@ -294,7 +286,7 @@ public class BetLiveScraper implements BookieScraper {
         return categories;
     }
 
-    protected List<LocalEvent> parseEvents(Long subCategoryId) throws ScrapperException {
+    protected List<LocalEvent> parseEvents(Long subCategoryId) throws ScraperException {
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -311,7 +303,7 @@ public class BetLiveScraper implements BookieScraper {
 
                 if(page == 0) {
                     logger.error("Cannot get event list, http request failed or could not deserialize data. {}", e);
-                    throw new ScrapperException(e);
+                    throw new ScraperException(e);
                 }
 
                 //Pages finished.

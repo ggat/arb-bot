@@ -1,7 +1,7 @@
 package ge.shitbot.scraper;
 
 import ge.shitbot.scraper.datatypes.Category;
-import ge.shitbot.scraper.exceptions.ScrapperException;
+import ge.shitbot.scraper.exceptions.ScraperException;
 
 import java.util.List;
 
@@ -10,5 +10,5 @@ import java.util.List;
  */
 public interface BookieScraper {
 
-    List<? extends Category> getFreshData() throws ScrapperException;
+    List<? extends Category> getFreshData() throws ScraperException;
 }

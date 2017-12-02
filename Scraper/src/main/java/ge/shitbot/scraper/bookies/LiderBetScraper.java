@@ -2,7 +2,6 @@ package ge.shitbot.scraper.bookies;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -17,7 +16,7 @@ import ge.shitbot.core.datatypes.util.http.Http;
 import ge.shitbot.scraper.BookieScraper;
 import ge.shitbot.scraper.datatypes.Category;
 import ge.shitbot.scraper.datatypes.Event;
-import ge.shitbot.scraper.exceptions.ScrapperException;
+import ge.shitbot.scraper.exceptions.ScraperException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -243,18 +242,18 @@ public class LiderBetScraper implements BookieScraper {
 
     }
 
-    public List<? extends Category> getFreshData() throws ScrapperException {
+    public List<? extends Category> getFreshData() throws ScraperException {
         logger.info("Start scraping");
 
         try {
             return parseCategories();
         } catch (IOException e) {
             logger.error("Error while trying to parse categories {}", e);
-            throw new ScrapperException(e);
+            throw new ScraperException(e);
         }
     }
 
-    protected List<? extends Category> parseCategories() throws ScrapperException, IOException {
+    protected List<? extends Category> parseCategories() throws ScraperException, IOException {
         String data = Http.get("https://sportcache.lider-bet.com/search/data_en.json");
 
         long categoriesParsed = 0;
@@ -286,7 +285,7 @@ public class LiderBetScraper implements BookieScraper {
 
         if( !(categoryNodes instanceof ObjectNode) && !(subCategoryNodes instanceof ObjectNode)) {
             logger.error("Received unexpected data.");
-            throw new ScrapperException("Received unexpected data. categoryNodes and subCategoryNodes at leas one of " +
+            throw new ScraperException("Received unexpected data. categoryNodes and subCategoryNodes at leas one of " +
                     "them is not ObjectNode");
         }
 
@@ -299,7 +298,7 @@ public class LiderBetScraper implements BookieScraper {
         return mapEventsToCategories(new ArrayList<>(categories.values()), events);
     }
 
-    public Map<Long, List<LocalEvent>> getAllEventsForSport() throws ScrapperException {
+    public Map<Long, List<LocalEvent>> getAllEventsForSport() throws ScraperException {
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -310,7 +309,7 @@ public class LiderBetScraper implements BookieScraper {
 
             if( !(tree instanceof ObjectNode) ) {
                 logger.error("Unknown data structure received. Root object for events is expected to be ObjectNode but it is not.");
-                throw new ScrapperException("Unknown data structure received. Root object for events is expected to be ObjectNode but it is not.");
+                throw new ScraperException("Unknown data structure received. Root object for events is expected to be ObjectNode but it is not.");
             }
 
             ((ObjectNode) tree).remove("-1");
@@ -320,7 +319,7 @@ public class LiderBetScraper implements BookieScraper {
             events = mapper.readValue(fixedTree, new TypeReference<Map<Long, List<LocalEvent>>>() {});
         } catch (IOException e) {
             logger.error("Cannot get event list, http request failed or could not deserialize data. {}", e);
-            throw new ScrapperException(e);
+            throw new ScraperException(e);
         }
 
         return events;

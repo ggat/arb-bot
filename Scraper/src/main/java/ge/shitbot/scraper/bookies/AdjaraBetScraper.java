@@ -2,9 +2,7 @@ package ge.shitbot.scraper.bookies;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -16,7 +14,7 @@ import ge.shitbot.core.datatypes.deserialize.AbstractDateDeserializer;
 import ge.shitbot.scraper.BookieScraper;
 import ge.shitbot.scraper.datatypes.Category;
 import ge.shitbot.scraper.datatypes.Event;
-import ge.shitbot.scraper.exceptions.ScrapperException;
+import ge.shitbot.scraper.exceptions.ScraperException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -167,18 +165,18 @@ public class AdjaraBetScraper implements BookieScraper {
 
     }
 
-    public List<? extends Category> getFreshData() throws ScrapperException {
+    public List<? extends Category> getFreshData() throws ScraperException {
         logger.info("Start scraping");
 
         try {
             return parseCategories();
         } catch (IOException e) {
             logger.error("Error while trying to parse categories {}", e);
-            throw new ScrapperException(e);
+            throw new ScraperException(e);
         }
     }
 
-    protected List<? extends Category> parseCategories() throws ScrapperException, IOException {
+    protected List<? extends Category> parseCategories() throws ScraperException, IOException {
         String sportBookTree = executeGet("https://bookmakersapi.adjarabet.com/sportsbook/rest/public/sportbookTree?ln=en");
 
         ObjectMapper mapper = new ObjectMapper();
@@ -236,7 +234,7 @@ public class AdjaraBetScraper implements BookieScraper {
         return mapEventsToCategories(categories, events);
     }
 
-    protected Map<Long, List<LocalEvent>> getAllEventsForSport() throws ScrapperException {
+    protected Map<Long, List<LocalEvent>> getAllEventsForSport() throws ScraperException {
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -248,7 +246,7 @@ public class AdjaraBetScraper implements BookieScraper {
             events = mapper.readValue(executeString, new TypeReference<Map<Long, List<LocalEvent>>>() {});
         } catch (IOException e) {
             logger.error("Cannot get event list, http request failed or could not deserialize data. {}", e);
-            throw new ScrapperException(e);
+            throw new ScraperException(e);
         }
 
         return events;

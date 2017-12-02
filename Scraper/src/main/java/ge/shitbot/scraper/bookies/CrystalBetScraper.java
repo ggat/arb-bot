@@ -3,7 +3,7 @@ package ge.shitbot.scraper.bookies;
 import ge.shitbot.scraper.BookieScraper;
 import ge.shitbot.scraper.datatypes.Category;
 import ge.shitbot.scraper.datatypes.Event;
-import ge.shitbot.scraper.exceptions.ScrapperException;
+import ge.shitbot.scraper.exceptions.ScraperException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -46,7 +46,7 @@ public class CrystalBetScraper implements BookieScraper {
 
     }
 
-    public List<Category> getFreshData() throws ScrapperException {
+    public List<Category> getFreshData() throws ScraperException {
         logger.info("Start scrapping of CrystalBet");
 
         try {
@@ -65,7 +65,7 @@ public class CrystalBetScraper implements BookieScraper {
 
             logger.error("Scrapping of CrystalBet failed {}", e);
             e.printStackTrace();
-            throw new ScrapperException(e);
+            throw new ScraperException(e);
         }
     }
 
@@ -150,16 +150,16 @@ public class CrystalBetScraper implements BookieScraper {
 
                 Element sideNames = row.selectFirst(".x_game_title > span");
 
-                if(sideNames == null) {
+                if(sideNames == null || sideNames.children().size() < 1) {
                     logger.info("This event has no name element, so we skip it.");
                     continue;
                 }
 
                 sideNames = sideNames.child(0);
 
-                if (sideNames == null) {
+                if (sideNames == null || sideNames.children().size() < 1) {
                     logger.error("Cannot get side names element");
-                    throw new ScrapperException("Cannot get side names element");
+                    throw new ScraperException("Cannot get side names element");
                 }
 
                 String eventTitle = sideNames.text().trim();
@@ -170,7 +170,7 @@ public class CrystalBetScraper implements BookieScraper {
                 if (names.length != 2) {
 
                     logger.debug("Could not parse side names for text={}", eventTitle);
-                    throw new ScrapperException("Could not parse side names for text=" + eventTitle);
+                    throw new ScraperException("Could not parse side names for text=" + eventTitle);
                 }
 
                 Event event = new Event(surroundingCategory, eventDateTime, names[0], names[1]);
@@ -183,14 +183,14 @@ public class CrystalBetScraper implements BookieScraper {
                 }
             } catch (ParseException e) {
 
-                logger.error("Parsing for date time failed for subcategory: {} id={} e={}", surroundingCategory.getName(), e);
+                logger.warn("Parsing for date time failed for subcategory: {} id={} e={}", surroundingCategory.getName(), e);
 
-                e.printStackTrace();
+                //e.printStackTrace();
             } catch (Exception e) {
 
-                logger.error("Parsing for subcategory: {} e={}", surroundingCategory, e);
+                logger.warn("Parsing failed for subCategory: {} e={}", surroundingCategory.getName(), e);
 
-                e.printStackTrace();
+                //e.printStackTrace();
             }
 
         }

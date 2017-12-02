@@ -14,19 +14,12 @@ import ge.shitbot.core.datatypes.util.http.Http;
 import ge.shitbot.scraper.BookieScraper;
 import ge.shitbot.scraper.datatypes.Category;
 import ge.shitbot.scraper.datatypes.Event;
-import ge.shitbot.scraper.exceptions.ScrapperException;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClients;
+import ge.shitbot.scraper.exceptions.ScraperException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.tidy.StreamIn;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -96,15 +89,15 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
         }
 
         @JsonProperty("eventName")
-        public void setSideNames(String eventName) throws ScrapperException {
+        public void setSideNames(String eventName) throws ScraperException {
 
             eventName = eventName.trim();
             String names[] = eventName.split(" - ");
 
             if(names.length != 2 ) {
 
-                logger.error("Could not parse side names for eventName={} split_length={}", eventName, names.length);
-                throw new ScrapperException("Could not parse side eventName for event=" + eventName);
+                logger.warn("Could not parse side names for eventName={} split_length={}", eventName, names.length);
+                throw new ScraperException("Could not parse side eventName for event=" + eventName);
             }
 
             super.setSideOne(names[0]);
@@ -131,7 +124,7 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
         }
     }
 
-    public List<? extends Category> getFreshData() throws ScrapperException {
+    public List<? extends Category> getFreshData() throws ScraperException {
         logger.info("Start scraping");
 
         try {
@@ -144,7 +137,7 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
 
             logger.error("Scraping failed {}", e);
             e.printStackTrace();
-            throw new ScrapperException(e);
+            throw new ScraperException(e);
         }
     }
 
@@ -182,7 +175,7 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
         return dataNode.toString();
     }
 
-    protected List<? extends Category> parseCategories() throws IOException, ScrapperException {
+    protected List<? extends Category> parseCategories() throws IOException, ScraperException {
 
         ObjectMapper mapper = new ObjectMapper();
         String data = getJsonDataNodeFromUrl(getSearchUrl());
@@ -199,7 +192,7 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
                 .collect(Collectors.toList());
 
         if(sports.size() < 1) {
-            throw new ScrapperException("Sport list is less than 1 probably soccer id changed.");
+            throw new ScraperException("Sport list is less than 1 probably soccer id changed.");
         }
 
         long categoriesParsed = sports.stream().filter(el -> el.getLocalLevel().equals(2L)).count();
@@ -227,7 +220,14 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
 
                                if(category.getName().equals("International")) {
                                    //Out rights are europe specific thing and we skip these
-                                   if(subCategory.getName().equals("Outrights")) { return; }
+                                   if(subCategory.getName().equals("Outrights")) {
+                                       return;
+                                   }
+                               }
+
+                               //Out rights are europe specific thing and we skip these
+                               if(subCategory.getName().contains("Outright")) {
+                                   return;
                                }
 
                                ArrayList<LocalEvent> events = parseEvents(subCategory);
@@ -236,9 +236,9 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
                                    subCategory.addEvent(event);
                                });
 
-                           } catch (ScrapperException e) {
+                           } catch (ScraperException e) {
 
-                               logger.error("Events parsing failed for subCategory={} and id={}", subCategory.getName(), subCategory.getId());
+                               logger.warn("Events parsing failed for subCategory={} and id={}", subCategory.getName(), subCategory.getId());
 
                                e.printStackTrace();
                            }
@@ -261,7 +261,7 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
         return s.hasNext() ? s.next() : "";
     }
 
-    protected ArrayList<LocalEvent> parseEvents(Category surroundingCategory) throws ScrapperException {
+    protected ArrayList<LocalEvent> parseEvents(Category surroundingCategory) throws ScraperException {
         try {
 
             ObjectMapper mapper = new ObjectMapper();
@@ -274,7 +274,7 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
             logger.error("Could not get events for subcategory {} id={} and category {} id={}",
                     surroundingCategory.getName(), surroundingCategory.getId(),
                     surroundingCategory.getParent().getName(), surroundingCategory.getParent().getId());
-            throw new ScrapperException(e);
+            throw new ScraperException(e);
         }
     }
 }
