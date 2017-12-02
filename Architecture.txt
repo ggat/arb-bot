@@ -15,7 +15,7 @@
 
     There may be multiple sources, one of them will be our daemon.
 
-- Scrapper
+- Scraper
     *Provide scrapper implementation for each bookie.
     
 - DataAnalyzer
@@ -26,7 +26,7 @@
 - Persist
     * Abstraction layer for data persistence.
 
-- Daemon [DataAnalyzer, Alert]
+- Daemon [Scraper, DataAnalyzer, Alert]
     * Get new data
     * Save it.
     * Run DataAnalyzer and save data/analyzed data.
