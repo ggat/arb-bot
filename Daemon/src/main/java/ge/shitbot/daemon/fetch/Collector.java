@@ -3,7 +3,6 @@ package ge.shitbot.daemon.fetch;
 import ge.shitbot.daemon.exceptions.BookieScraperNotFoundException;
 import ge.shitbot.hardcode.BookieNames;
 import ge.shitbot.scraper.BookieScraper;
-import ge.shitbot.scraper.bookies.*;
 import ge.shitbot.scraper.datatypes.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +16,9 @@ import java.util.concurrent.Semaphore;
 /**
  * Created by giga on 11/30/17.
  */
-public final class Fetcher {
+public final class Collector {
 
-    private static Logger logger = LoggerFactory.getLogger(Fetcher.class);
+    private static Logger logger = LoggerFactory.getLogger(Collector.class);
 
     protected static Semaphore semaphore = new Semaphore(1);
     protected static List<ScraperThread> scraperThreads = new ArrayList<>();

@@ -1,6 +1,6 @@
 package ge.shitbot.daemon;
 
-import ge.shitbot.daemon.fetch.Fetcher;
+import ge.shitbot.daemon.fetch.Collector;
 import ge.shitbot.hardcode.BookieNames;
 import ge.shitbot.scraper.datatypes.Category;
 import org.slf4j.Logger;
@@ -20,8 +20,8 @@ public class Launch {
         //
         logger.info("Daemon started.");
         logger.info("Starting data fetcher.");
-        Fetcher.start();
-        Map<String, List<? extends Category>> data = Fetcher.getData();
+        Collector.start();
+        Map<String, List<? extends Category>> data = Collector.getData();
 
         while (true) {
 
@@ -41,7 +41,7 @@ public class Launch {
             } catch (InterruptedException e1) {
 
                 logger.debug("Launcher interrupted.");
-                Fetcher.stop();
+                Collector.stop();
                 Thread.currentThread().interrupt();
             }
         }
