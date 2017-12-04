@@ -105,6 +105,8 @@ public class CrystalBetScraper implements BookieScraper {
 
                     logger.error("Request for events html data of subCategory={} id={} failed.", subCategory.getName(),
                             subCategory.getId());
+
+                    continue;
                 }
 
                 logger.debug("Start parsing of events for subcategory: {} id={}", subCategory.getName(), subCategory.getId());
@@ -158,8 +160,9 @@ public class CrystalBetScraper implements BookieScraper {
                 sideNames = sideNames.child(0);
 
                 if (sideNames == null || sideNames.children().size() < 1) {
-                    logger.error("Cannot get side names element");
-                    throw new ScraperException("Cannot get side names element");
+                    logger.warn("Cannot get side names element");
+                    continue;
+                    //throw new ScraperException("Cannot get side names element");
                 }
 
                 String eventTitle = sideNames.text().trim();

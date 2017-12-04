@@ -299,6 +299,12 @@ public class BetLiveScraper implements BookieScraper {
                         "&gametype=null&state=null&sportid=null&time=100&page=0");
 
                 events = mapper.readValue(executeString, LocalEventList.class);
+
+                if(events == null) {
+                    logger.error("Look at mee this is strange events == null but how FIXME.");
+                    throw new IOException("Could not read events.");
+                }
+
             } catch (IOException e) {
 
                 if(page == 0) {

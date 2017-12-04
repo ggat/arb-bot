@@ -239,8 +239,6 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
                            } catch (ScraperException e) {
 
                                logger.warn("Events parsing failed for subCategory={} and id={}", subCategory.getName(), subCategory.getId());
-
-                               e.printStackTrace();
                            }
                        }
                    });
