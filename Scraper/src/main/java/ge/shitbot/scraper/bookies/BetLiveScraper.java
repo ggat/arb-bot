@@ -269,11 +269,14 @@ public class BetLiveScraper implements BookieScraper {
             category.getSubCategories().forEach(subCategory -> {
 
                 try {
-                    List<LocalEvent> events = parseEvents(subCategory.getId());
 
-                    events.forEach(event -> {
-                        subCategory.addEvent(event);
-                    });
+                    if(!subCategory.getName().contains("OutRight")) {
+                        List<LocalEvent> events = parseEvents(subCategory.getId());
+
+                        events.forEach(event -> {
+                            subCategory.addEvent(event);
+                        });
+                    }
 
                 } catch (ScraperException e) {
                     logger.warn("Could not parse events for subCategory {}", subCategory.getName());

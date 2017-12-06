@@ -23,4 +23,9 @@ public class CrocoBetScraper extends AbstractEuropeCrocoScraper {
 
         return "https://www.crocobet.com/rest/market/categories/multi/"+ subCategoryId +"/events";
     }
+
+    @Override
+    public String getOutRightsString() {
+        return "Outright";
+    }
 }

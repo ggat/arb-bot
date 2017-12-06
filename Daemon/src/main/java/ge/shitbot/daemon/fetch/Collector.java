@@ -7,10 +7,7 @@ import ge.shitbot.scraper.datatypes.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -20,17 +17,26 @@ public final class Collector {
 
     private static Logger logger = LoggerFactory.getLogger(Collector.class);
 
-    protected static Semaphore semaphore = new Semaphore(1);
     protected static List<ScraperThread> scraperThreads = new ArrayList<>();
-    protected static Map<String, List<? extends Category>> data = new LinkedHashMap<>();
+    protected static ScraperThread.SharedData data = new ScraperThread.SharedData();
+    protected static Object lock = new Object();
+    protected static long scrapingInterval = 30;
+    protected static List<DataUpdateHandler> updateHandlers = new ArrayList<>();
 
-    public static Map<String, List<? extends Category>> start() {
+    public static long getScrapingInterval() {
+        return scrapingInterval;
+    }
 
-        long interval = 30 * 1000;
+    public static void setScrapingInterval(long scrapingInterval) {
+        Collector.scrapingInterval = scrapingInterval;
+    }
 
+    public static void start() {
+
+        long interval = scrapingInterval * 1000;
         List<String> bookieNames = BookieNames.asList();
 
-        for (int num = 0; num < bookieNames.size(); num++ ) {
+        for (int num = 0; num < bookieNames.size(); num++) {
 
             String bookieName = bookieNames.get(num);
 
@@ -42,15 +48,36 @@ public final class Collector {
                 continue;
             }
 
-            ScraperThread scraperThread = new ScraperThread(semaphore, "ScraperThread " + num,
-                    bookieName, scraper, data, interval);
+            ScraperThread scraperThread = new ScraperThread("ScraperThread " + num,
+                    bookieName, scraper, data, interval, lock);
             scraperThreads.add(scraperThread);
 
             logger.info("Created scraper thread for bookie {} and starting it..", bookieName);
             scraperThread.start();
         }
 
-        return data;
+        while (true) {
+
+            try {
+
+                logger.debug("Waiting for data to be added.");
+
+                synchronized (lock) {
+                    lock.wait();
+
+                    synchronized (data) {
+
+                        logger.info("LastUpdatedKey: {}", data.lastUpdatedKey());
+
+                        List<? extends Category> updatedItem = data.getLastUpdated();
+                        handleDataUpdate(updatedItem);
+                    }
+                }
+            } catch (InterruptedException e) {
+                logger.warn("Collector thread interrupted.");
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     public static boolean isRunning() {
@@ -58,7 +85,7 @@ public final class Collector {
     }
 
     public static Map<String, List<? extends Category>> getData() {
-        return data;
+        return new HashMap<>(data);
     }
 
     public static void stop() {
@@ -82,5 +109,22 @@ public final class Collector {
         }
 
         logger.info("All scraper threads terminated successfully.");
+    }
+
+    protected static void handleDataUpdate(List<? extends Category> updatedItem) {
+
+
+        for (DataUpdateHandler handler : updateHandlers) {
+            handler.handle(new DataUpdateEvent(updatedItem));
+        }
+
+        logger.info("Data {}", data.size());
+    }
+
+    public static void addUpdateEventHandler(DataUpdateHandler handler) {
+
+        updateHandlers.add(handler);
+
+        logger.info("Updated handles {}", updateHandlers.size());
     }
 }

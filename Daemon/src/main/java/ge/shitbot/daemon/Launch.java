@@ -21,6 +21,14 @@ public class Launch {
         logger.info("Daemon started.");
         logger.info("Starting data fetcher.");
         Collector.start();
+        Collector.setScrapingInterval(40);
+
+        Collector.addUpdateEventHandler(event -> {
+            List<? extends Category> data = event.getData();
+
+            System.out.println("ssdsadad");
+        });
+
         Map<String, List<? extends Category>> data = Collector.getData();
 
         while (true) {

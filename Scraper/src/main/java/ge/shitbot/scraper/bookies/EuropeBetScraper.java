@@ -23,4 +23,9 @@ public class EuropeBetScraper extends AbstractEuropeCrocoScraper {
     public String getEventsUrl(Long subCategoryId) {
         return "https://sport2.europebet.com/rest/market/categories/"+ subCategoryId +"/events?_=1511269825840";
     }
+
+    @Override
+    public String getOutRightsString() {
+        return "Outrights";
+    }
 }

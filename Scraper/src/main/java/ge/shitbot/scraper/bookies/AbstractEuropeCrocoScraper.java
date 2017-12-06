@@ -42,6 +42,8 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
 
     public abstract String getEventsUrl(Long subCategoryId);
 
+    public abstract String getOutRightsString();
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class LocalCategory extends Category {
 
@@ -218,15 +220,8 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
 
                            try {
 
-                               if(category.getName().equals("International")) {
-                                   //Out rights are europe specific thing and we skip these
-                                   if(subCategory.getName().equals("Outrights")) {
-                                       return;
-                                   }
-                               }
-
                                //Out rights are europe specific thing and we skip these
-                               if(subCategory.getName().contains("Outright")) {
+                               if(subCategory.getName().contains(getOutRightsString())) {
                                    return;
                                }
 
@@ -269,7 +264,7 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
 
         } catch (Exception e) {
 
-            logger.error("Could not get events for subcategory {} id={} and category {} id={}",
+            logger.debug("Could not get events for subcategory {} id={} and category {} id={}",
                     surroundingCategory.getName(), surroundingCategory.getId(),
                     surroundingCategory.getParent().getName(), surroundingCategory.getParent().getId());
             throw new ScraperException(e);

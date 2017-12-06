@@ -84,7 +84,7 @@ public class CrystalBetScraper implements BookieScraper {
             Category category = new Category(name, Long.parseLong(id));
             Elements subcategoryDiv = row.parent().select(".new_sport_div > .new_sport");
 
-            logger.debug("Start parsing of subCategories for category: {} id={}", category.getName(), category.getId());
+            logger.trace("Start parsing of subCategories for category: {} id={}", category.getName(), category.getId());
 
             for (Element subCategoryElement : subcategoryDiv) {
 
@@ -109,7 +109,7 @@ public class CrystalBetScraper implements BookieScraper {
                     continue;
                 }
 
-                logger.debug("Start parsing of events for subcategory: {} id={}", subCategory.getName(), subCategory.getId());
+                logger.trace("Start parsing of events for subcategory: {} id={}", subCategory.getName(), subCategory.getId());
 
                 //Parse events html data using add it to subCategory.
                 parseEvents(events, subCategory);
@@ -159,8 +159,9 @@ public class CrystalBetScraper implements BookieScraper {
 
                 sideNames = sideNames.child(0);
 
-                if (sideNames == null || sideNames.children().size() < 1) {
-                    logger.warn("Cannot get side names element");
+                if (sideNames == null) {
+                    logger.debug("Cannot get side names element for subCategory={} id={}", surroundingCategory.getName(),
+                            surroundingCategory.getId());
                     continue;
                     //throw new ScraperException("Cannot get side names element");
                 }

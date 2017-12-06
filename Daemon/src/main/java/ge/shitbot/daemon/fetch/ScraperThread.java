@@ -6,6 +6,8 @@ import ge.shitbot.scraper.exceptions.ScraperException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
@@ -17,27 +19,49 @@ public class ScraperThread implements Runnable {
 
     private static Logger logger = LoggerFactory.getLogger(ScraperThread.class);
 
-    protected Semaphore semaphore;
     protected String name;
     protected String bookieName;
     protected BookieScraper scraper;
     protected long fetchInterval = 60;
     private long successFetchCount = 0;
+    protected Object localLock;
 
     //Thread specific
     private Thread thread;
     //private boolean mustRun;
 
-    Map<String, List<? extends Category>> categories;
+    SharedData categories;
 
-    public ScraperThread(Semaphore semaphore, String name, String bookieName, BookieScraper scraper,
-                         Map<String, List<? extends Category>> categories, long fetchInterval) {
-        this.semaphore = semaphore;
+    public static class SharedData extends HashMap<String, List<? extends Category>> {
+        private String lastUpdated;
+
+        public String lastUpdatedKey() {
+            return lastUpdated;
+        }
+
+        public List<? extends Category> getLastUpdated() {
+            return lastUpdated == null ? null : this.get(lastUpdated);
+        }
+
+        @Override
+        public List<? extends Category> put(String key, List<? extends Category> value) {
+            List<? extends Category> result = super.put(key, value);
+
+            lastUpdated = key;
+
+            return result;
+        }
+
+    }
+
+    public ScraperThread(String name, String bookieName, BookieScraper scraper,
+                         SharedData categories, long fetchInterval, Object lock) {
         this.name = name;
         this.bookieName = bookieName;
         this.scraper = scraper;
         this.categories = categories;
         this.fetchInterval = fetchInterval;
+        this.localLock = lock;
     }
 
     public void start() {
@@ -54,49 +78,40 @@ public class ScraperThread implements Runnable {
         logger.info("Starting thread: {}", name);
 
         while (true) {
-            try {
 
-                List<? extends Category> data = fetchIt();
-
-                // First, get a permit.
-
-                logger.info("{} is waiting for a permit.", name);
-
-                semaphore.acquire();
-
-                logger.info("{} gets a permit.", name);
-                // Now, access shared resource.
-
-                categories.put(bookieName, data);
-
-            } catch (InterruptedException exc) {
-                logger.debug("Interrupted first.");
-                Thread.currentThread().interrupt();
+            List<? extends Category> data = fetchIt();
+            synchronized (categories) {
+                synchronized (localLock) {
+                    categories.put(bookieName, data);
+                    localLock.notifyAll();
+                }
             }
 
-            // Release the permit.
-            logger.info("{} releases the permit.", name);
-            semaphore.release();
+            try {
+                Thread.sleep(fetchInterval);
+            } catch (InterruptedException e) {
+
+                logger.warn("Interrupted thread {} ", name);
+                Thread.currentThread().interrupt();
+            }
         }
     }
 
     private List<? extends Category> fetchIt() {
-
-        logger.info("Fetching #{} now.", successFetchCount);
-
         try {
 
-            logger.info("Putting fetch #{} data.", successFetchCount);
+        logger.info("Putting fetch #{} data.", successFetchCount);
 
-            //categories.put(bookieName, scraper.getFreshData());
-            List<? extends Category> freshData = scraper.getFreshData();
-            successFetchCount++;
-            return freshData;
+        //categories.put(bookieName, scraper.getFreshData());
+        List<? extends Category> freshData = scraper.getFreshData();
+        //List<? extends Category> freshData = new ArrayList<>();
+        successFetchCount++;
+        return freshData;
 
         } catch (ScraperException e) {
 
             logger.info("Fetch #{} failed, will retry within {} seconds..", successFetchCount,
-                    fetchInterval / 1000 );
+                    fetchInterval / 1000);
 
             //Wait little bit after fail.
             try {
