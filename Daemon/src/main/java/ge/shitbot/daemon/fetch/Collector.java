@@ -13,7 +13,7 @@ import java.util.concurrent.Semaphore;
 /**
  * Created by giga on 11/30/17.
  */
-public final class Collector {
+public final class Collector implements Runnable {
 
     private static Logger logger = LoggerFactory.getLogger(Collector.class);
 
@@ -22,6 +22,7 @@ public final class Collector {
     protected static Object lock = new Object();
     protected static long scrapingInterval = 30;
     protected static List<DataUpdateHandler> updateHandlers = new ArrayList<>();
+    protected static Thread thread;
 
     public static long getScrapingInterval() {
         return scrapingInterval;
@@ -31,7 +32,20 @@ public final class Collector {
         Collector.scrapingInterval = scrapingInterval;
     }
 
+    public void run() {
+        Collector.action();
+    }
+
     public static void start() {
+        thread = new Thread( new Collector(),"Collector Thread");
+        thread.start();
+    }
+
+    public static void stop() {
+        Collector.stopAction();
+    }
+
+    public static void action() {
 
         long interval = scrapingInterval * 1000;
         List<String> bookieNames = BookieNames.asList();
@@ -70,7 +84,8 @@ public final class Collector {
                         logger.info("LastUpdatedKey: {}", data.lastUpdatedKey());
 
                         List<? extends Category> updatedItem = data.getLastUpdated();
-                        handleDataUpdate(updatedItem);
+                        String target = data.lastUpdatedKey();
+                        handleDataUpdate(updatedItem, target);
                     }
                 }
             } catch (InterruptedException e) {
@@ -88,7 +103,9 @@ public final class Collector {
         return new HashMap<>(data);
     }
 
-    public static void stop() {
+
+
+    public static void stopAction() {
         logger.info("Stop fetching data going to terminate all scraper threads.");
 
         while (scraperThreads.size() > 0) {
@@ -111,11 +128,11 @@ public final class Collector {
         logger.info("All scraper threads terminated successfully.");
     }
 
-    protected static void handleDataUpdate(List<? extends Category> updatedItem) {
+    protected static void handleDataUpdate(List<? extends Category> updatedItem, String target) {
 
 
         for (DataUpdateHandler handler : updateHandlers) {
-            handler.handle(new DataUpdateEvent(updatedItem));
+            handler.handle(new DataUpdateEvent(new ArrayList<Category>(updatedItem), target));
         }
 
         logger.info("Data {}", data.size());

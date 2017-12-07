@@ -11,9 +11,11 @@ import java.util.List;
 public class DataUpdateEvent {
 
     List<? extends Category> data;
+    String target;
 
-    public DataUpdateEvent(List<? extends Category> data) {
+    public DataUpdateEvent(List<? extends Category> data, String target) {
         this.data = data;
+        this.target = target;
     }
 
     public List<? extends Category> getData() {
@@ -22,5 +24,13 @@ public class DataUpdateEvent {
 
     public void setData(List<? extends Category> data) {
         this.data = data;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
     }
 }
