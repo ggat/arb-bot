@@ -1,18 +1,21 @@
 package ge.shitbot.persist.models;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by giga on 12/7/17.
  */
 @Entity
-@Table(name = "skill")
-public class Skill {
+public class Person {
 
-    String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public Skill() {
+    @Column
+    public String name;
+
+    public Person() {
     }
 
     public String getName() {
@@ -25,7 +28,7 @@ public class Skill {
 
     @Override
     public String toString() {
-        return "Skill{" +
+        return "Person{" +
                 "name='" + name + '\'' +
                 '}';
     }

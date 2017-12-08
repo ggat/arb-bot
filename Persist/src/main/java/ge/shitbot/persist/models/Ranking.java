@@ -1,18 +1,26 @@
 package ge.shitbot.persist.models;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by giga on 12/7/17.
  */
 @Entity
-@Table(name = "ranking")
 public class Ranking {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne
     Person subject;
+
+    @OneToOne
     Person observer;
+
+    @OneToOne
     Skill skill;
+
     Integer ranking;
 
     public Ranking() {

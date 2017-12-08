@@ -16,5 +16,7 @@
             org.hibernate.dialect.MySQL5Dialect
         </property>
         <mapping class="ge.shitbot.persist.models.Person" />
+        <mapping class="ge.shitbot.persist.models.Skill" />
+        <mapping class="ge.shitbot.persist.models.Ranking" />
     </session-factory>
 </hibernate-configuration>

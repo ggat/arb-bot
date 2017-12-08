@@ -1,6 +1,8 @@
 package ge.shitbot.persist.tests;
 
 import ge.shitbot.persist.models.Person;
+import ge.shitbot.persist.models.Ranking;
+import ge.shitbot.persist.models.Skill;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -32,11 +34,7 @@ public class PersonTest {
 
         try (Session session = factory.openSession()) {
             Transaction tx = session.beginTransaction();
-            Person person = new Person();
-            person.setName("j. C. Smell");
-
-            session.save(person);
-
+            savePerson(session, "j. C. Smell");
             tx.commit();
         }
     }
@@ -59,5 +57,65 @@ public class PersonTest {
         Person person = query.setMaxResults(1).uniqueResult();
 
         return person;
+    }
+
+    public Person savePerson(Session session, String name) {
+        Person person = findPerson(session, name);
+
+        if(person == null) {
+            person = new Person();
+            person.setName(name);
+            session.save(person);
+        }
+
+        return person;
+    }
+
+    public Skill findSkill(Session session, String name) {
+        Query<Skill> query = session.createQuery("from Skill s where s.name=:name", Skill.class);
+        query.setParameter("name", name);
+        return query.setMaxResults(1).uniqueResult();
+    }
+
+    public Skill saveSkill(Session session, String name) {
+        Skill skill = findSkill(session, name);
+
+        if(skill == null) {
+            skill = new Skill();
+            skill.setName(name);
+            session.save(skill);
+        }
+
+        return skill;
+    }
+
+    @Test
+    public void testSaveSkill() {
+        try (Session session = factory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            saveSkill(session, "Java");
+            tx.commit();
+        }
+    }
+
+    @Test
+    public void testSaveRanking() {
+        try(Session session = factory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            Person subject = savePerson(session, "Giga Gatenashvili");
+            Person observer = savePerson(session, "Alex Kazaziani");
+            Skill skill = saveSkill(session, "Java");
+
+            Ranking ranking = new Ranking();
+            ranking.setSubject(subject);
+            ranking.setObserver(observer);
+            ranking.setSkill(skill);
+            ranking.setRanking(8);
+            session.save(ranking);
+
+            transaction.commit();
+
+        }
     }
 }

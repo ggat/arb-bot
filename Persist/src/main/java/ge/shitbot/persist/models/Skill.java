@@ -6,17 +6,15 @@ import javax.persistence.*;
  * Created by giga on 12/7/17.
  */
 @Entity
-@Table(name = "persons")
-public class Person {
+public class Skill {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
     String name;
 
-    public Person() {
+    public Skill() {
     }
 
     public String getName() {
@@ -29,7 +27,7 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
+        return "Skill{" +
                 "name='" + name + '\'' +
                 '}';
     }
