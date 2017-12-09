@@ -71,24 +71,25 @@
                     <thead>
                     <tr>
                         <th ng-repeat="bookie in data">{{bookie.name}}</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="success">
-                        <td ng-repeat="bookie in data">
+                    <tr ng-repeat="chain in chains" class="success">
+                        <td ng-repeat="bookie in bookieData">
                             <!--<select ng-model="ddd[$index]" ng-options="item for item in bookie.items"> </select>-->
                             <div class="form-group" ng-class="{ 'has-error' : false }">
                                 <!--<label for="tyis_tipi_id"><?php echo $human_name; ?></label>-->
                                 <select ng-required="false"
-                                        ng-options="item for item in bookie.items"
+                                        ng-options="item.id as item.name for item in  bookie.items"
                                         class="form-control"
                                         type="number"
                                         name="tyis_tipi_id"
                                         data-placeholder="Category"
                                         chosen
                                         ng-disabled="false"
-                                        ng-model="someModel">
-                                    <option value="">{{item}}</option>
+                                        ng-model="chain[bookie.id.toString()]">
+                                    <option value="">Category</option>
                                 </select>
 
                                 <div class="help-block" ng-messages="maketi3.tyis_tipi_id.$error"
@@ -97,6 +98,33 @@
                                 </div>
                             </div>
                         </td>
+                        <td><button class="btn btn-danger" ng-click="chains.splice($index, 1)">RM</button></td>
+                    </tr>
+                    <!--New chain initiator row-->
+                    <tr>
+                        <td ng-repeat="bookie in bookieData">
+                            <!--<select ng-model="ddd[$index]" ng-options="item for item in bookie.items"> </select>-->
+                            <div class="form-group" ng-class="{ 'has-error' : false }">
+                                <!--<label for="tyis_tipi_id"><?php echo $human_name; ?></label>-->
+                                <select ng-required="false"
+                                        ng-options="item.id as item.name for item in  chainInititatorRowData[bookie.id]"
+                                        class="form-control"
+                                        type="number"
+                                        name="tyis_tipi_id"
+                                        data-placeholder="Category"
+                                        chosen
+                                        ng-disabled="false"
+                                        ng-model="newChainInitiatorRowModel[bookie.id]">
+                                    <option value="">Category</option>
+                                </select>
+
+                                <div class="help-block" ng-messages="maketi3.tyis_tipi_id.$error"
+                                     ng-if="maketi3.tyis_tipi_id.$invalid">
+                                    <!-- Messages should go here. -->
+                                </div>
+                            </div>
+                        </td>
+                        <td></td>
                     </tr>
                     </tbody>
                 </table>
@@ -113,6 +141,8 @@
         crossorigin="anonymous"></script>
 <!-- Latest compiled and minified JavaScript -->
 <script src="../node_modules/angular/angular.min.js"></script>
+<!--Chosen with fuzzy search support.-->
+<script src="../node_modules/underscore/underscore-min.js"></script>
 <!--Chosen with fuzzy search support.-->
 <script src="js/lib/fuzzy-chosen/chosen-fuzzy.jquery.js"></script>
 <!-- Ordinary chosen.-->

@@ -1,37 +1,133 @@
-var app = angular.module('matcher', ['localytics.directives']);
+var underscore = angular.module('underscore', []);
+underscore.factory('_', ['$window', function($window) {
+    return $window._; // assumes underscore has already been loaded on the page
+}]);
 
+var app = angular.module('matcher', ['localytics.directives', 'underscore']);
 
-app.controller('MainCtrl', function($scope) {
+app.controller('MainCtrl', function($scope, _) {
 
     $scope.name = 'World';
-    $scope.data = [ ];
+    $scope.bookieData = [];
+    $scope.chains = [];
+    $scope.newChainInitiatorRowModel = {};
+
+    /**
+     * NICR selects
+     *
+     * @type {{
+     *  key : "bookieId" Id of bookie.
+     *  value : items[] list of items that are not used to any chain yet.
+     * }}
+     */
+    $scope.chainInititatorRowData = {};
+    function updateChainInititatorRowData() {
+
+        $scope.chainInititatorRowData = {};
+        _.each($scope.bookieData, function (bookie, key) {
+            var bookieId = bookie.id;
+
+            $scope.chainInititatorRowData[bookieId] = [];
+
+            console.log("$scope.chainInititatorRowData: 1111");
+
+            //Iterate over each item of this bookie
+            _.each(bookie.items, function (category) {
+
+                console.log("$scope.chainInititatorRowData: 2222");
+
+                //Iterate over each chain
+                var used = _.any($scope.chains, function(chain) {
+
+                    console.log("$scope.chainInititatorRowData: 3333");
+
+                    // Check if there is an item for this bookie in this chain
+                    // and it matches current category. This means category is used by chain.
+                    var bookieChaninItem = chain[bookieId.toString()];
+                    var used = bookieChaninItem == category.id;
+
+                    return used;
+                });
+
+                if(!used) {
+                    $scope.chainInititatorRowData[bookieId].push(category);
+                } else {
+                    console.log("asdasdsadasd")
+                }
+            });
+        });
+
+        console.log("$scope.chainInititatorRowData: ", $scope.chainInititatorRowData);
+    }
+
+    $scope.$watchCollection('newChainInitiatorRowModel', function (newValue, oldValue, scope) {
+
+        // Check if run after reset
+        if(_.isEmpty(newValue)) {
+            return;
+        }
+
+        $scope.chains.push(newValue);
+
+        //After chains are updated update initiator selects too.
+        updateChainInititatorRowData();
+
+        console.log("Initiating new chain with value ", newValue );
+        $scope.newChainInitiatorRowModel = {};
+    });
 
     for(var i=0; i < 8; i++) {
-        $scope.data[i] = {
+        $scope.bookieData[i] = {
+            id: i + 5620,
             name : "Bookie_" + i,
             items: []
         };
 
+        countries = getNewCouuntries();
+
         for(var index in countries) {
             var country = countries[index];
-            var countryName = country.name;
+            /*var countryName = country.name;
 
             if(countryName.length > 24) {
                 countryName = countryName.substr(0, 24);
-            }
+            }*/
 
-            $scope.data[i].items[index] = countryName;
+            $scope.bookieData[i].items[index] = country;
         }
     }
+
+    updateChainInititatorRowData();
+
+    $scope.bookieCount = $scope.bookieData.length;
+    $scope.bookieIndex = _.object(_.map($scope.bookieData, function (item, key) {
+        return [item.id, key];
+    }));
+
+    console.log("bookieIndex ", $scope.bookieIndex);
+    console.log("bookieData ", $scope.bookieData);
 });
 
-var countries = [
+function getNewCouuntries() {
+    var newCouuntries = [];
+    var idStartNumber = 1009;
+
+    for(var index in _countries) {
+        var country = _countries[index];
+        country.id = idStartNumber + index;
+        newCouuntries[index] = country
+    }
+
+    return newCouuntries;
+}
+
+var _countries = [
     {name: 'Afghanistan', code: 'AF'},
     {name: 'Åland Islands', code: 'AX'},
     {name: 'Albania', code: 'AL'},
     {name: 'Algeria', code: 'DZ'},
     {name: 'American Samoa', code: 'AS'},
-    {name: 'AndorrA', code: 'AD'},
+    {name: 'AndorrA', code: 'AD'}/*,
     {name: 'Angola', code: 'AO'},
     {name: 'Anguilla', code: 'AI'},
     {name: 'Antarctica', code: 'AQ'},
@@ -268,5 +364,5 @@ var countries = [
     {name: 'Western Sahara', code: 'EH'},
     {name: 'Yemen', code: 'YE'},
     {name: 'Zambia', code: 'ZM'},
-    {name: 'Zimbabwe', code: 'ZW'}
+    {name: 'Zimbabwe', code: 'ZW'}*/
 ];
