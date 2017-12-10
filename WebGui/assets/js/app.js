@@ -18,6 +18,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             url: '/home',
             controller: 'MainCtrl',
             templateUrl: 'main.html',
+        })
+        .state('home.sub', {
+            url: '/sub/{chainIndex}',
+            controller: 'SubCtrl',
+            templateUrl: 'table.html',
         });
 });
 
@@ -25,7 +30,7 @@ app.run(function ($state) {
     $state.go('home');
 });
 
-app.controller('MainCtrl', function ($scope, _) {
+var MainCtrl = function ($scope, _, $state) {
 
     $scope.name = 'World';
     $scope.bookieData = [];
@@ -51,7 +56,7 @@ app.controller('MainCtrl', function ($scope, _) {
      * }}
      */
     $scope.chainInititatorRowData = {};
-    function updateChainInititatorRowData() {
+    var updateChainInititatorRowData = function () {
 
         $scope.chainInititatorRowData = {};
         for (var bookieIndex in $scope.bookieData) {
@@ -82,7 +87,9 @@ app.controller('MainCtrl', function ($scope, _) {
                 }
             }
         }
-    }
+    };
+
+    $scope.updateChainInititatorRowData = updateChainInititatorRowData;
 
     $scope.getCategoryByIdForBookieAndChain = function (bookieId, chain) {
 
@@ -121,18 +128,20 @@ app.controller('MainCtrl', function ($scope, _) {
 
         $scope.newChainInitiatorRowModel = {};
     });
-    
+
     $scope.startChainEdit = function(chain) {
         /*if(chain.edit) {
-            chain.edit = false;
-            return;
-        }*/
+         chain.edit = false;
+         return;
+         }*/
 
         for(chainIndex in $scope.chains) {
             $scope.chains[chainIndex].edit = false;
         }
 
         chain.edit = true;
+
+        $state.go("home.sub", {chainIndex : $scope.chains.indexOf(chain)});
     };
 
     for (var i = 0; i < 10; i++) {
@@ -164,7 +173,160 @@ app.controller('MainCtrl', function ($scope, _) {
     }));
 
     $scope.tableTdMaxWith = 100 / $scope.bookieData.length + 2;
-});
+};
+app.controller('MainCtrl', MainCtrl);
+
+var SubCtrl = function ($scope, _, $stateParams) {
+
+    $scope.name = 'World';
+    $scope.bookieData = [];
+    var parentChains = $scope.chains;
+    var editingChain = parentChains[$stateParams.chainIndex];
+    if(!editingChain.subs) {
+        editingChain.subs = [];
+    }
+    $scope.chains = editingChain.subs;
+    $scope.newChainInitiatorRowModel = {};
+
+    $scope.getItemNameByBookieIdAndItemId = function (bookieId, itemId) {
+
+        var bookie = _.findWhere($scope.bookieData, {id : bookieId});
+        if(!bookie) return null;
+
+        var item = _.findWhere(bookie.items, {id : itemId});
+
+        return item ? item.name : null;
+    };
+
+    /**
+     * NICR selects
+     *
+     * @type {{
+     *  key : "bookieId" Id of bookie.
+     *  value : items[] list of items that are not used to any chain yet.
+     * }}
+     */
+    $scope.chainInititatorRowData = {};
+    var updateChainInititatorRowData = function () {
+
+        $scope.chainInititatorRowData = {};
+        for (var bookieIndex in $scope.bookieData) {
+            var bookie = $scope.bookieData[bookieIndex];
+            var bookieId = bookie.id;
+
+            $scope.chainInititatorRowData[bookieId] = [];
+
+            //Iterate over each item of this bookie
+            for (var iii in bookie.items) {
+                var category = bookie.items[iii];
+
+                //Iterate over each chain
+                var used;
+                for (var index in $scope.chains) {
+
+                    // Check if there is an item for this bookie in this chain
+                    // and it matches current category. This means category is used by chain.
+                    var bookieChaninItem = $scope.chains[index][bookieId];
+                    used = bookieChaninItem == category.id;
+                    if(used) {
+                        break;
+                    }
+                }
+
+                if (!used) {
+                    $scope.chainInititatorRowData[bookieId].push(category);
+                }
+            }
+        }
+    };
+
+    $scope.updateChainInititatorRowData = updateChainInititatorRowData;
+
+    $scope.getCategoryByIdForBookieAndChain = function (bookieId, chain) {
+
+        updateChainInititatorRowData();
+
+        var resultCategory = null;
+
+        var bookie = _.findWhere($scope.bookieData, function (bookie) {
+            return bookie.id = bookieId;
+        });
+
+        _.each(bookie.items, function (category) {
+            if(category.id == chain[bookieId]) {
+                resultCategory = category;
+            }
+        });
+
+        var result = $scope.chainInititatorRowData[bookieId].slice(0);
+        result.push(resultCategory);
+
+        return result;
+    };
+
+    $scope.$watchCollection('newChainInitiatorRowModel', function (newValue, oldValue, scope) {
+
+        // Check if run after reset
+        if (_.isEmpty(newValue)) {
+            return;
+        }
+
+        $scope.chains.push(newValue);
+        $scope.startChainEdit(newValue);
+
+        //After chains are updated update initiator selects too.
+        updateChainInititatorRowData();
+
+        $scope.newChainInitiatorRowModel = {};
+    });
+
+    $scope.startChainEdit = function(chain) {
+        /*if(chain.edit) {
+         chain.edit = false;
+         return;
+         }*/
+
+        for(chainIndex in $scope.chains) {
+            $scope.chains[chainIndex].edit = false;
+        }
+
+        chain.edit = true;
+
+        //$state.go("home.sub", {chainIndex : $scope.chains.indexOf(chain)});
+    };
+
+    for (var i = 0; i < 10; i++) {
+        $scope.bookieData[i] = {
+            id: i + 5620,
+            name: "Bookie_" + i,
+            items: []
+        };
+
+        countries = getNewCouuntries();
+
+        for (var index in countries) {
+            var country = countries[index];
+            /*var countryName = country.name;
+
+             if(countryName.length > 24) {
+             countryName = countryName.substr(0, 24);
+             }*/
+
+            $scope.bookieData[i].items[index] = country;
+        }
+    }
+
+    updateChainInititatorRowData();
+
+    $scope.bookieCount = $scope.bookieData.length;
+    $scope.bookieIndex = _.object(_.map($scope.bookieData, function (item, key) {
+        return [item.id, key];
+    }));
+
+    $scope.tableTdMaxWith = 100 / $scope.bookieData.length + 2;
+};
+
+app.controller('SubCtrl', SubCtrl);
 
 function getNewCouuntries() {
     var newCouuntries = [];
