@@ -27,17 +27,21 @@
             width: 100%;
             background-color: #f3f3f3;
         }
+
         .table-fixed tbody {
             height: 200px;
             overflow-y: auto;
             width: 100%;
         }
+
         .table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
             display: block;
         }
+
         .table-fixed tbody td {
             float: left;
         }
+
         .table-fixed thead tr th {
             float: left;
             background-color: #f39c12;
@@ -48,12 +52,12 @@
 </head>
 <body ng-controller="MainCtrl">
 <!--<h1>Hello, world!</h1>-->
-<div class="container-fluid" >
+<div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
                 <!-- Default panel contents -->
-                <div class="panel-heading"> Map category names </div>
+                <div class="panel-heading"> Map category names</div>
                 <div class="panel-body">
                     <button class="btn btn-success" type="button">
                         Completed <span class="badge">1</span>
@@ -70,18 +74,21 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th ng-repeat="bookie in data">{{bookie.name}}</th>
+                        <th ng-repeat="bookie in bookieData">{{bookie.name}}</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="chain in chains" class="success">
-                        <td ng-repeat="bookie in bookieData">
+                        <td  ng-if="!chain.edit" ng-class="{ 'danger' : !chain[bookie.id] }" ng-repeat="bookie in bookieData">
+                            {{getItemNameByBookieIdAndItemId(bookie.id, chain[bookie.id.toString()])}}
+                        </td>
+                        <td ng-if="chain.edit" ng-repeat="bookie in bookieData">
                             <!--<select ng-model="ddd[$index]" ng-options="item for item in bookie.items"> </select>-->
                             <div class="form-group" ng-class="{ 'has-error' : false }">
                                 <!--<label for="tyis_tipi_id"><?php echo $human_name; ?></label>-->
                                 <select ng-required="false"
-                                        ng-options="item.id as item.name for item in  bookie.items"
+                                        ng-options="item.id as item.name for item in getCategoryByIdForBookieAndChain(bookie.id, chain)"
                                         class="form-control"
                                         type="number"
                                         name="tyis_tipi_id"
@@ -98,13 +105,18 @@
                                 </div>
                             </div>
                         </td>
-                        <td><button class="btn btn-danger" ng-click="chains.splice($index, 1)">RM</button></td>
+                        <td>
+                            <button class="btn btn-warning" ng-click="startChainEdit(chain)">ED</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger" ng-click="chains.splice($index, 1)">RM</button>
+                        </td>
                     </tr>
                     <!--New chain initiator row-->
                     <tr>
                         <td ng-repeat="bookie in bookieData">
                             <!--<select ng-model="ddd[$index]" ng-options="item for item in bookie.items"> </select>-->
-                            <div class="form-group" ng-class="{ 'has-error' : false }">
+                            <div class="form-group" ng-class="{ 'has-error' : !newChainInitiatorRowModel[bookie.id] }">
                                 <!--<label for="tyis_tipi_id"><?php echo $human_name; ?></label>-->
                                 <select ng-required="false"
                                         ng-options="item.id as item.name for item in  chainInititatorRowData[bookie.id]"
