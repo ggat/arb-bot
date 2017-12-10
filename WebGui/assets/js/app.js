@@ -144,26 +144,7 @@ var MainCtrl = function ($scope, _, $state) {
         $state.go("home.sub", {chainIndex : $scope.chains.indexOf(chain)});
     };
 
-    for (var i = 0; i < 10; i++) {
-        $scope.bookieData[i] = {
-            id: i + 5620,
-            name: "Bookie_" + i,
-            items: []
-        };
-
-        countries = getNewCouuntries();
-
-        for (var index in countries) {
-            var country = countries[index];
-            /*var countryName = country.name;
-
-             if(countryName.length > 24) {
-             countryName = countryName.substr(0, 24);
-             }*/
-
-            $scope.bookieData[i].items[index] = country;
-        }
-    }
+    $scope.bookieData = getNewBookieData();
 
     updateChainInititatorRowData();
 
@@ -319,10 +300,36 @@ var SubCtrl = function ($scope, _, $stateParams) {
         //$state.go("home.sub", {chainIndex : $scope.chains.indexOf(chain)});
     };
 
-    for (var i = 0; i < 10; i++) {
-        $scope.bookieData[i] = {
+    $scope.bookieData = getNewBookieData();
+
+    updateChainInititatorRowData();
+
+    $scope.bookieCount = $scope.bookieData.length;
+    $scope.bookieIndex = _.object(_.map($scope.bookieData, function (item, key) {
+        return [item.id, key];
+    }));
+
+    $scope.tableTdMaxWith = 100 / $scope.bookieData.length + 2;
+};
+
+app.controller('SubCtrl', SubCtrl);
+
+function getNewBookieData() {
+
+    var bookieNames = [
+        "AdjaraBet",
+        "EuropeBet",
+        "LiderBet",
+        "CrocoBet",
+        "BetLive",
+        "CrystalBet"
+    ];
+
+    var bookieData = [];
+    for (var i in bookieNames) {
+        bookieData[i] = {
             id: i + 5620,
-            name: "Bookie_" + i,
+            name: bookieNames[i],
             items: []
         };
 
@@ -336,21 +343,12 @@ var SubCtrl = function ($scope, _, $stateParams) {
              countryName = countryName.substr(0, 24);
              }*/
 
-            $scope.bookieData[i].items[index] = country;
+            bookieData[i].items[index] = country;
         }
     }
 
-    updateChainInititatorRowData();
-
-    $scope.bookieCount = $scope.bookieData.length;
-    $scope.bookieIndex = _.object(_.map($scope.bookieData, function (item, key) {
-        return [item.id, key];
-    }));
-
-    $scope.tableTdMaxWith = 100 / $scope.bookieData.length + 2;
-};
-
-app.controller('SubCtrl', SubCtrl);
+    return bookieData;
+}
 
 function getNewCouuntries() {
     var newCouuntries = [];
