@@ -3,7 +3,7 @@ underscore.factory('_', ['$window', function ($window) {
     return $window._; // assumes underscore has already been loaded on the page
 }]);
 
-var app = angular.module('matcher', ['localytics.directives', 'underscore']);
+var app = angular.module('matcher', ['localytics.directives', 'underscore'])
 
 app.controller('MainCtrl', function ($scope, _) {
 
@@ -103,10 +103,10 @@ app.controller('MainCtrl', function ($scope, _) {
     });
     
     $scope.startChainEdit = function(chain) {
-        if(chain.edit) {
+        /*if(chain.edit) {
             chain.edit = false;
             return;
-        }
+        }*/
 
         for(chainIndex in $scope.chains) {
             $scope.chains[chainIndex].edit = false;
@@ -115,7 +115,7 @@ app.controller('MainCtrl', function ($scope, _) {
         chain.edit = true;
     };
 
-    for (var i = 0; i < 8; i++) {
+    for (var i = 0; i < 10; i++) {
         $scope.bookieData[i] = {
             id: i + 5620,
             name: "Bookie_" + i,
@@ -142,6 +142,8 @@ app.controller('MainCtrl', function ($scope, _) {
     $scope.bookieIndex = _.object(_.map($scope.bookieData, function (item, key) {
         return [item.id, key];
     }));
+
+    $scope.tableTdMaxWith = 100 / $scope.bookieData.length + 2;
 });
 
 function getNewCouuntries() {
