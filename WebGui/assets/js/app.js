@@ -3,7 +3,27 @@ underscore.factory('_', ['$window', function ($window) {
     return $window._; // assumes underscore has already been loaded on the page
 }]);
 
-var app = angular.module('matcher', ['localytics.directives', 'underscore'])
+var app = angular.module('matcher', ['localytics.directives', 'underscore', 'ui.router'])
+
+app.config(function ($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise('/home');
+
+/*    $stateProvider.state("zone", {
+        url: "/",
+        templateUrl: "views/zone.html",
+    });*/
+
+    $stateProvider
+        .state('home', {
+            url: '/home',
+            controller: 'MainCtrl',
+            templateUrl: 'main.html',
+        });
+});
+
+app.run(function ($state) {
+    $state.go('home');
+});
 
 app.controller('MainCtrl', function ($scope, _) {
 
