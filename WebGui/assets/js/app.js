@@ -157,14 +157,15 @@ var MainCtrl = function ($scope, _, $state) {
 };
 app.controller('MainCtrl', MainCtrl);
 
-var SubCtrl = function ($scope, _, $stateParams) {
+var SubCtrl = function ($scope, _, $stateParams, $state) {
 
     $scope.name = 'World';
     var parentChains = $scope.chains;
     var editingChain = parentChains[$stateParams.chainIndex];
-    /*if(!editingChain) {
+    if(!editingChain) {
+        $state.go('home');
         return;
-    }*/
+    }
 
     if(!editingChain.subs) {
         editingChain.subs = [];
