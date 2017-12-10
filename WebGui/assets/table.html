@@ -1,4 +1,4 @@
-<table class="table" >
+<table class="table chainer" >
     <thead>
     <tr>
         <th ng-repeat="bookie in bookieData">{{bookie.name}}</th>
@@ -19,12 +19,12 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-click="startChainEdit(chain)" ng-repeat="chain in chains" class="success">
+    <tr ng-click="startChainEdit(chain)" ng-repeat="chain in chains">
         <td ng-if="!chain.edit"
-            ng-class="{ 'danger' : !chain[bookie.id] }" ng-repeat="bookie in bookieData">
+            ng-class="!chain[bookie.id] ? 'danger' : 'success'" ng-repeat="bookie in bookieData">
             {{getItemNameByBookieIdAndItemId(bookie.id, chain[bookie.id.toString()])}}
         </td>
-        <td ng-if="chain.edit" ng-repeat="bookie in bookieData">
+        <td ng-if="chain.edit" ng-class="!chain[bookie.id] ? 'danger' : 'success'" ng-repeat="bookie in bookieData">
             <!--<select ng-model="ddd[$index]" ng-options="item for item in bookie.items"> </select>-->
             <div class="form-group" ng-class="{ 'has-error' : false }">
                 <!--<label for="tyis_tipi_id"><?php echo $human_name; ?></label>-->
