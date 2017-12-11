@@ -6,3 +6,7 @@
 .table.chainer>tbody>tr>td.danger {
     background-color: #e48a7b;
 }
+
+.table.fixed {
+    table-layout: fixed;
+}
