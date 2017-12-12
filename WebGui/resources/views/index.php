@@ -65,10 +65,10 @@
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
 <!-- Latest compiled and minified JavaScript -->
-<script src="../node_modules/angular/angular.min.js"></script>
-<script src="../node_modules/underscore/underscore-min.js"></script>
+<script src="node_modules/angular/angular.min.js"></script>
+<script src="node_modules/underscore/underscore-min.js"></script>
 
-<script src="../node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
+<script src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
 <!--Chosen with fuzzy search support.-->
 <script src="js/lib/fuzzy-chosen/chosen-fuzzy.jquery.js"></script>
 <!-- Ordinary chosen.-->

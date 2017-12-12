@@ -19,7 +19,7 @@
                         </div>
                     </div>
                     <!-- Table -->
-                    <div ng-include="'table.html'" ></div>
+                    <div ng-include="'table'" ></div>
                     <hr/>
                     <ui-view></ui-view>
                 </div>

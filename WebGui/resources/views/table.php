@@ -25,9 +25,7 @@
             {{getItemNameByBookieIdAndItemId(bookie.id, chain[bookie.id.toString()])}}
         </td>
         <td ng-if="chain.edit" ng-class="!chain[bookie.id] ? 'danger' : 'success'" ng-repeat="bookie in bookieData">
-            <!--<select ng-model="ddd[$index]" ng-options="item for item in bookie.items"> </select>-->
             <div class="form-group" ng-class="{ 'has-error' : false }">
-                <!--<label for="tyis_tipi_id"><?php echo $human_name; ?></label>-->
                 <select ng-required="false"
                         ng-options="item.id as item.name for item in getCategoryByIdForBookieAndChain(bookie.id, chain)"
                         class="form-control"

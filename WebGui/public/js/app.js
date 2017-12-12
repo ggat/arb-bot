@@ -17,12 +17,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         .state('home', {
             url: '/home',
             controller: 'MainCtrl',
-            templateUrl: 'main.html',
+            templateUrl: 'main',
         })
         .state('home.sub', {
             url: '/sub/{chainIndex}',
             controller: 'SubCtrl',
-            templateUrl: 'table.html',
+            templateUrl: 'table',
         });
 });
 
