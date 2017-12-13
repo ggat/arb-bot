@@ -22,3 +22,6 @@ Route::get('/main', function () {
 Route::get('/table', function () {
     return View::make('table');
 });
+
+Route::resource('category_infos', 'CategoryInfoController');
+Route::resource('chains', 'ChainController');

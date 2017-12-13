@@ -303,6 +303,8 @@ var SubCtrl = function ($scope, _, $stateParams, $state) {
 
     $scope.bookieData = getNewBookieData();
 
+    console.log($scope.bookieData);
+
     updateChainInititatorRowData();
 
     $scope.bookieCount = $scope.bookieData.length;
