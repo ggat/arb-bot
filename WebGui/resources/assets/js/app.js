@@ -1,9 +1,11 @@
+import {server} from './modules/server';
+
 var underscore = angular.module('underscore', []);
 underscore.factory('_', ['$window', function ($window) {
     return $window._; // assumes underscore has already been loaded on the page
 }]);
 
-var app = angular.module('matcher', ['localytics.directives', 'underscore', 'ui.router'])
+var app = angular.module('matcher', ['localytics.directives', 'underscore', 'ui.router', 'server'])
 
 app.config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/home');
@@ -18,22 +20,46 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             url: '/home',
             controller: 'MainCtrl',
             templateUrl: 'main',
+            resolve: {
+
+                // Get AngularJS resource to query
+                //Server: 'Server',
+
+                // Use the resource to fetch data from the server
+                bookieData: ['Server', function (Server) {
+                    return Server.getCategoryInfos();
+                }]
+            }
         })
         .state('home.sub', {
             url: '/sub/{chainIndex}',
             controller: 'SubCtrl',
-            templateUrl: 'table',
-        });
+            templateUrl: 'table'
+        })
+        .state('fail', { template: '<h1>Failure</h1><pre>{{error}}</pre>' });
 });
 
-app.run(function ($state) {
+app.run(function ($state, $rootScope) {
     $state.go('home');
+
+    $rootScope.$on('$stateChangeError',
+        function(event, toState, toParams, fromState, fromParams, error){
+            $state.go('fail', { errorMessage: error }); // careful not to create an infinite loop here
+        });
+
+    /*$state.defaultErrorHandler(function(error) {
+        $state.go('fail', { errorMessage: error }); // careful not to create an infinite loop here
+    });*/
 });
 
-var MainCtrl = function ($scope, _, $state) {
+console.log("Just one");
+
+var MainCtrl = function ($scope, _, $state, bookieData) {
 
     $scope.name = 'World';
-    $scope.bookieData = [];
+    //$scope.bookieData = bookieData;
+    console.log('bookieData: ', bookieData);
+    $scope.bookieData = bookieData;
     $scope.chains = [];
     $scope.newChainInitiatorRowModel = {};
 
@@ -144,7 +170,9 @@ var MainCtrl = function ($scope, _, $state) {
         $state.go("home.sub", {chainIndex : $scope.chains.indexOf(chain)});
     };
 
-    $scope.bookieData = getNewBookieData();
+    //$scope.bookieData = getNewBookieData();
+
+    console.log("BookieData");
 
     updateChainInititatorRowData();
 

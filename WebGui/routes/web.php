@@ -23,5 +23,5 @@ Route::get('/table', function () {
     return View::make('table');
 });
 
-Route::resource('category_infos', 'CategoryInfoController');
+Route::resource('category-infos', 'CategoryInfoController');
 Route::resource('chains', 'ChainController');

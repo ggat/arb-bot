@@ -19,6 +19,11 @@ let mix = require('laravel-mix');
     <link rel="stylesheet" href="../assets/css/chosen-bootstrap-yeti.css">
     <link rel="stylesheet" href="../assets/css/app.css">*/
 
+mix.webpackConfig({ devtool: "inline-source-map" });
+
 mix.copyDirectory('resources/assets/img', 'public/img');
 mix.copyDirectory('resources/assets/css', 'public/css');
-mix.copyDirectory('resources/assets/js', 'public/js');
+mix.copyDirectory('resources/assets/js/lib', 'public/js/lib');
+mix.js('resources/assets/js/app.js', 'public/js')
+    .sourceMaps();
+//mix.copyDirectory('resources/assets/js', 'public/js');

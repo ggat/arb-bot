@@ -53,7 +53,7 @@
 
     </style>
 </head>
-<body ng-controller="MainCtrl">
+<body>
 <!--<h1>Hello, world!</h1>-->
 
 <ui-view></ui-view>

@@ -15,7 +15,13 @@ class CategoryInfoController extends Controller
      */
     public function index()
     {
-        return Bookie::with('items')->get();
+
+        $response = [
+            'status' => "OK",
+            'data' => Bookie::with('items')->get()
+        ];
+
+        return $response;
     }
 
     /**
