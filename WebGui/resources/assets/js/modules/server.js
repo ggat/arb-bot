@@ -48,7 +48,30 @@ server.factory('Server', ['$http', '$q', '$timeout', function($http, $q, $timeou
     var Server = {
 
         getCategoryInfos : function () {
-            return typical('get', '/category-infos');
+            return typical('get', '/category-infos', null, function (responseData) {
+                var data = responseData.data;
+
+                console.log("getCategoryInfos data: ", data);
+                
+                function convert(items) {
+                    return _.map(items, function (item) {
+
+                        console.log("item: ", item);
+
+                        if(item.category_info_id) {
+                            item.items = undefined;
+                        }
+
+                        if(item.items) {
+                            convert(item.items);
+                        }
+
+                        return item;
+                    });
+                }
+
+                return convert(data);
+            });
         },
 
         getSbDropDownData : function () {

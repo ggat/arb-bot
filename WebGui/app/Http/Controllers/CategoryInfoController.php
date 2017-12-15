@@ -18,10 +18,12 @@ class CategoryInfoController extends Controller
 
         $response = [
             'status' => "OK",
-            'data' => Bookie::with('items')->get()
+            'data' => Bookie::with(['items' => function($query) {
+                $query->whereNull('category_info_id');
+            }])->get()
         ];
 
-        return $response;
+        return response()->json($response, 200, [], JSON_NUMERIC_CHECK);
     }
 
     /**

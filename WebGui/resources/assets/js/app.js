@@ -56,6 +56,8 @@ console.log("Just one");
 
 var MainCtrl = function ($scope, _, $state, bookieData) {
 
+    console.log("bookieData resolved in MainCtrl: ", bookieData);
+
     $scope.name = 'World';
     //$scope.bookieData = bookieData;
     console.log('bookieData: ', bookieData);
@@ -161,7 +163,7 @@ var MainCtrl = function ($scope, _, $state, bookieData) {
          return;
          }*/
 
-        for(chainIndex in $scope.chains) {
+        for(var chainIndex in $scope.chains) {
             $scope.chains[chainIndex].edit = false;
         }
 
@@ -169,10 +171,6 @@ var MainCtrl = function ($scope, _, $state, bookieData) {
 
         $state.go("home.sub", {chainIndex : $scope.chains.indexOf(chain)});
     };
-
-    //$scope.bookieData = getNewBookieData();
-
-    console.log("BookieData");
 
     updateChainInititatorRowData();
 
@@ -320,7 +318,7 @@ var SubCtrl = function ($scope, _, $stateParams, $state) {
          return;
          }*/
 
-        for(chainIndex in $scope.chains) {
+        for(var chainIndex in $scope.chains) {
             $scope.chains[chainIndex].edit = false;
         }
 
@@ -328,10 +326,6 @@ var SubCtrl = function ($scope, _, $stateParams, $state) {
 
         //$state.go("home.sub", {chainIndex : $scope.chains.indexOf(chain)});
     };
-
-    $scope.bookieData = getNewBookieData();
-
-    console.log($scope.bookieData);
 
     updateChainInititatorRowData();
 
@@ -364,10 +358,14 @@ function getNewBookieData() {
             items: []
         };
 
-        countries = getNewCouuntries();
+        var countries = getNewCouuntries();
 
         for (var index in countries) {
+
+            if(index > 1) break;
+
             var country = countries[index];
+            country.code = undefined;
             /*var countryName = country.name;
 
              if(countryName.length > 24) {
@@ -646,8 +644,13 @@ function getNewClubs() {
     var newClubs = [];
 
     for (var index in _clubs) {
+
+        if(index > 1) break;
+
         var club = _clubs[index];
         club.id = index;
+        club.code = undefined;
+        club.key = undefined;
         newClubs.push(club);
     }
 
@@ -756,3 +759,751 @@ var _clubs = [
         "code": null
     }
 ];
+
+var fullRemoteData =
+    [
+        {
+            "id": "25",
+            "name": "AdjaraBet",
+            "items": [
+                {
+                    "id": "94",
+                    "bookie_id": 25,
+                    "name": "Georgia_AdjaraBet",
+                    "category_info_id": null,
+                    "items": [
+                        {
+                            "id": "95",
+                            "bookie_id": 25,
+                            "name": "National league_AdjaraBet",
+                            "category_info_id": 94
+                        },
+                        {
+                            "id": "96",
+                            "bookie_id": 25,
+                            "name": "East league_AdjaraBet",
+                            "category_info_id": 94
+                        },
+                        {
+                            "id": "97",
+                            "bookie_id": 25,
+                            "name": "West league_AdjaraBet",
+                            "category_info_id": 94
+                        }
+                    ]
+                },
+                {
+                    "id": "98",
+                    "bookie_id": 25,
+                    "name": "Italy_AdjaraBet",
+                    "category_info_id": null,
+                    "items": [
+                        {
+                            "id": "99",
+                            "bookie_id": 25,
+                            "name": "Serie A_AdjaraBet",
+                            "category_info_id": 98
+                        },
+                        {
+                            "id": "100",
+                            "bookie_id": 25,
+                            "name": "Coppa Italia_AdjaraBet",
+                            "category_info_id": 98
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "26",
+            "name": "BetLive",
+            "items": [
+                {
+                    "id": "106",
+                    "bookie_id": 26,
+                    "name": "Georgia_BetLive",
+                    "category_info_id": null,
+                    "items": [
+                        {
+                            "id": "107",
+                            "bookie_id": 26,
+                            "name": "National league_BetLive",
+                            "category_info_id": 106
+                        },
+                        {
+                            "id": "108",
+                            "bookie_id": 26,
+                            "name": "East league_BetLive",
+                            "category_info_id": 106
+                        },
+                        {
+                            "id": "109",
+                            "bookie_id": 26,
+                            "name": "West league_BetLive",
+                            "category_info_id": 106
+                        }
+                    ]
+                },
+                {
+                    "id": "110",
+                    "bookie_id": 26,
+                    "name": "Italy_BetLive",
+                    "category_info_id": null,
+                    "items": [
+                        {
+                            "id": "111",
+                            "bookie_id": 26,
+                            "name": "Serie A_BetLive",
+                            "category_info_id": 110
+                        },
+                        {
+                            "id": "112",
+                            "bookie_id": 26,
+                            "name": "Coppa Italia_BetLive",
+                            "category_info_id": 110
+                        }
+                    ]
+                }
+            ]
+        }];
+
+var fullRemoteData_without_reds =
+    [
+        {
+            "id": "25",
+            "name": "AdjaraBet",
+            "items": [
+                {
+                    "id": "94",
+                    "name": "Georgia_AdjaraBet",
+                    "items": [
+                        {
+                            "id": "95",
+                            "name": "National league_AdjaraBet"
+                        },
+                        {
+                            "id": "96",
+                            "name": "East league_AdjaraBet"
+                        }
+                    ]
+                },
+                {
+                    "id": "98",
+                    "name": "Italy_AdjaraBet",
+                    "items": [
+                        {
+                            "id": "99",
+                            "name": "Serie A_AdjaraBet"
+                        },
+                        {
+                            "id": "100",
+                            "name": "Coppa Italia_AdjaraBet"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "26",
+            "name": "BetLive",
+            "items": [
+                {
+                    "id": "106",
+                    "name": "Georgia_BetLive",
+                    "items": [
+                        {
+                            "id": "107",
+                            "name": "National league_BetLive"
+                        },
+                        {
+                            "id": "108",
+                            "name": "East league_BetLive"
+                        }
+                    ]
+                },
+                {
+                    "id": "110",
+                    "name": "Italy_BetLive",
+                    "items": [
+                        {
+                            "id": "111",
+                            "name": "Serie A_BetLive"
+                        },
+                        {
+                            "id": "112",
+                            "name": "Coppa Italia_BetLive"
+                        }
+                    ]
+                }
+            ]
+        }];
+
+var fullRemoteData_name_id_reorder = [
+    {
+        "id": "25",
+        "name": "AdjaraBet",
+        "items": [
+            {
+                "name": "Georgia_AdjaraBet",
+                "id": "94",
+                "items": [
+                    {
+                        "name": "National league_AdjaraBet",
+                        "id": "95"
+                    },
+                    {
+                        "name": "East league_AdjaraBet",
+                        "id": "96"
+                    }
+                ]
+            },
+            {
+                "name": "Italy_AdjaraBet",
+                "id": "98",
+                "items": [
+                    {
+                        "name": "Serie A_AdjaraBet",
+                        "id": "99"
+                    },
+                    {
+                        "name": "Coppa Italia_AdjaraBet",
+                        "id": "100"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "26",
+        "name": "BetLive",
+        "items": [
+            {
+                "name": "Georgia_BetLive",
+                "id": "106",
+                "items": [
+                    {
+                        "name": "National league_BetLive",
+                        "id": "107"
+                    },
+                    {
+                        "name": "East league_BetLive",
+                        "id": "108"
+                    }
+                ]
+            },
+            {
+                "name": "Italy_BetLive",
+                "id": "110",
+                "items": [
+                    {
+                        "name": "Serie A_BetLive",
+                        "id": "111"
+                    },
+                    {
+                        "name": "Coppa Italia_BetLive",
+                        "id": "112"
+                    }
+                ]
+            }
+        ]
+    }];
+
+var fullRemoteData_interanl_ids = [
+    {
+        "id": "25",
+        "name": "AdjaraBet",
+        "items": [
+            {
+                "name": "Georgia_AdjaraBet",
+                "id": "10090",
+                "items": [
+                    {
+                        "name": "National league_AdjaraBet",
+                        "id": "0"
+                    },
+                    {
+                        "name": "East league_AdjaraBet",
+                        "id": "1"
+                    }
+                ]
+            },
+            {
+                "name": "Italy_AdjaraBet",
+                "id": "10091",
+                "items": [
+                    {
+                        "name": "Serie A_AdjaraBet",
+                        "id": "0"
+                    },
+                    {
+                        "name": "Coppa Italia_AdjaraBet",
+                        "id": "1"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "26",
+        "name": "BetLive",
+        "items": [
+            {
+                "name": "Georgia_BetLive",
+                "id": "10090",
+                "items": [
+                    {
+                        "name": "National league_BetLive",
+                        "id": "0"
+                    },
+                    {
+                        "name": "East league_BetLive",
+                        "id": "1"
+                    }
+                ]
+            },
+            {
+                "name": "Italy_BetLive",
+                "id": "10091",
+                "items": [
+                    {
+                        "name": "Serie A_BetLive",
+                        "id": "0"
+                    },
+                    {
+                        "name": "Coppa Italia_BetLive",
+                        "id": "1"
+                    }
+                ]
+            }
+        ]
+    }]
+;
+
+var fullLocalData = [
+    {
+        "id": "05620",
+        "name": "AdjaraBet",
+        "items": [
+            {
+                "name": "Afghanistan",
+                "code": "AF",
+                "id": "10090",
+                "items": [
+                    {
+                        "key": "milan",
+                        "name": "Milan",
+                        "code": "MIL",
+                        "id": "0"
+                    },
+                    {
+                        "key": "inter",
+                        "name": "Inter",
+                        "code": "INT",
+                        "id": "1"
+                    },
+                    {
+                        "key": "lazio",
+                        "name": "Lazio",
+                        "code": "LAZ",
+                        "id": "2"
+                    }
+                ]
+            },
+            {
+                "name": "Åland Islands",
+                "code": "AX",
+                "id": "10091",
+                "items": [
+                    {
+                        "key": "milan",
+                        "name": "Milan",
+                        "code": "MIL",
+                        "id": "0"
+                    },
+                    {
+                        "key": "inter",
+                        "name": "Inter",
+                        "code": "INT",
+                        "id": "1"
+                    },
+                    {
+                        "key": "lazio",
+                        "name": "Lazio",
+                        "code": "LAZ",
+                        "id": "2"
+                    },
+                    {
+                        "key": "roma",
+                        "name": "Roma",
+                        "code": "ROM",
+                        "id": "3"
+                    },
+                    {
+                        "key": "genoa",
+                        "name": "Genoa",
+                        "code": "GEN",
+                        "id": "4"
+                    },
+                    {
+                        "key": "sampdoria",
+                        "name": "Sampdoria",
+                        "code": "SAM",
+                        "id": "5"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "45620",
+        "name": "BetLive",
+        "items": [
+            {
+                "name": "Afghanistan",
+                "code": "AF",
+                "id": "10090",
+                "items": [
+                    {
+                        "key": "milan",
+                        "name": "Milan",
+                        "code": "MIL",
+                        "id": "0"
+                    },
+                    {
+                        "key": "inter",
+                        "name": "Inter",
+                        "code": "INT",
+                        "id": "1"
+                    },
+                    {
+                        "key": "lazio",
+                        "name": "Lazio",
+                        "code": "LAZ",
+                        "id": "2"
+                    },
+                    {
+                        "key": "roma",
+                        "name": "Roma",
+                        "code": "ROM",
+                        "id": "3"
+                    },
+                    {
+                        "key": "genoa",
+                        "name": "Genoa",
+                        "code": "GEN",
+                        "id": "4"
+                    },
+                    {
+                        "key": "sampdoria",
+                        "name": "Sampdoria",
+                        "code": "SAM",
+                        "id": "5"
+                    }
+                ]
+            },
+            {
+                "name": "Åland Islands",
+                "code": "AX",
+                "id": "10091",
+                "items": [
+                    {
+                        "key": "milan",
+                        "name": "Milan",
+                        "code": "MIL",
+                        "id": "0"
+                    },
+                    {
+                        "key": "inter",
+                        "name": "Inter",
+                        "code": "INT",
+                        "id": "1"
+                    },
+                    {
+                        "key": "lazio",
+                        "name": "Lazio",
+                        "code": "LAZ",
+                        "id": "2"
+                    },
+                    {
+                        "key": "roma",
+                        "name": "Roma",
+                        "code": "ROM",
+                        "id": "3"
+                    },
+                    {
+                        "key": "genoa",
+                        "name": "Genoa",
+                        "code": "GEN",
+                        "id": "4"
+                    },
+                    {
+                        "key": "sampdoria",
+                        "name": "Sampdoria",
+                        "code": "SAM",
+                        "id": "5"
+                    }
+                ]
+            }
+        ]
+    }
+];
+
+var fullLocalData_without_blues = [
+    {
+        "id": "05620",
+        "name": "AdjaraBet",
+        "items": [
+            {
+                "name": "Afghanistan",
+                "id": "10090",
+                "items": [
+                    {
+                        "name": "Milan",
+                        "id": "0"
+                    },
+                    {
+                        "name": "Inter",
+                        "id": "1"
+                    }
+                ]
+            },
+            {
+                "name": "Åland Islands",
+                "id": "10091",
+                "items": [
+                    {
+                        "name": "Milan",
+                        "id": "0"
+                    },
+                    {
+                        "name": "Inter",
+                        "id": "1"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "45620",
+        "name": "BetLive",
+        "items": [
+            {
+                "name": "Afghanistan",
+                "id": "10090",
+                "items": [
+                    {
+                        "name": "Milan",
+                        "id": "0"
+                    },
+                    {
+                        "name": "Inter",
+                        "id": "1"
+                    }
+                ]
+            },
+            {
+                "name": "Åland Islands",
+                "id": "10091",
+                "items": [
+                    {
+                        "name": "Milan",
+                        "id": "0"
+                    },
+                    {
+                        "name": "Inter",
+                        "id": "1"
+                    }
+                ]
+            }
+        ]
+    }
+];
+
+var generated_data = [
+    {
+        "id":"05620",
+        "name":"AdjaraBet",
+        "items":[
+            {
+                "name":"Afghanistan",
+                "id":"10090",
+                "items":[
+                    {
+                        "name":"Milan",
+                        "id":"0"
+                    },
+                    {
+                        "name":"Inter",
+                        "id":"1"
+                    }]
+            },
+            {
+                "name":"Åland Islands",
+                "id":"10091",
+                "items":[
+                    {
+                        "name":"Milan",
+                        "id":"0"
+                    },
+                    {
+                        "name":"Inter",
+                        "id":"1"
+                    }]
+            }]
+    },
+    {
+        "id":"15620",
+        "name":"EuropeBet",
+        "items":[
+            {
+                "name":"Afghanistan",
+                "id":"10090",
+                "items":[
+                    {
+                        "name":"Milan",
+                        "id":"0"
+                    },
+                    {
+                        "name":"Inter",
+                        "id":"1"
+                    }]
+            },
+            {
+                "name":"Åland Islands",
+                "id":"10091",
+                "items":[
+                    {
+                        "name":"Milan",
+                        "id":"0"
+                    },
+                    {
+                        "name":"Inter",
+                        "id":"1"
+                    }]
+            }]
+    },
+    {
+        "id":"25620",
+        "name":"LiderBet",
+        "items":[
+            {
+                "name":"Afghanistan",
+                "id":"10090",
+                "items":[
+                    {
+                        "name":"Milan",
+                        "id":"0"
+                    },
+                    {
+                        "name":"Inter",
+                        "id":"1"
+                    }]
+            },
+            {
+                "name":"Åland Islands",
+                "id":"10091",
+                "items":[
+                    {
+                        "name":"Milan",
+                        "id":"0"
+                    },
+                    {
+                        "name":"Inter",
+                        "id":"1"
+                    }]
+            }]
+    },
+    {
+        "id":"35620",
+        "name":"CrocoBet",
+        "items":[
+            {
+                "name":"Afghanistan",
+                "id":"10090",
+                "items":[
+                    {
+                        "name":"Milan",
+                        "id":"0"
+                    },
+                    {
+                        "name":"Inter",
+                        "id":"1"
+                    }]
+            },
+            {
+                "name":"Åland Islands",
+                "id":"10091",
+                "items":[
+                    {
+                        "name":"Milan",
+                        "id":"0"
+                    },
+                    {
+                        "name":"Inter",
+                        "id":"1"
+                    }]
+            }]
+    },
+    {
+        "id":"45620",
+        "name":"BetLive",
+        "items":[
+            {
+                "name":"Afghanistan",
+                "id":"10090",
+                "items":[
+                    {
+                        "name":"Milan",
+                        "id":"0"
+                    },
+                    {
+                        "name":"Inter",
+                        "id":"1"
+                    }]
+            },
+            {
+                "name":"Åland Islands",
+                "id":"10091",
+                "items":[
+                    {
+                        "name":"Milan",
+                        "id":"0"
+                    },
+                    {
+                        "name":"Inter",
+                        "id":"1"
+                    }]
+            }]
+    },
+    {
+        "id":"55620",
+        "name":"CrystalBet",
+        "items":[
+            {
+                "name":"Afghanistan",
+                "id":"10090",
+                "items":[
+                    {
+                        "name":"Milan",
+                        "id":"0"
+                    },
+                    {
+                        "name":"Inter",
+                        "id":"1"
+                    }]
+            },
+            {
+                "name":"Åland Islands",
+                "id":"10091",
+                "items":[
+                    {
+                        "name":"Milan",
+                        "id":"0"
+                    },
+                    {
+                        "name":"Inter",
+                        "id":"1"
+                    }]
+            }]
+    }]
+;
