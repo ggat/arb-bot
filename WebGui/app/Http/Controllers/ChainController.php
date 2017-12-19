@@ -16,7 +16,11 @@ class ChainController extends Controller
      */
     public function index()
     {
-        return Chain::all();
+        //return Chain::all();
+        return [
+            "status" => "OK",
+            "data" => Chain::all()->pluck("data")
+        ];
     }
 
     /**
@@ -40,8 +44,10 @@ class ChainController extends Controller
         //TODO: Add validation.
         $chains = $request->json()->all();
 
-
         DB::transaction(function() use ($chains) {
+
+            Chain::truncate();
+
             foreach($chains as $chain){
                 Chain::create(['data' => json_encode($chain)]);
             }

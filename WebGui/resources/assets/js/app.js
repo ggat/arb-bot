@@ -28,6 +28,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 // Use the resource to fetch data from the server
                 bookieData: ['Server', function (Server) {
                     return Server.getCategoryInfos();
+                }],
+
+                // Use the resource to fetch data from the server
+                chains: ['Server', function (Server) {
+                    return Server.getChains();
                 }]
             }
         })
@@ -36,7 +41,13 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             controller: 'SubCtrl',
             templateUrl: 'table'
         })
-        .state('fail', { template: '<h1>Failure</h1><pre>{{error}}</pre>' });
+        .state('fail', {
+            url: '/fail/{message}',
+            template: '<h1>Failure</h1><pre>{{message}}</pre>',
+            controller: function ($scope, $stateParams) {
+                $scope.message = $stateParams.message;
+            }
+        });
 });
 
 app.run(function ($state, $rootScope) {
@@ -44,7 +55,8 @@ app.run(function ($state, $rootScope) {
 
     $rootScope.$on('$stateChangeError',
         function(event, toState, toParams, fromState, fromParams, error){
-            $state.go('fail', { errorMessage: error }); // careful not to create an infinite loop here
+            console.error("Error was: ", error);
+            $state.go('fail', { message: error }); // careful not to create an infinite loop here
         });
 
     /*$state.defaultErrorHandler(function(error) {
@@ -54,16 +66,23 @@ app.run(function ($state, $rootScope) {
 
 console.log("Just one");
 
-var MainCtrl = function ($scope, _, $state, bookieData) {
+var MainCtrl = function ($scope, _, $state, bookieData, chains, Server) {
 
     console.log("bookieData resolved in MainCtrl: ", bookieData);
+
+    console.log(typeof chains);
+    console.log("Length of existing chains: " + chains.length);
 
     $scope.name = 'World';
     //$scope.bookieData = bookieData;
     console.log('bookieData: ', bookieData);
     $scope.bookieData = bookieData;
-    $scope.chains = [];
+    $scope.chains = chains;
     $scope.newChainInitiatorRowModel = {};
+
+    $scope.storeChains = function () {
+        Server.storeChains($scope.chains);
+    };
 
     $scope.getItemNameByBookieIdAndItemId = function (bookieId, itemId) {
 

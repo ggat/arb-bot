@@ -34,12 +34,14 @@ server.factory('Server', ['$http', '$q', '$timeout', function($http, $q, $timeou
 
                 deferred.resolve(data.data || "");
             } else {
-                deferred.reject(data);
+                deferred.reject("Status is not ok for URL "+ url);
+                //deferred.reject(data);
             }
         }
 
         function fail(res){
-            deferred.reject(res);
+            deferred.reject("Http failed for URL "+ url);
+            //deferred.reject(res);
         }
 
         return deferred.promise;
@@ -77,6 +79,18 @@ server.factory('Server', ['$http', '$q', '$timeout', function($http, $q, $timeou
                 console.log("Converted data : ", converted);
 
                 return converted;
+            });
+        },
+
+        storeChains : function(data){
+            return typical('post', '/chains', data);
+        },
+
+        getChains : function(){
+            return typical('get', '/chains', null, function (response) {
+                response.data = _.map(response.data, function (chain) {
+                    return JSON.parse(chain);
+                });
             });
         },
 

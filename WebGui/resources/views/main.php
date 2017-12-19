@@ -16,6 +16,10 @@
                             <button class="btn btn-default" type="button">
                                 Opportunities <span class="badge">238</span>
                             </button>
+
+                            <button ng-click="storeChains()" class="btn btn-info" type="button">
+                                Save
+                            </button>
                         </div>
                     </div>
                     <!-- Table -->
