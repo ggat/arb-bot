@@ -81,7 +81,11 @@ var MainCtrl = function ($scope, _, $state, bookieData, chains, Server) {
     $scope.newChainInitiatorRowModel = {};
 
     $scope.storeChains = function () {
-        Server.storeChains($scope.chains);
+        Server.storeChains($scope.chains).then(function (res) {
+            alert("Saved!")
+        }, function (res) {
+            alert("Failed!")
+        });
     };
 
     $scope.getItemNameByBookieIdAndItemId = function (bookieId, itemId) {
