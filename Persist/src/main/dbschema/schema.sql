@@ -1,21 +1,22 @@
-CREATE TABLE Person
+CREATE TABLE Bookie
 (
     id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL
 );
-CREATE TABLE Ranking
+CREATE UNIQUE INDEX Bookie_name_uindex ON Bookie (name);
+CREATE TABLE CategoryInfo
 (
     id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    subject_id INT(11) NOT NULL,
-    observer_id INT(11) NOT NULL,
-    skill_id INT(11) NOT NULL,
-    ranking INT(11) NOT NULL
+    bookie_id INT(11) NOT NULL,
+    name VARCHAR(255),
+    category_info_id INT(11),
+    CONSTRAINT CategoryInfo_Bookie_id_fk FOREIGN KEY (bookie_id) REFERENCES Bookie (id),
+    CONSTRAINT CategoryInfo_CategoryInfo_id_fk FOREIGN KEY (category_info_id) REFERENCES CategoryInfo (id)
 );
-CREATE INDEX Ranking_Person_Observer_id_fk ON Ranking (observer_id);
-CREATE INDEX Ranking_Person_Subject_id_fk ON Ranking (subject_id);
-CREATE INDEX Ranking_Skill_id_fk ON Ranking (skill_id);
-CREATE TABLE Skill
+CREATE INDEX CategoryInfo_Bookie_id_fk ON CategoryInfo (bookie_id);
+CREATE INDEX CategoryInfo_CategoryInfo_id_fk ON CategoryInfo (category_info_id);
+CREATE TABLE Chain
 (
     id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL
+    data JSON
 );
