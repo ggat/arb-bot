@@ -334,6 +334,12 @@ var SubCtrl = function ($scope, _, $stateParams, $state) {
         return result;
     };
 
+    $scope.$watchCollection(function () {
+        return editingChain;
+    }, function (newValue) {
+        $scope.updateChainInititatorRowData();
+    });
+
     $scope.updateChainInititatorRowData();
 };
 
