@@ -54,12 +54,13 @@ server.factory('Server', ['$http', '$q', '$timeout', function($http, $q, $timeou
                 console.log("getCategoryInfos data: ", data);
                 
                 function convert(items) {
+
                     return _.map(items, function (item) {
 
-                        console.log("item: ", item);
+                        //console.log("item: ", item);
 
                         if(item.category_info_id) {
-                            item.items = undefined;
+                            delete item.items;
                         }
 
                         if(item.items) {
@@ -70,7 +71,12 @@ server.factory('Server', ['$http', '$q', '$timeout', function($http, $q, $timeou
                     });
                 }
 
-                return convert(data);
+                console.log("Converting data : ", data);
+                var converted = convert(data);
+
+                console.log("Converted data : ", converted);
+
+                return converted;
             });
         },
 

@@ -78,13 +78,13 @@ var MainCtrl = function ($scope, _, $state, bookieData) {
     /**
      * NICR selects
      *
-     * @type {{
+     * @type {{cd
      *  key : "bookieId" Id of bookie.
      *  value : items[] list of items that are not used to any chain yet.
      * }}
      */
     $scope.chainInititatorRowData = {};
-    var updateChainInititatorRowData = function () {
+    $scope.updateChainInititatorRowData = function () {
 
         $scope.chainInititatorRowData = {};
         for (var bookieIndex in $scope.bookieData) {
@@ -117,17 +117,13 @@ var MainCtrl = function ($scope, _, $state, bookieData) {
         }
     };
 
-    $scope.updateChainInititatorRowData = updateChainInititatorRowData;
-
     $scope.getCategoryByIdForBookieAndChain = function (bookieId, chain) {
 
-        updateChainInititatorRowData();
+        $scope.updateChainInititatorRowData();
 
         var resultCategory = null;
 
-        var bookie = _.findWhere($scope.bookieData, function (bookie) {
-            return bookie.id = bookieId;
-        });
+        var bookie = _.findWhere($scope.bookieData, {id : bookieId});
 
         _.each(bookie.items, function (category) {
             if(category.id == chain[bookieId]) {
@@ -141,7 +137,7 @@ var MainCtrl = function ($scope, _, $state, bookieData) {
         return result;
     };
 
-    $scope.$watchCollection('newChainInitiatorRowModel', function (newValue, oldValue, scope) {
+    $scope.unbindChainInitiatorWatcher = $scope.$watchCollection('newChainInitiatorRowModel', function (newValue, oldValue, scope) {
 
         // Check if run after reset
         if (_.isEmpty(newValue)) {
@@ -152,7 +148,7 @@ var MainCtrl = function ($scope, _, $state, bookieData) {
         $scope.startChainEdit(newValue);
 
         //After chains are updated update initiator selects too.
-        updateChainInititatorRowData();
+        $scope.updateChainInititatorRowData();
 
         $scope.newChainInitiatorRowModel = {};
     });
@@ -163,6 +159,8 @@ var MainCtrl = function ($scope, _, $state, bookieData) {
          return;
          }*/
 
+        console.log("Parents startChainEdit: did run");
+
         for(var chainIndex in $scope.chains) {
             $scope.chains[chainIndex].edit = false;
         }
@@ -172,7 +170,7 @@ var MainCtrl = function ($scope, _, $state, bookieData) {
         $state.go("home.sub", {chainIndex : $scope.chains.indexOf(chain)});
     };
 
-    updateChainInititatorRowData();
+    $scope.updateChainInititatorRowData();
 
     $scope.bookieCount = $scope.bookieData.length;
     $scope.bookieIndex = _.object(_.map($scope.bookieData, function (item, key) {
@@ -204,14 +202,15 @@ var SubCtrl = function ($scope, _, $stateParams, $state) {
         var bookie = _.findWhere($scope.bookieData, {id : bookieId});
         if(!bookie) return null;
 
-        var parentCategoryId = editingChain[bookieId];
-        var parentCategory = _.findWhere(bookie.items, {id : parentCategoryId});
+        // Parent category for this bookie
+        var parent = editingChain[bookieId];
 
-        if(!parentCategory) {
-            return null;
-        }
+        //If no parent category choosen for this bookie. Move to next bookie.
+        if(!parent) return null;
 
-        var item = _.findWhere(parentCategory.items, {id : itemId});
+        var categories = _.findWhere(bookie.items, {id : parent}).items;
+
+        var item = _.findWhere(categories, {id : itemId});
 
         return item ? item.name : null;
     };
@@ -225,26 +224,29 @@ var SubCtrl = function ($scope, _, $stateParams, $state) {
      * }}
      */
     $scope.chainInititatorRowData = {};
-    var updateChainInititatorRowData = function () {
+    $scope.updateChainInititatorRowData = function () {
 
         $scope.chainInititatorRowData = {};
-        //Each bookie
         for (var bookieIndex in $scope.bookieData) {
             var bookie = $scope.bookieData[bookieIndex];
             var bookieId = bookie.id;
 
+            // Parent category for this bookie
+            var parent = editingChain[bookieId];
+
+            //First reset items for this bookie.
             $scope.chainInititatorRowData[bookieId] = [];
 
-            var parentCategoryId = editingChain[bookieId];
-            var parentCategory = _.findWhere(bookie.items, {id : parentCategoryId});
-
-            if(!parentCategory) {
+            //If no parent category choosen for this bookie. Move to next bookie.
+            if(!parent) {
                 continue;
             }
 
+            var categories = _.findWhere(bookie.items, {id : parent}).items;
+
             //Iterate over each item of this bookie
-            for (var iii in parentCategory.items) {
-                var category = parentCategory.items[iii];
+            for (var iii in categories) {
+                var category = categories[iii];
 
                 //Iterate over each chain
                 var used;
@@ -266,37 +268,7 @@ var SubCtrl = function ($scope, _, $stateParams, $state) {
         }
     };
 
-    $scope.updateChainInititatorRowData = updateChainInititatorRowData;
-
-    $scope.getCategoryByIdForBookieAndChain = function (bookieId, chain) {
-
-        updateChainInititatorRowData();
-
-        var resultCategory = null;
-
-        var bookie = _.findWhere($scope.bookieData, function (bookie) {
-            return bookie.id = bookieId;
-        });
-
-        var parentCategoryId = editingChain[bookieId];
-        var parentCategory = _.findWhere(bookie.items, {id : parentCategoryId});
-        if(!parentCategory) {
-            return;
-        }
-
-        _.each(parentCategory.items, function (category) {
-            if(category.id == chain[bookieId]) {
-                resultCategory = category;
-            }
-        });
-
-        var result = $scope.chainInititatorRowData[bookieId].slice(0);
-        result.push(resultCategory);
-
-        return result;
-    };
-
-    $scope.$watchCollection('newChainInitiatorRowModel', function (newValue, oldValue, scope) {
+    $scope.unbindChainInitiatorWatcher = $scope.$watchCollection('newChainInitiatorRowModel', function (newValue, oldValue, scope) {
 
         // Check if run after reset
         if (_.isEmpty(newValue)) {
@@ -307,7 +279,7 @@ var SubCtrl = function ($scope, _, $stateParams, $state) {
         $scope.startChainEdit(newValue);
 
         //After chains are updated update initiator selects too.
-        updateChainInititatorRowData();
+        $scope.updateChainInititatorRowData();
 
         $scope.newChainInitiatorRowModel = {};
     });
@@ -318,6 +290,8 @@ var SubCtrl = function ($scope, _, $stateParams, $state) {
          return;
          }*/
 
+        console.log("Subs startChainEdit: did run");
+
         for(var chainIndex in $scope.chains) {
             $scope.chains[chainIndex].edit = false;
         }
@@ -327,14 +301,40 @@ var SubCtrl = function ($scope, _, $stateParams, $state) {
         //$state.go("home.sub", {chainIndex : $scope.chains.indexOf(chain)});
     };
 
-    updateChainInititatorRowData();
+    $scope.getCategoryByIdForBookieAndChain = function (bookieId, chain) {
 
-    $scope.bookieCount = $scope.bookieData.length;
-    $scope.bookieIndex = _.object(_.map($scope.bookieData, function (item, key) {
-        return [item.id, key];
-    }));
+        $scope.updateChainInititatorRowData();
 
-    $scope.tableTdMaxWith = 100 / $scope.bookieData.length + 2;
+        var result = [];
+        var resultCategory = null;
+
+        var bookie = _.findWhere($scope.bookieData, {id : bookieId});
+        var bookieId = bookie.id;
+
+        // Parent category for this bookie
+        var parent = editingChain[bookieId];
+
+        //If no parent category choosen for this bookie. Move to next bookie.
+        if(!parent) {
+            return result;
+        }
+
+        var categories = _.findWhere(bookie.items, {id : parent}).items;
+        console.log("Categories: ", categories);
+
+        _.each(categories, function (category) {
+            if(category.id == chain[bookieId]) {
+                resultCategory = category;
+            }
+        });
+
+        result = $scope.chainInititatorRowData[bookieId].slice(0);
+        result.push(resultCategory);
+
+        return result;
+    };
+
+    $scope.updateChainInititatorRowData();
 };
 
 app.controller('SubCtrl', SubCtrl);
