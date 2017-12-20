@@ -1,6 +1,7 @@
 package ge.shitbot.persist.models;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by giga on 12/19/17.
@@ -12,15 +13,15 @@ public class CategoryInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /*@Column(name = "category_info_id", nullable = true)
-    public Long categoryInfoId;*/
-
     @Column(name = "bookie_id")
     public Long bookieId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "category_info_id", nullable = true)
     public CategoryInfo parent;
+
+    @OneToMany(mappedBy = "parent")
+    public List<CategoryInfo> subCategoryInfos;
 
     @Column
     public String name;
@@ -55,5 +56,13 @@ public class CategoryInfo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<CategoryInfo> getSubCategoryInfos() {
+        return subCategoryInfos;
+    }
+
+    public void setSubCategoryInfos(List<CategoryInfo> subCategoryInfos) {
+        this.subCategoryInfos = subCategoryInfos;
     }
 }

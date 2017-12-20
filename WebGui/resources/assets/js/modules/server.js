@@ -61,6 +61,9 @@ server.factory('Server', ['$http', '$q', '$timeout', function($http, $q, $timeou
 
                         //console.log("item: ", item);
 
+                        item.id = item.id + "";
+                        item.bookie_id = item.bookie_id + "";
+
                         if(item.category_info_id) {
                             delete item.items;
                         }

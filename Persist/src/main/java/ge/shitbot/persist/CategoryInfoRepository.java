@@ -45,6 +45,11 @@ public class CategoryInfoRepository extends BaseRepository {
         return query.list();
     }
 
+    public List<? extends CategoryInfo> categoryInfosWithChildren() {
+        Query<CategoryInfo> query = session.createQuery("from CategoryInfo where category_info_id IS NOT NULL ", CategoryInfo.class);
+        return query.list();
+    }
+
     public CategoryInfo find(Long id) {
         return session.get(CategoryInfo.class, id);
     }
@@ -56,5 +61,27 @@ public class CategoryInfoRepository extends BaseRepository {
         CategoryInfo categoryInfo = query.setMaxResults(1).uniqueResult();
 
         return categoryInfo;
+    }
+
+    public void updateCategoryInfosForBookie(Long bookieId, List<? extends CategoryInfo> categoryInfos) {
+        Query<CategoryInfo> existingInfosQuery = session.createQuery("from CategoryInfo where bookieId=:bookieId");
+        existingInfosQuery.setParameter("bookieId", bookieId);
+        List<CategoryInfo> existingInfos = existingInfosQuery.list();
+
+        for (CategoryInfo newCategoryInfo : categoryInfos) {
+
+            boolean exists = false;
+
+            for(CategoryInfo existingCategoryInfo : existingInfos) {
+                if(existingCategoryInfo.getName().equals(newCategoryInfo.getName())) {
+                    exists = true;
+                    break;
+                }
+            }
+
+            if(!exists) {
+                session.save(newCategoryInfo);
+            }
+        }
     }
 }

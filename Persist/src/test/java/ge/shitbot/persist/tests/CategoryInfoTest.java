@@ -46,4 +46,18 @@ public class CategoryInfoTest {
 
         assertNotNull(repository.byName("TestCategoryInfo"));
     }
+
+    @Test
+    public void childrenTest() {
+
+        List<? extends CategoryInfo> infos = repository.categoryInfosWithChildren();
+
+        System.out.println("CategoryInfos with children size: " + infos.size());
+
+        if(infos.size() > 0 ) {
+            for (CategoryInfo info : infos) {
+                assertNotNull(info.getParent());
+            }
+        }
+    }
 }

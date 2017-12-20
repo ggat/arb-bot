@@ -220,18 +220,33 @@ var SubCtrl = function ($scope, _, $stateParams, $state) {
     $scope.chains = editingChain.subs;
     $scope.newChainInitiatorRowModel = {};
 
-    $scope.getItemNameByBookieIdAndItemId = function (bookieId, itemId) {
+    $scope.getParentCategoryForBookie = function(bookieId) {
 
         var bookie = _.findWhere($scope.bookieData, {id : bookieId});
-        if(!bookie) return null;
 
         // Parent category for this bookie
         var parent = editingChain[bookieId];
 
         //If no parent category choosen for this bookie. Move to next bookie.
-        if(!parent) return null;
+        var parentObject;
+        if(!bookie || !parent || !(parentObject = _.findWhere(bookie.items, {id : parent}))) {
+            return null;
+        }
 
-        var categories = _.findWhere(bookie.items, {id : parent}).items;
+        return parentObject;
+    };
+
+    $scope.getItemNameByBookieIdAndItemId = function (bookieId, itemId) {
+
+        var bookie = _.findWhere($scope.bookieData, {id : bookieId});
+        if(!bookie) return null;
+
+        var parentCategory = $scope.getParentCategoryForBookie(bookieId);
+
+        //If no parent category choosen for this bookie. Move to next bookie.
+        if(!parentCategory) return null;
+
+        var categories = parentCategory.items;
 
         var item = _.findWhere(categories, {id : itemId});
 
@@ -254,18 +269,17 @@ var SubCtrl = function ($scope, _, $stateParams, $state) {
             var bookie = $scope.bookieData[bookieIndex];
             var bookieId = bookie.id;
 
-            // Parent category for this bookie
-            var parent = editingChain[bookieId];
-
             //First reset items for this bookie.
             $scope.chainInititatorRowData[bookieId] = [];
 
+            var parentCategory = $scope.getParentCategoryForBookie(bookieId);
+
             //If no parent category choosen for this bookie. Move to next bookie.
-            if(!parent) {
+            if(!parentCategory) {
                 continue;
             }
 
-            var categories = _.findWhere(bookie.items, {id : parent}).items;
+            var categories = parentCategory.items;
 
             //Iterate over each item of this bookie
             for (var iii in categories) {
@@ -331,19 +345,14 @@ var SubCtrl = function ($scope, _, $stateParams, $state) {
         var result = [];
         var resultCategory = null;
 
-        var bookie = _.findWhere($scope.bookieData, {id : bookieId});
-        var bookieId = bookie.id;
-
-        // Parent category for this bookie
-        var parent = editingChain[bookieId];
+        var parentCategory = $scope.getParentCategoryForBookie(bookieId);
 
         //If no parent category choosen for this bookie. Move to next bookie.
-        if(!parent) {
+        if(!parentCategory) {
             return result;
         }
 
-        var categories = _.findWhere(bookie.items, {id : parent}).items;
-        console.log("Categories: ", categories);
+        var categories = parentCategory.items;
 
         _.each(categories, function (category) {
             if(category.id == chain[bookieId]) {

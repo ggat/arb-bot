@@ -1,5 +1,3 @@
-<pre>{{chains}}</pre>
-<pre>{{chainInititatorRowData}}</pre>
 <table class="table chainer fixed" >
     <thead>
     <tr>
