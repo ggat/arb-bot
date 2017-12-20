@@ -11,5 +11,11 @@
 
     <artifactId>shitbot-dataanalyzer</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>ge.shitbot</groupId>
+            <artifactId>shitbot-core</artifactId>
+            <version>0.1</version>
+        </dependency>
+    </dependencies>
 </project>
