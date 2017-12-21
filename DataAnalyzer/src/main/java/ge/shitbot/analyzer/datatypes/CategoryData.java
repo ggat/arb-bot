@@ -1,5 +1,6 @@
 package ge.shitbot.analyzer.datatypes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ public class CategoryData {
     protected String bookieName;
     protected String category;
     protected String subCategory;
-    protected List<EventData> events;
+    protected List<EventData> events = new ArrayList<>();
 
     public String getBookieName() {
         return bookieName;

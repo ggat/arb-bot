@@ -53,7 +53,8 @@ public class Analyzer {
 
                                             Double profit = Calc.profit(eventDataOneOdd, eventDataTwoOdd);
 
-                                            if(profit > 0) {
+                                            //TODO: Temporary searching for negative arbs too
+                                            if(profit > -20) {
                                                 //We found arb!
                                                 Arb arb = new Arb();
                                                 Arb.Bookie bookie1 = new Arb.Bookie();

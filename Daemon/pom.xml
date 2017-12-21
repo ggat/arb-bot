@@ -30,5 +30,11 @@
             <artifactId>shitbot-persist</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>ge.shitbot</groupId>
+            <artifactId>shitbot-dataanalyzer</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

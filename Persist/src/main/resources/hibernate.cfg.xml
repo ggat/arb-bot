@@ -20,5 +20,6 @@
         <mapping class="ge.shitbot.persist.models.Ranking" />
         <mapping class="ge.shitbot.persist.models.CategoryInfo" />
         <mapping class="ge.shitbot.persist.models.Bookie" />
+        <mapping class="ge.shitbot.persist.models.Chain" />
     </session-factory>
 </hibernate-configuration>
