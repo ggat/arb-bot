@@ -41,6 +41,49 @@ public enum OddType {
         return resultContrary;
     }
 
+    public String stringValue() {
+
+        String result = null;
+
+        switch (this) {
+            case _1:
+                result = "1";
+                break;
+            case _X:
+                result = "X";
+                break;
+            case _2:
+                result = "2";
+                break;
+            case _1X:
+                result = "1X";
+                break;
+            case _12:
+                result = "12";
+                break;
+            case _X2:
+                result = "X2";
+                break;
+            case _UNDER_25:
+                result = "UNDER";
+                break;
+            case _OVER_25:
+                result = "OVER";
+                break;
+            case _YES:
+                result = "YES";
+                break;
+            case _NO:
+                result = "NO";
+                break;
+            case __UNKNOWN:
+                result = "UNKNOWN";
+                break;
+        }
+
+        return result;
+    }
+
     @Override
     public String toString() {
         return super.toString();
