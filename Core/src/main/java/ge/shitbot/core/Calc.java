@@ -1,6 +1,4 @@
-package ge.shitbot.gui;
-
-import java.math.BigDecimal;
+package ge.shitbot.core;
 
 /**
  * Created by giga on 10/1/17.
