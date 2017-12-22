@@ -4,6 +4,7 @@ import ge.shitbot.scraper.datatypes.Category;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by giga on 12/21/17.

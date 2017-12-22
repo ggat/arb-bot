@@ -68,6 +68,8 @@ public final class Collector implements Runnable {
 
             logger.info("Created scraper thread for bookie {} and starting it..", bookieName);
             scraperThread.start();
+
+            break;
         }
 
         while (true) {
@@ -128,8 +130,10 @@ public final class Collector implements Runnable {
         logger.info("All scraper threads terminated successfully.");
     }
 
-    protected static void handleDataUpdate(List<? extends Category> updatedItem, String target) {
 
+    //TODO: Look at me thread safety!
+    //FIXME: Is it enough to clone updateItem here to defend thread safety.
+    protected static void handleDataUpdate(List<? extends Category> updatedItem, String target) {
 
         for (DataUpdateHandler handler : updateHandlers) {
             handler.handle(new DataUpdateEvent(new ArrayList<Category>(updatedItem), target));

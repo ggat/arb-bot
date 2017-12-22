@@ -72,6 +72,12 @@ public class Analyzer {
                                                 arb.getBookieTwo().setTeamOneName(eventDataTwo.getSideOne());
                                                 arb.getBookieTwo().setTeamTwoName(eventDataTwo.getSideTwo());
 
+                                                //Set category/subCategory
+                                                arb.getBookieOne().setCategory(categoryDataOne.getCategory());
+                                                arb.getBookieOne().setSubCategory(categoryDataOne.getSubCategory());
+                                                arb.getBookieTwo().setCategory(categoryDataTwo.getCategory());
+                                                arb.getBookieTwo().setSubCategory(categoryDataTwo.getSubCategory());
+
                                                 //Set odds
                                                 arb.getBookieOne().setOddType(oddType.stringValue());
                                                 arb.getBookieOne().setOdd(eventDataOneOdd);

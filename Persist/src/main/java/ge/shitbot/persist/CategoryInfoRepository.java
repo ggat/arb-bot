@@ -45,6 +45,12 @@ public class CategoryInfoRepository extends BaseRepository {
         return query.list();
     }
 
+    public List<? extends CategoryInfo> getCategoryInfosForBookie(Long bookieId) {
+        Query<CategoryInfo> query = session.createQuery("from CategoryInfo where bookieId=:bookieId", CategoryInfo.class);
+        query.setParameter("bookieId", bookieId);
+        return query.list();
+    }
+
     public List<? extends CategoryInfo> categoryInfosWithChildren() {
         Query<CategoryInfo> query = session.createQuery("from CategoryInfo where category_info_id IS NOT NULL ", CategoryInfo.class);
         return query.list();

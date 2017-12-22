@@ -7,11 +7,15 @@ import ge.shitbot.analyzer.datatypes.ComparableChain;
 import ge.shitbot.core.datatypes.Arb;
 import ge.shitbot.daemon.analyze.AnalyzerService;
 import ge.shitbot.daemon.analyze.models.Chain;
+import ge.shitbot.daemon.analyze.models.LiveData;
+import ge.shitbot.daemon.exceptions.AnalyzeException;
 import ge.shitbot.daemon.fetch.Collector;
+import ge.shitbot.hardcode.BookieNames;
 import ge.shitbot.persist.BookieRepository;
 import ge.shitbot.persist.CategoryInfoRepository;
 import ge.shitbot.persist.ChainRepository;
 import ge.shitbot.persist.exceptions.PersistException;
+import ge.shitbot.persist.models.Bookie;
 import ge.shitbot.persist.models.CategoryInfo;
 import ge.shitbot.scraper.datatypes.Category;
 import org.slf4j.Logger;
@@ -26,6 +30,7 @@ import java.util.*;
 public class Launch {
 
     private static Logger logger = LoggerFactory.getLogger(Launch.class);
+    private static LiveData liveData = new LiveData();
 
     public static void main(String[] args) {
         //
@@ -39,6 +44,17 @@ public class Launch {
 
             Collector.start();
             Collector.setScrapingInterval(40);
+
+            // Update LiveData handler
+            Collector.addUpdateEventHandler(event -> {
+
+                //logger.info("Handling update event for {} with {} event(s)", event.getTarget(), event.getData().size());
+
+                String targetBookie = event.getTarget();
+                Long bookieId = bookieRepository.bookieIdByName(targetBookie);
+
+                liveData.put(bookieId, event.getData());
+            });
 
             // Update CategoryInfos handler
             Collector.addUpdateEventHandler(event -> {
@@ -84,20 +100,32 @@ public class Launch {
                 logger.info("Start searching for new Arbs. {} data({}) was just updated", event.getTarget(), event.getData().size());
 
                 String targetBookie = event.getTarget();
-                Long bookieId = bookieRepository.bookieIdByName(targetBookie);
+                Bookie bookie = bookieRepository.byName(targetBookie);
+                Long bookieId = bookie.getId();
 
                 logger.debug("BookieId for {} is {}", event.getTarget(), bookieId);
 
                 List<? extends Category> data = event.getData();
 
                 AnalyzerService analyzerService = new AnalyzerService();
-                Analyzer analyzer = new Analyzer();
-                List<Chain> chains = adaptChains(chainRepository.all());
-                List<ComparableChain> comparableChains = analyzerService.createComparableChains(targetBookie, data, chains);
-                List<Arb> arbs = analyzer.findArbs(comparableChains);
+                List<Bookie> bookies = bookieRepository.all();
+                //Bookie names by ID.
+                Map<Long, String> bookieNames = new HashMap<>();
 
-                logger.info("Found {} Arbs", arbs.size());
-                //TODO: We have Arbs here what we do next? Send alerts, update web service.
+                for (Bookie tmpBookie : bookies) {
+                    bookieNames.put(bookie.getId(), tmpBookie.getName());
+                }
+
+                try {
+                    List<Arb> arbs = analyzerService.analyze(liveData, chainRepository.all(), bookieNames);
+
+                    logger.info("Found {} Arbs", arbs.size());
+                    //TODO: We have Arbs here what we do next? Send alerts, update web service.
+                } catch (AnalyzeException e) {
+
+                    //TODO: Add logs here
+                    e.printStackTrace();
+                }
             });
 
             Collector.stop();
@@ -105,43 +133,5 @@ public class Launch {
         } catch (PersistException e) {
             logger.error("Error while trying to instantiate repository.", e.getMessage());
         }
-    }
-
-    protected static List<Chain> adaptChains (List<ge.shitbot.persist.models.Chain> chains) {
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<Chain> adaptedChains = new ArrayList<>();
-
-        for (ge.shitbot.persist.models.Chain chain : chains) {
-            String data = chain.getData();
-
-            JsonNode chainNode = null;
-            try {
-                chainNode = objectMapper.readTree(data);
-            } catch (IOException e) {
-                logger.warn("Could not parse chain with id {}", chain.getId());
-                continue;
-            }
-
-            Chain resultChain = new Chain();
-            Iterator<Map.Entry<String, JsonNode>> fields = chainNode.fields();
-
-            while(fields.hasNext()) {
-                Map.Entry<String, JsonNode> nodeEntry = fields.next();
-
-                String bookieIdString = nodeEntry.getKey();
-
-                if(!bookieIdString.equals("subs") && !bookieIdString.equals("edit")) {
-                    Long categoryId = nodeEntry.getValue().asLong();
-                    Long bookieId = Long.valueOf(bookieIdString);
-
-                    resultChain.put(bookieId, categoryId);
-                }
-            }
-
-            adaptedChains.add(resultChain);
-        }
-
-        return adaptedChains;
     }
 }

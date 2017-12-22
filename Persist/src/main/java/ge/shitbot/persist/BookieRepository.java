@@ -37,4 +37,10 @@ public class BookieRepository extends BaseRepository {
 
         return bookie;
     }
+
+    public List<Bookie> all() {
+
+        Query<Bookie> chainQuery = session.createQuery("FROM Bookie ");
+        return chainQuery.list();
+    }
 }
