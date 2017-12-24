@@ -113,7 +113,7 @@ public class Launch {
                 Map<Long, String> bookieNames = new HashMap<>();
 
                 for (Bookie tmpBookie : bookies) {
-                    bookieNames.put(bookie.getId(), tmpBookie.getName());
+                    bookieNames.put(tmpBookie.getId(), tmpBookie.getName());
                 }
 
                 try {

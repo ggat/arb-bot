@@ -20,7 +20,7 @@ public final class Collector implements Runnable {
     protected static List<ScraperThread> scraperThreads = new ArrayList<>();
     protected static ScraperThread.SharedData data = new ScraperThread.SharedData();
     protected static Object lock = new Object();
-    protected static long scrapingInterval = 30;
+    protected static long scrapingInterval = 5;
     protected static List<DataUpdateHandler> updateHandlers = new ArrayList<>();
     protected static Thread thread;
 
@@ -79,10 +79,14 @@ public final class Collector implements Runnable {
                 synchronized (lock) {
                     lock.wait();
 
+                    System.out.println("TMPL");
+
                     synchronized (data) {
 
                         logger.info("LastUpdatedKey: {}", data.lastUpdatedKey());
 
+                        //FIXME: Importan if something fails here i.e. RuntimeException.
+                        // Collector thread fails, while other threads continue to execute.
                         List<? extends Category> updatedItem = data.getLastUpdated();
                         String target = data.lastUpdatedKey();
                         handleDataUpdate(updatedItem, target);

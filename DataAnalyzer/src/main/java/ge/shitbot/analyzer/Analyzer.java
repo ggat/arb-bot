@@ -37,8 +37,10 @@ public class Analyzer {
                                 EventData eventDataOne = categoryDataOne.getEvents().get(iEvent);
                                 EventData eventDataTwo = categoryDataTwo.getEvents().get(kEvent);
 
+                                Long timeDiff = eventDataOne.getDate().getTime() - eventDataTwo.getDate().getTime();
+
                                 //Check if dates of categories match
-                                if(eventDataOne.getDate() == eventDataTwo.getDate()) {
+                                if(timeDiff == 0) {
 
                                     //Check if any of team names match
                                     if(eventDataOne.getSideOne().equals(eventDataTwo.getSideOne()) ||
@@ -59,7 +61,7 @@ public class Analyzer {
                                             Double profit = Calc.profit(eventDataOneOdd, eventDataTwoOdd);
 
                                             //TODO: Temporary searching for negative arbs too
-                                            if(profit > -50) {
+                                            if(profit > -10) {
                                                 //We found arb!
                                                 Arb arb = new Arb();
                                                 arb.setProfit(profit);

@@ -122,7 +122,9 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
         @Override
         protected Date convert(String str, DeserializationContext ctx) {
             long unixSeconds = Long.parseLong(str);
-            return new Date(unixSeconds*1000L);
+            //return new Date(unixSeconds*1000L);
+            //TODO: Removed multply on 1000 cause it seems it is in milliseconds already. NOT TESTED IF IT IS CORRECT
+            return new Date(unixSeconds);
         }
     }
 
