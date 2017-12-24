@@ -1,30 +1,25 @@
 package ge.shitbot.daemon;
 
-import ge.shitbot.daemon.analyze.models.FlatCategories;
 import ge.shitbot.daemon.analyze.utils.ChainUtils;
 import ge.shitbot.persist.models.Chain;
-import ge.shitbot.scraper.datatypes.Category;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
 
 /**
  * Created by giga on 12/7/17.
  */
 public class ChainUtilsTest {
 
-    private String[] sampleChains = new String[]{
-            "{\"25\": \"2786\", \"27\": \"3274\", \"28\": \"2989\", \"29\": \"2916\", \"30\": \"3136\", \"edit\": true, \"subs\": [{\"25\": \"2787\", \"27\": \"3275\", \"28\": \"2990\", \"29\": \"2923\", \"30\": \"3137\", \"edit\": true}]}",
-            "{\"25\": \"2786\", \"27\": \"3274\", \"28\": \"2989\", \"29\": \"2916\", \"30\": \"3136\", \"edit\": true, \"subs\": [{\"25\": \"2787\", \"27\": \"3275\", \"28\": \"2990\", \"29\": \"2923\", \"30\": \"3137\", \"edit\": true}]}",
-    };
-
     @Test
     public void testAdaptChains() {
+        String[] sampleChains = new String[]{
+                "{\"25\": \"2786\", \"27\": \"3274\", \"28\": \"2989\", \"29\": \"2916\", \"30\": \"3136\", \"edit\": true, \"subs\": [{\"25\": \"2787\", \"27\": \"3275\", \"28\": \"2990\", \"29\": \"2923\", \"30\": \"3137\", \"edit\": true}, {\"25\": \"2787\", \"27\": \"3275\", \"28\": \"2990\", \"29\": \"2923\", \"30\": \"3137\", \"edit\": false}]}",
+                "{\"25\": \"2786\", \"27\": \"3274\", \"28\": \"2989\", \"29\": \"2916\", \"30\": \"3136\", \"edit\": true, \"subs\": [{\"25\": \"2787\", \"27\": \"3275\", \"28\": \"2990\", \"29\": \"2923\", \"30\": \"3137\", \"edit\": true}]}",
+        };
 
         List<Chain> dbChains = new ArrayList<>();
 
@@ -38,7 +33,7 @@ public class ChainUtilsTest {
 
         List<ge.shitbot.daemon.analyze.models.Chain> adaptedChains = ChainUtils.adaptChains(dbChains);
 
-        assertEquals(4, adaptedChains.size());
+        assertEquals(5, adaptedChains.size());
 
         for(ge.shitbot.daemon.analyze.models.Chain chain : adaptedChains) {
             assertTrue("One of the Chain is empty.", chain.size() > 0);

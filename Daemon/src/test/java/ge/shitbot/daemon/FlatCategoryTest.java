@@ -1,6 +1,6 @@
 package ge.shitbot.daemon;
 
-import ge.shitbot.daemon.analyze.models.FlatCategories;
+import ge.shitbot.daemon.analyze.utils.FlatCategories;
 import ge.shitbot.scraper.datatypes.Category;
 import org.junit.Test;
 

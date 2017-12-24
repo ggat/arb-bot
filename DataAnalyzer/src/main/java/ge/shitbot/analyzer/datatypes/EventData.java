@@ -3,6 +3,7 @@ package ge.shitbot.analyzer.datatypes;
 import ge.shitbot.core.datatypes.OddType;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,7 +14,7 @@ public class EventData {
     protected Date date;
     protected String sideOne;
     protected String sideTwo;
-    protected Map<OddType, Double> odds;
+    protected Map<OddType, Double> odds = new HashMap<>();
 
     public Date getDate() {
         return date;

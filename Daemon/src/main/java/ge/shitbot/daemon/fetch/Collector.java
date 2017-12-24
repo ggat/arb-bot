@@ -68,8 +68,6 @@ public final class Collector implements Runnable {
 
             logger.info("Created scraper thread for bookie {} and starting it..", bookieName);
             scraperThread.start();
-
-            break;
         }
 
         while (true) {

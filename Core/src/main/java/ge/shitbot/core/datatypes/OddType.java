@@ -35,7 +35,10 @@ public enum OddType {
                 //throw new CoreException();
             }
 
-            resultContrary = contrary[0] == this ? contrary[1] : contrary[0];
+            if(contrary[0] == this || contrary[1] == this) {
+                resultContrary = contrary[0] == this ? contrary[1] : contrary[0];
+                break;
+            }
         }
 
         return resultContrary;
@@ -82,6 +85,12 @@ public enum OddType {
         }
 
         return result;
+    }
+
+    public static void main(String[] args) {
+        OddType oddType = OddType._X;
+
+        oddType.contrary();
     }
 
     @Override

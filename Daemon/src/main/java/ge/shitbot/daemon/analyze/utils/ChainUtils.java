@@ -2,6 +2,7 @@ package ge.shitbot.daemon.analyze.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import ge.shitbot.daemon.analyze.models.Chain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,8 +57,11 @@ public class ChainUtils {
             String bookieIdString = nodeEntry.getKey();
 
             if(bookieIdString.equals("subs")) {
-                JsonNode subChainNode = nodeEntry.getValue();
-                recurseOnChains(subChainNode, adaptedChains);
+                //Chain may have multiple subCains "subs" is array therefore
+                ArrayNode subChainNodes = (ArrayNode) nodeEntry.getValue();
+                for(JsonNode subChainNode : subChainNodes){
+                    recurseOnChains(subChainNode, adaptedChains);
+                }
                 continue;
             }
 
@@ -66,7 +70,6 @@ public class ChainUtils {
                 Long bookieId = Long.valueOf(bookieIdString);
 
                 resultChain.put(bookieId, categoryId);
-                //return new Long[] {bookieId, categoryId};
             }
         }
 

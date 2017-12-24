@@ -1,4 +1,4 @@
-package ge.shitbot.daemon.analyze.models;
+package ge.shitbot.daemon.analyze.utils;
 
 import ge.shitbot.scraper.datatypes.Category;
 

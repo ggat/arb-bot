@@ -7,6 +7,7 @@ import ge.shitbot.core.Calc;
 import ge.shitbot.core.datatypes.Arb;
 import ge.shitbot.core.datatypes.OddType;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class Analyzer {
                         for(int iEvent = 0; iEvent < categoryDataOne.getEvents().size(); iEvent++ ) {
                             for(int kEvent = 0; kEvent < categoryDataTwo.getEvents().size(); kEvent++ ) {
 
-                                EventData eventDataOne = categoryDataTwo.getEvents().get(iEvent);
+                                EventData eventDataOne = categoryDataOne.getEvents().get(iEvent);
                                 EventData eventDataTwo = categoryDataTwo.getEvents().get(kEvent);
 
                                 //Check if dates of categories match
@@ -51,12 +52,21 @@ public class Analyzer {
                                             Double eventDataOneOdd = eventDataOne.getOdds().get(oddType);
                                             Double eventDataTwoOdd = eventDataTwo.getOdds().get(oddType.contrary());
 
+                                            // If event on one or both sides are missing oddType we cannot compare
+                                            // them so we skip it.
+                                            if(eventDataOneOdd == null || eventDataTwoOdd == null) continue;
+
                                             Double profit = Calc.profit(eventDataOneOdd, eventDataTwoOdd);
 
                                             //TODO: Temporary searching for negative arbs too
                                             if(profit > -20) {
                                                 //We found arb!
                                                 Arb arb = new Arb();
+                                                arb.setProfit(profit);
+
+                                                //Here it does not really matter from which side we take date/time
+                                                arb.setDate(new Timestamp(eventDataOne.getDate().getTime()));
+
                                                 Arb.Bookie bookie1 = new Arb.Bookie();
                                                 Arb.Bookie bookie2 = new Arb.Bookie();
                                                 arb.setBookieOne(bookie1);
