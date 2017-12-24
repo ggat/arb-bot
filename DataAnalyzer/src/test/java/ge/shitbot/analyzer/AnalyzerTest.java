@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * Created by giga on 12/24/17.
  */
@@ -23,7 +25,9 @@ public class AnalyzerTest {
         List<ComparableChain> comparableChains = new ArrayList<>();
 
         ComparableChain comparableChainOne = new ComparableChain();
-        List<CategoryData> arbedCategoryDatas = createArbedCategoryData("Category", "SubCategory", "Real", "Barca", OddType._YES);
+        //List<CategoryData> arbedCategoryDatas = createArbedCategoryData("Category", "SubCategory", "Real", "Barca", OddType._YES);
+        List<CategoryData> arbedCategoryDatas = createMatchableCategoryDatas("Category", "SubCategory", "Real", "Barca", OddType._YES, 3.0, 3.0, 3.0);
+        arbedCategoryDatas.addAll(createMatchableCategoryDatas("Category", "SubCategory", "Manchester", "Chelsea", OddType._1, 1.5, 2.1, 2.5));
 
         for (CategoryData categoryData : arbedCategoryDatas) {
             comparableChainOne.add(categoryData);
@@ -34,7 +38,7 @@ public class AnalyzerTest {
         Analyzer analyzer = new Analyzer();
         List<? extends Arb> arbs = analyzer.findArbs(comparableChains);
 
-        System.out.println("Arbs size: " + arbs.size());
+        assertEquals(2, arbs.size());
     }
 
     private List<CategoryData> createArbedCategoryData(String category, String subCategory, String sideOne, String sideTwo, OddType oddType) {
