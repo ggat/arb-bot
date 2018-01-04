@@ -5,6 +5,7 @@ import ge.shitbot.datasources.source.ArbDataSource;
 import ge.shitbot.datasources.source.MainDataSource;
 import ge.shitbot.core.datatypes.Arb;
 import ge.shitbot.core.Calc;
+import ge.shitbot.datasources.source.NewDataSource;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
@@ -344,7 +345,7 @@ public class AppMain extends javafx.application.Application {
     }
 
     protected ObservableList<Arb> getArbs() throws DataSourceException {
-        ArbDataSource<Arb> source = new MainDataSource<>();
+        ArbDataSource<Arb> source = new NewDataSource<>();
         return FXCollections.observableArrayList(source.getArbs());
     }
 

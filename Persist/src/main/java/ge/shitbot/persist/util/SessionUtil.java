@@ -18,6 +18,7 @@ public class SessionUtil {
     private static final SessionUtil instance = new SessionUtil();
     private final SessionFactory factory;
     private static final String CONFIG_NAME = "/configuration.properties";
+    private static Session session;
 
     private SessionUtil() {
 
@@ -29,6 +30,14 @@ public class SessionUtil {
 
     public static Session getSession() {
         return getInstance().factory.openSession();
+    }
+
+    public static Session getSingletonSession() {
+        if (session == null) {
+            session = getSession();
+        }
+
+        return session;
     }
 
     private static SessionUtil getInstance() {

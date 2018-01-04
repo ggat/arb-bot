@@ -1,5 +1,6 @@
 package ge.shitbot.daemon;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ge.shitbot.analyzer.Analyzer;
@@ -11,10 +12,12 @@ import ge.shitbot.daemon.analyze.models.LiveData;
 import ge.shitbot.daemon.exceptions.AnalyzeException;
 import ge.shitbot.daemon.fetch.Collector;
 import ge.shitbot.hardcode.BookieNames;
+import ge.shitbot.persist.ArbInfoRepository;
 import ge.shitbot.persist.BookieRepository;
 import ge.shitbot.persist.CategoryInfoRepository;
 import ge.shitbot.persist.ChainRepository;
 import ge.shitbot.persist.exceptions.PersistException;
+import ge.shitbot.persist.models.ArbInfo;
 import ge.shitbot.persist.models.Bookie;
 import ge.shitbot.persist.models.CategoryInfo;
 import ge.shitbot.scraper.datatypes.Category;
@@ -41,6 +44,7 @@ public class Launch {
             CategoryInfoRepository repository = new CategoryInfoRepository();
             BookieRepository bookieRepository = new BookieRepository();
             ChainRepository chainRepository = new ChainRepository();
+            ArbInfoRepository arbInfoRepository = new ArbInfoRepository();
 
             Collector.start();
             Collector.setScrapingInterval(40);
@@ -118,13 +122,23 @@ public class Launch {
 
                 try {
                     List<Arb> arbs = analyzerService.analyze(liveData, chainRepository.all(), bookieNames);
-
                     logger.info("Found {} Arbs", arbs.size());
-                    //TODO: We have Arbs here what we do next? Send alerts, update web service.
+
+                    try {
+
+                        ObjectMapper mapper = new ObjectMapper();
+                        String arbInfoData = mapper.writeValueAsString(arbs);
+                        ArbInfo arbInfo = new ArbInfo();
+                        arbInfo.setData(arbInfoData);
+                        arbInfoRepository.truncate();
+                        arbInfoRepository.saveArbInfo(arbInfo);
+                    } catch (JsonProcessingException e) {
+
+                        logger.error("Could not create JSON of ArbInfo list. {}", e);
+                    }
                 } catch (AnalyzeException e) {
 
-                    //TODO: Add logs here
-                    e.printStackTrace();
+                    logger.error("Error while analyzing data. {}", e);
                 }
             });
 

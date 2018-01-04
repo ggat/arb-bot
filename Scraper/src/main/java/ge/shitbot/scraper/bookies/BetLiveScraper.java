@@ -260,7 +260,8 @@ public class BetLiveScraper implements BookieScraper {
     }
 
     protected List<? extends Category> parseCategories() throws ScraperException, IOException {
-        String sportBookTree = Http.get("https://sport.betlive.com/en-US/api/category/getSportCountryCategories?languageId=1&sportId=" + SOCCER_ID + "&time=100");
+        String sportBookTree = Http.get("https://sport.betlive.com/category/getCountryCategories?time=100&sportId=" + SOCCER_ID + "&languageId=1");
+        //String sportBookTree = Http.get("https://sport.betlive.com/en-US/api/category/getSportCountryCategories?languageId=1&sportId=" + SOCCER_ID + "&time=100");
 
         ObjectMapper mapper = new ObjectMapper();
         List<LocalCategory> categories = mapper.readValue(sportBookTree, new TypeReference<ArrayList<LocalCategory>>() {});
@@ -297,9 +298,13 @@ public class BetLiveScraper implements BookieScraper {
         for (int page = 0; page < MAX_PAGE_COUNT; page++) {
             events = null;
             try {
-                String executeString = Http.get("https://sport.betlive.com/en-US/Prematch/LeaguesJson/?idList="
+                //https://sport.betlive.com/category/getPrematchLiveCategories?languageId=1
+                /*String executeString = Http.get("https://sport.betlive.com/en-US/Prematch/LeaguesJson/?idList="
                         + subCategoryId +
-                        "&gametype=null&state=null&sportid=null&time=100&page=0");
+                        "&gametype=null&state=null&sportid=null&time=100&page=0");*/
+
+                String executeString = Http.get("https://sport.betlive.com/category/getCategoryLeagues?leagueIds="+
+                        subCategoryId +"&time=100&page=0&take=50&languageId=1");
 
                 events = mapper.readValue(executeString, LocalEventList.class);
 

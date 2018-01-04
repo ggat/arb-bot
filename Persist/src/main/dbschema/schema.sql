@@ -1,3 +1,8 @@
+CREATE TABLE ArbInfo
+(
+    id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    data JSON NOT NULL
+);
 CREATE TABLE Bookie
 (
     id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -10,8 +15,8 @@ CREATE TABLE CategoryInfo
     bookie_id INT(11) NOT NULL,
     name VARCHAR(255),
     category_info_id INT(11),
-    CONSTRAINT CategoryInfo_Bookie_id_fk FOREIGN KEY (bookie_id) REFERENCES Bookie (id),
-    CONSTRAINT CategoryInfo_CategoryInfo_id_fk FOREIGN KEY (category_info_id) REFERENCES CategoryInfo (id)
+    CONSTRAINT CategoryInfo_Bookie_id_fk FOREIGN KEY (bookie_id) REFERENCES Bookie (id) ON DELETE CASCADE,
+    CONSTRAINT CategoryInfo_CategoryInfo_id_fk FOREIGN KEY (category_info_id) REFERENCES CategoryInfo (id) ON DELETE CASCADE
 );
 CREATE INDEX CategoryInfo_Bookie_id_fk ON CategoryInfo (bookie_id);
 CREATE INDEX CategoryInfo_CategoryInfo_id_fk ON CategoryInfo (category_info_id);

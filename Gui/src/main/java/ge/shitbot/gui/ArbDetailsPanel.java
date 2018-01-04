@@ -2,6 +2,7 @@ package ge.shitbot.gui;
 
 import ge.shitbot.bot.exceptions.BookieDriverNotFoundException;
 import ge.shitbot.bot.exceptions.UnknownOddTypeException;
+import ge.shitbot.core.Calc;
 import ge.shitbot.core.datatypes.Arb;
 import ge.shitbot.gui.service.BotService;
 import javafx.beans.value.ChangeListener;

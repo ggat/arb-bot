@@ -1,0 +1,76 @@
+<configuration>
+
+    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener" />
+
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <!--<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>testFile.log</file>
+        <append>true</append>
+        &lt;!&ndash; set immediateFlush to false for much higher logging throughput &ndash;&gt;
+        <immediateFlush>true</immediateFlush>
+        &lt;!&ndash; encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default &ndash;&gt;
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>-->
+
+    <appender name="SCRAPER" class="ch.qos.logback.core.FileAppender">
+        <file>log/scraper.log</file>
+        <append>true</append>
+        <!-- set immediateFlush to false for much higher logging throughput -->
+        <immediateFlush>true</immediateFlush>
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="stdout" />
+    </root>
+
+    <logger name="ge.shitbot.scraper" level="info" additivity="false">
+        <appender-ref ref="SCRAPER" />
+    </logger>
+
+    <logger name="org.hibernate" level="error" additivity="false">
+        <appender-ref ref="stdout" />
+    </logger>
+
+    <!--<appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator class="ch.qos.logback.classic.sift.JNDIBasedContextDiscriminator">
+            <defaultValue>unknown</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="FILE-${contextName}" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${catalina.base}/logs/processing/${contextName}.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    &lt;!&ndash; daily rollover &ndash;&gt;
+                    <fileNamePattern>${catalina.base}/logs/processing/${contextName}.%d{yyyy-MM-dd}.log</fileNamePattern>
+                    &lt;!&ndash; keep 30 days' worth of history capped at 3GB total size &ndash;&gt;
+                    <maxHistory>30</maxHistory>
+                    <totalSizeCap>3GB</totalSizeCap>
+                </rollingPolicy>
+                <encoder>
+                    <pattern>%d{"yyyy-MM-dd'T'HH:mm:ss,SSS"} [%thread] %-50(%level %logger{35}) cn=%contextName - %msg%n</pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>-->
+
+    <!--<logger name="com.onepay.billing.centralproc" level="trace" additivity="false">
+        <appender-ref ref="SIFT" />
+    </logger>-->
+
+    <root level="debug">
+        <appender-ref ref="stdout" />
+    </root>
+</configuration>

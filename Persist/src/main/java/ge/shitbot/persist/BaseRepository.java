@@ -17,7 +17,7 @@ public class BaseRepository {
 
     public BaseRepository() throws PersistException {
         try {
-            session = SessionUtil.getSession();
+            session = SessionUtil.getSingletonSession();
         } catch (RuntimeException e) {
             logger.error("Could not get session");
             throw new PersistException(e);

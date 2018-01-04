@@ -1,6 +1,7 @@
 package ge.shitbot.persist.models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,12 +17,12 @@ public class CategoryInfo {
     @Column(name = "bookie_id")
     public Long bookieId;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_info_id", nullable = true)
     public CategoryInfo parent;
 
     @OneToMany(mappedBy = "parent")
-    public List<CategoryInfo> subCategoryInfos;
+    public List<CategoryInfo> subCategoryInfos = new ArrayList<>();
 
     @Column
     public String name;
