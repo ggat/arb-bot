@@ -12,18 +12,23 @@ import ge.shitbot.daemon.analyze.models.LiveData;
 import ge.shitbot.daemon.exceptions.AnalyzeException;
 import ge.shitbot.daemon.fetch.Collector;
 import ge.shitbot.hardcode.BookieNames;
-import ge.shitbot.persist.ArbInfoRepository;
-import ge.shitbot.persist.BookieRepository;
-import ge.shitbot.persist.CategoryInfoRepository;
-import ge.shitbot.persist.ChainRepository;
+import ge.shitbot.persist.*;
+import ge.shitbot.persist.config.PersistConfig;
+import ge.shitbot.persist.config.PersistConfigBuilder;
 import ge.shitbot.persist.exceptions.PersistException;
 import ge.shitbot.persist.models.ArbInfo;
 import ge.shitbot.persist.models.Bookie;
 import ge.shitbot.persist.models.CategoryInfo;
 import ge.shitbot.scraper.datatypes.Category;
+import org.apache.commons.configuration2.HierarchicalConfiguration;
+import org.apache.commons.configuration2.XMLConfiguration;
+import org.apache.commons.configuration2.builder.fluent.Configurations;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -35,12 +40,19 @@ public class Launch {
     private static Logger logger = LoggerFactory.getLogger(Launch.class);
     private static LiveData liveData = new LiveData();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ConfigurationException {
+
+        bootstrap();
+        run();
+    }
+
+    public static void run() {
         //
         logger.info("Daemon started.");
         logger.info("Starting data fetcher.");
 
         try {
+
             CategoryInfoRepository repository = new CategoryInfoRepository();
             BookieRepository bookieRepository = new BookieRepository();
             ChainRepository chainRepository = new ChainRepository();
@@ -145,7 +157,26 @@ public class Launch {
             Collector.stop();
 
         } catch (PersistException e) {
-            logger.error("Error while trying to instantiate repository.", e.getMessage());
+            logger.error("Error while trying to instantiate repository. {}", e);
         }
+    }
+
+    private static void bootstrap() throws ConfigurationException {
+
+        Configurations configs = new Configurations();
+        XMLConfiguration config = configs.xml(new File(System.getProperty("user.dir")) + "/env.xml");
+
+        //Bootstrap the persistence
+        PersistConfig persistConfig = new PersistConfigBuilder()
+                .url(config.getString("db.url"))
+                .driver(config.getString("db.driver"))
+                .user(config.getString("db.user"))
+                .pass(config.getString("db.pass"))
+                .dialect(config.getString("db.dialect"))
+                .build();
+
+        PersistFacade.setSettings(persistConfig);
+
+        System.out.println(persistConfig);
     }
 }
