@@ -1,5 +1,6 @@
 package ge.shitbot.persist.util;
 
+import ge.shitbot.persist.exceptions.PersistException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -21,12 +22,14 @@ public class SessionUtil {
     //Logger logger = LoggerFactory.getLogger(SessionUtil.class);
 
     private static SessionUtil instance;
-    private final SessionFactory factory;
+    private SessionFactory factory;
     private static final String CONFIG_NAME = "/configuration.properties";
     private static Session session;
     private static Map<String, String> settings = new HashMap<>();
 
-    private SessionUtil() {
+    private SessionUtil(){}
+
+    /*private SessionUtil() {
 
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure()
@@ -36,6 +39,19 @@ public class SessionUtil {
 
         //FIXME: Moved this initialization here because of this we could not set settings without instantiating SessionUtil.
         instance = new SessionUtil();
+    }*/
+
+    protected static void recreateInstance() {
+
+        SessionUtil sessionUtil = new SessionUtil();
+
+        StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+                .configure()
+                .applySettings(settings)
+                .build();
+        sessionUtil.factory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+
+        instance = sessionUtil;
     }
 
     public static Session getSession() {
@@ -51,6 +67,12 @@ public class SessionUtil {
     }
 
     private static SessionUtil getInstance() {
+
+        //This check is if settings where not set
+        if(instance == null) {
+            recreateInstance();
+        }
+
         return instance;
     }
 
@@ -59,6 +81,10 @@ public class SessionUtil {
     }
 
     public static void setSettings(Map<String, String> settings) {
-        SessionUtil.settings = settings;
+        if (settings != null) {
+            SessionUtil.settings = settings;
+        }
+
+        recreateInstance();
     }
 }

@@ -6,6 +6,8 @@ import ge.shitbot.analyzer.datatypes.EventData;
 import ge.shitbot.core.Calc;
 import ge.shitbot.core.datatypes.Arb;
 import ge.shitbot.core.datatypes.OddType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -16,11 +18,15 @@ import java.util.List;
  */
 public class Analyzer {
 
+    Logger logger = LoggerFactory.getLogger(Analyzer.class);
+
     public List<Arb> findArbs(List<ComparableChain> comparableChains) {
 
         List<Arb> resultArbs = new ArrayList<>();
 
         for(ComparableChain comparableChain : comparableChains) {
+
+            logger.debug("Working on chain({}): {}", comparableChain.size(), comparableChain.toString());
 
             for (int i = 0; i < comparableChain.size(); i++) {
 
@@ -29,6 +35,8 @@ public class Analyzer {
                     CategoryData categoryDataOne = comparableChain.get(i);
                     CategoryData categoryDataTwo = comparableChain.get(k);
 
+                    logger.debug("Comparing CategoryDatas {} {}", categoryDataOne, categoryDataTwo);
+
                     if (categoryDataOne != categoryDataTwo) {
 
                         for(int iEvent = 0; iEvent < categoryDataOne.getEvents().size(); iEvent++ ) {
@@ -36,6 +44,8 @@ public class Analyzer {
 
                                 EventData eventDataOne = categoryDataOne.getEvents().get(iEvent);
                                 EventData eventDataTwo = categoryDataTwo.getEvents().get(kEvent);
+
+                                logger.debug("Comparing Events {} {}", eventDataOne, eventDataTwo);
 
                                 Long timeDiff = eventDataOne.getDate().getTime() - eventDataTwo.getDate().getTime();
 

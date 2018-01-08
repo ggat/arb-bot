@@ -8,6 +8,18 @@
         </encoder>
     </appender>
 
+    <appender name="ALL" class="ch.qos.logback.core.FileAppender">
+        <file>log/all.log</file>
+        <append>true</append>
+        <!-- set immediateFlush to false for much higher logging throughput -->
+        <immediateFlush>true</immediateFlush>
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <appender name="SCRAPER" class="ch.qos.logback.core.FileAppender">
         <file>log/scraper.log</file>
         <append>true</append>
@@ -44,11 +56,6 @@
         </encoder>
     </appender>
 
-    <root level="DEBUG">
-        <appender-ref ref="FILE" />
-        <appender-ref ref="stdout" />
-    </root>
-
     <logger name="ge.shitbot.scraper" level="debug" additivity="false">
         <appender-ref ref="SCRAPER" />
     </logger>
@@ -67,5 +74,6 @@
 
     <root level="debug">
         <appender-ref ref="stdout" />
+        <appender-ref ref="ALL" />
     </root>
 </configuration>

@@ -38,8 +38,10 @@ public class CategoryCategoryInfoMapper {
         //Here there is possibility categories and categoryInfo quantities will be different.
         for (Category category : categories) {
 
+            // FIXME: This is failing if we have same league name like Jamaica - > Premier League and England -> Premier League.
+            // So we need a way to compare parents too or something like that.
             CategoryInfo categoryInfo = categoryInfos.stream()
-                    .filter(categoryInfoItem -> categoryInfoItem.getName().equals(category.getName()))
+                    .filter(categoryInfoItem ->  categoryInfoItem.getName().equals(category.getName()))
                     .collect(StreamUtils.singletonCollector());
 
             if (categoryInfo != null) {

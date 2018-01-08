@@ -44,4 +44,12 @@ public class CategoryData {
     public void setEvents(List<EventData> events) {
         this.events = events;
     }
+
+    @Override
+    public String toString() {
+        return "CategoryData{" +
+                "bookieName='" + bookieName + '\'' +
+                ", category='" + category + '\'' +
+                '}';
+    }
 }

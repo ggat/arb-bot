@@ -111,6 +111,10 @@ public class AnalyzerService {
                     }
                 }
 
+                if(comparableChain.size() == 0) {
+                    continue;
+                }
+
                 comparableChains.add(comparableChain);
             }
 
@@ -124,8 +128,11 @@ public class AnalyzerService {
     public List<Arb> analyze(LiveData liveData,
                              List<ge.shitbot.persist.models.Chain> rawChains, Map<Long, String> bookieNames)throws AnalyzeException {
         Analyzer analyzer = new Analyzer();
+
         List<Chain> chains = ChainUtils.adaptChains(rawChains);
         List<ComparableChain> comparableChains = createComparableChains(liveData, chains, bookieNames);
+
+        logger.info("Created {} ", comparableChains.size());
 
         //FIXME: This is only for single bookie so probably it will never generate Arbs
         return analyzer.findArbs(comparableChains);

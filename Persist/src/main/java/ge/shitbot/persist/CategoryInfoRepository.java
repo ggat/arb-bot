@@ -90,4 +90,10 @@ public class CategoryInfoRepository extends BaseRepository {
             }
         }
     }
+
+    public List<CategoryInfo> getCategoryInfosByName(String name) {
+        Query<CategoryInfo> existingInfosQuery = session.createQuery("from CategoryInfo where name=:name");
+        existingInfosQuery.setParameter("name", name);
+        return existingInfosQuery.list();
+    }
 }

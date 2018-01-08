@@ -47,4 +47,14 @@ public class EventData {
     public void setOdds(Map<OddType, Double> odds) {
         this.odds = odds;
     }
+
+    @Override
+    public String toString() {
+        return "EventData{" +
+                "date=" + date +
+                ", sideOne='" + sideOne + '\'' +
+                ", sideTwo='" + sideTwo + '\'' +
+                ", oddCount='" + (odds == null ? "0" : odds.size()) + '\'' +
+                '}';
+    }
 }

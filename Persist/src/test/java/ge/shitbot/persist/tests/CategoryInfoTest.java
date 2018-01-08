@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -45,6 +46,32 @@ public class CategoryInfoTest {
         repository.saveCategoryInfo(info);
 
         assertNotNull(repository.byName("TestCategoryInfo"));
+    }
+
+    @Test
+    public void testUpdateForBookie() {
+
+        Long bookieId = 25L;
+        List<CategoryInfo> categoryInfos = new ArrayList<>();
+
+        CategoryInfo info = new CategoryInfo();
+        info.setName("TestCategoryInfo");
+        info.setBookieId(bookieId);
+
+        categoryInfos.add(info);
+
+        repository.updateCategoryInfosForBookie(bookieId, categoryInfos);
+
+        /*info = new CategoryInfo();
+        info.setName("TestCategoryInfo");
+        info.setBookieId(bookieId);
+
+        categoryInfos.add(info);*/
+
+        repository.updateCategoryInfosForBookie(bookieId, categoryInfos);
+        repository.updateCategoryInfosForBookie(bookieId, categoryInfos);
+
+        assertEquals(1, repository.getCategoryInfosByName("TestCategoryInfo").size());
     }
 
     @Test

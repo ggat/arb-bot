@@ -42,8 +42,14 @@ public class Launch {
 
     public static void main(String[] args) throws ConfigurationException {
 
-        bootstrap();
-        run();
+        try {
+            bootstrap();
+            run();
+        } catch (ConfigurationException e) {
+            logger.error("Could not bootstrap application because configuration problem: {}", e);
+        } catch (Exception e) {
+            logger.error("Unexpected error exception thrown {}", e);
+        }
     }
 
     public static void run() {
