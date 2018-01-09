@@ -1,0 +1,71 @@
+package ge.shitbot.daemon;
+
+import ge.shitbot.daemon.analyze.AnalyzerService;
+import ge.shitbot.daemon.analyze.models.LiveData;
+import ge.shitbot.daemon.analyze.utils.categories.CategoryUtils;
+import ge.shitbot.daemon.exceptions.AnalyzeException;
+import ge.shitbot.persist.ChainRepository;
+import ge.shitbot.persist.exceptions.PersistException;
+import ge.shitbot.persist.models.CategoryInfo;
+import ge.shitbot.scraper.datatypes.Category;
+import org.junit.Test;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+/**
+ * Created by giga on 12/7/17.
+ */
+public class AnalyzerServiceTest {
+
+    Long ID = 1L;
+    private Long getNextId() {
+        return ID++;
+    }
+
+    private final String savedDataFile = "freshData.tmp";
+
+    @Test
+    public void testArbSearch() throws IOException, ClassNotFoundException, PersistException, AnalyzeException {
+        //FileInputStream fis = new FileInputStream();
+        ObjectInputStream ois = new ObjectInputStream(getClass().getResourceAsStream(savedDataFile));
+        HashMap<Long, List<? extends Category>> readObjects = (HashMap<Long, List<? extends Category>>) ois.readObject();
+
+        ChainRepository chainRepository = new ChainRepository();
+
+        AnalyzerService analyzerService = new AnalyzerService();
+        analyzerService.analyze(toLiveData(readObjects), chainRepository.all(), generateBookieNames(readObjects));
+
+        ois.close();
+    }
+
+    private Map<Long, String> generateBookieNames (HashMap<Long, List<? extends Category>> data) {
+
+        Map<Long, String> result = new HashMap<>();
+
+        for (Long bookieId : data.keySet()) {
+            result.put(bookieId, "Bookie " + bookieId);
+        }
+
+        return result;
+    }
+
+    private LiveData toLiveData(HashMap<Long, List<? extends Category>> data) {
+
+        LiveData liveData = new LiveData();
+
+        for (Map.Entry<Long, List<? extends Category>> entry : data.entrySet()) {
+
+            liveData.put(entry.getKey(), entry.getValue());
+        }
+
+        return liveData;
+    }
+}

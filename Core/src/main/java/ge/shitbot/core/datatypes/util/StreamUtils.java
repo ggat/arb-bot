@@ -8,14 +8,17 @@ import java.util.stream.Collectors;
  */
 public class StreamUtils {
 
-    public static <T> Collector<T, ?, T> singletonCollector() {
+    public static <T> Collector<T, ?, T> singletonCollector() throws IllegalStateException {
         return Collectors.collectingAndThen(
                 Collectors.toList(),
                 list -> {
-                    if (list.size() != 1) {
-                        //throw new IllegalStateException();
+                    if (list.size() > 1) {
+                        throw new IllegalStateException();
+                        //return null;
+                    } else if(list.size() < 1) {
                         return null;
                     }
+
                     return list.get(0);
                 }
         );

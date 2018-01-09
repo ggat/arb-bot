@@ -1,9 +1,10 @@
 package ge.shitbot.scraper.datatypes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Category {
+public class Category implements Serializable {
     private String name;
     private Long id;
     private List<Category> subCategories = new ArrayList<>();

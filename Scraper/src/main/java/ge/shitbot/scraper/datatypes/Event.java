@@ -2,6 +2,7 @@ package ge.shitbot.scraper.datatypes;
 
 import ge.shitbot.core.datatypes.OddType;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +10,7 @@ import java.util.Map;
 /**
  * Created by giga on 11/21/17.
  */
-public class Event
+public class Event implements Serializable
 {
     private Category category;
     protected Date date;

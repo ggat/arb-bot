@@ -54,6 +54,11 @@ public final class Collector implements Runnable {
 
             String bookieName = bookieNames.get(num);
 
+            //TODO: Remove this
+            if(!bookieName.equals("LiderBet")){
+                continue;
+            }
+
             BookieScraper scraper = null;
             try {
                 scraper = BookieScraperRegistry.getScraper(bookieName);

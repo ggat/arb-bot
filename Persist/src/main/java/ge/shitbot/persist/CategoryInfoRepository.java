@@ -69,7 +69,17 @@ public class CategoryInfoRepository extends BaseRepository {
         return categoryInfo;
     }
 
+    /**
+     * Flat list is expected here.
+     * This method will not recurse on subcategories.
+     *
+     * @param bookieId
+     * @param categoryInfos
+     */
     public void updateCategoryInfosForBookie(Long bookieId, List<? extends CategoryInfo> categoryInfos) {
+
+        Transaction tx = session.beginTransaction();
+
         Query<CategoryInfo> existingInfosQuery = session.createQuery("from CategoryInfo where bookieId=:bookieId");
         existingInfosQuery.setParameter("bookieId", bookieId);
         List<CategoryInfo> existingInfos = existingInfosQuery.list();
@@ -89,6 +99,8 @@ public class CategoryInfoRepository extends BaseRepository {
                 session.save(newCategoryInfo);
             }
         }
+
+        tx.commit();
     }
 
     public List<CategoryInfo> getCategoryInfosByName(String name) {

@@ -1,9 +1,14 @@
 package ge.shitbot.scraper;
 
 import ge.shitbot.scraper.bookies.*;
+import ge.shitbot.scraper.datatypes.Category;
 import ge.shitbot.scraper.exceptions.ScraperException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by giga on 11/21/17.
@@ -11,36 +16,36 @@ import org.slf4j.LoggerFactory;
 public class Main {
 
     private static Logger logger = LoggerFactory.getLogger(Main.class);
+    final String outFileName = "freshData.tmp";
 
-    public static void main(String[] args) throws ScraperException {
+    public static void main(String[] args) throws Exception {
+        Main self = new Main();
 
-        BookieScraper scraper = new EuropeBetScraper();
+        self.getDataAndWriteToFile();
+        //self.readSerializedData();
+    }
 
-        //BetLiveScraper scraper = new BetLiveScraper();
+    private void readSerializedData() throws Exception {
+        FileInputStream fis = new FileInputStream(outFileName);
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        HashMap<Long, List<? extends Category>> readObjects = (HashMap<Long, List<? extends Category>>) ois.readObject();
+        ois.close();
+    }
 
-        //Map<Long, List<Event>> events = scraper.getAllEventsForSport();
+    private void getDataAndWriteToFile() throws Exception {
+        HashMap<Long, List<? extends Category>> liveData = new HashMap<>();
+        liveData.put(25L, new AdjaraBetScraper().getFreshData());
+        liveData.put(28L, new EuropeBetScraper().getFreshData());
+        liveData.put(30L, new CrocoBetScraper().getFreshData());
+        liveData.put(29L, new LiderBetScraper().getFreshData());
+        liveData.put(27L, new CrystalBetScraper().getFreshData());
 
-        //try {
+        File yourFile = new File(outFileName);
+        yourFile.createNewFile();
 
-        logger.warn("My own logger.");
-
-            //scraper.getAllEventsForSport();
-
-            //List<? extends Category> result =  scraper.getFreshData();
-
-            //Map<String, List<? extends Category>> allCategories = BulkRunner.getCategories();
-
-            System.out.println("asdasd");
-
-            /*Event firstEvent = result.get(0).getSubCategories().get(0).getEvents().get(0);
-
-            System.out.println("First event sideOne: " + firstEvent.getSideOne());
-            System.out.println("First event getSideTwo: " + firstEvent.getSideTwo());
-            System.out.println("First event subCategory: " + firstEvent.getCategory().getName());
-            System.out.println("First event category: " + firstEvent.getCategory().getParent().getName());*/
-
-        /*} catch (ScraperException e) {
-            e.printStackTrace();
-        }*/
+        FileOutputStream fos = new FileOutputStream(outFileName);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(liveData);
+        oos.close();
     }
 }

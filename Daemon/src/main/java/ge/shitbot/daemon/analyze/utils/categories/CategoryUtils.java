@@ -3,6 +3,8 @@ package ge.shitbot.daemon.analyze.utils.categories;
 import ge.shitbot.persist.models.CategoryInfo;
 import ge.shitbot.scraper.datatypes.Category;
 
+import java.util.List;
+
 /**
  * Created by giga on 1/9/18.
  */
@@ -21,6 +23,27 @@ public class CategoryUtils {
 
             if(categoryInfoParentName.equals(categoryParentName)) {
                 return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean matchesDeep(CategoryInfo categoryInfo, Category category) {
+
+        if(matches(categoryInfo, category)) {
+            List<CategoryInfo> subCatInfos = categoryInfo.getSubCategoryInfos();
+            List<Category> subCats = category.getSubCategories();
+
+            for(CategoryInfo subCatInfo : subCatInfos) {
+                for(Category subCat : subCats) {
+
+                    //If any of subCategoryNames match
+                    //Parent comparison makes no sense here as we know that they have same parents, for sure.
+                    if(subCatInfo.getName().equals(subCat.getName())){
+                        return true;
+                    }
+                }
             }
         }
 
