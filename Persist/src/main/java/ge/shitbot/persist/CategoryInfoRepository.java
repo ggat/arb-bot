@@ -69,8 +69,15 @@ public class CategoryInfoRepository extends BaseRepository {
         return categoryInfo;
     }
 
+    public List<CategoryInfo> byNameList(String name) {
+
+        Query<CategoryInfo> query = session.createQuery("from CategoryInfo ci where ci.name=:name", CategoryInfo.class);
+        query.setParameter("name", name);
+        return query.list();
+    }
+
     /**
-     * Flat list is expected here.
+     * Flat list of 'root (Parentless)' categories is expected here.
      * This method will not recurse on subcategories.
      *
      * @param bookieId
@@ -84,23 +91,41 @@ public class CategoryInfoRepository extends BaseRepository {
         existingInfosQuery.setParameter("bookieId", bookieId);
         List<CategoryInfo> existingInfos = existingInfosQuery.list();
 
+        recursiveSave(categoryInfos, existingInfos);
+
+        tx.commit();
+    }
+
+
+    protected void recursiveSave(List<? extends CategoryInfo> categoryInfos, List<CategoryInfo> existingInfos) {
+
         for (CategoryInfo newCategoryInfo : categoryInfos) {
 
-            boolean exists = false;
+            CategoryInfo existingInfo = null;
 
+            //Check if this categoryInfo already exists
             for(CategoryInfo existingCategoryInfo : existingInfos) {
                 if(existingCategoryInfo.getName().equals(newCategoryInfo.getName())) {
-                    exists = true;
+
+                    existingInfo = existingCategoryInfo;
                     break;
                 }
             }
 
-            if(!exists) {
-                session.save(newCategoryInfo);
+            // If it exists, save it and start saving its subCategories. Then finish execution by return statement.
+            if(existingInfo != null) {
+                //it's subCategories must be compared to existingInfos subCategories second argument
+                recursiveSave(newCategoryInfo.getSubCategoryInfos(), existingInfo.getSubCategoryInfos());
+                return;
             }
-        }
 
-        tx.commit();
+            // Save it
+            session.save(newCategoryInfo);
+
+            // When there is no existing categoryInfo it means, newCategoryInfo's subcategories should not be compared
+            // to anything cause we know for sure that they does not exist yet
+            recursiveSave(newCategoryInfo.getSubCategoryInfos(), new ArrayList<>());
+        }
     }
 
     public List<CategoryInfo> getCategoryInfosByName(String name) {

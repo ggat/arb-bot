@@ -17,7 +17,7 @@ public class CategoryInfo {
     @Column(name = "bookie_id")
     public Long bookieId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne//(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_info_id", nullable = true)
     public CategoryInfo parent;
 

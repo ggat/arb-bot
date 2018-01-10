@@ -71,7 +71,7 @@ public class Analyzer {
                                             Double profit = Calc.profit(eventDataOneOdd, eventDataTwoOdd);
 
                                             //TODO: Temporary searching for negative arbs too
-                                            if(profit > -10 || true) {
+                                            if(profit > -7 || true) {
                                                 //We found arb!
                                                 Arb arb = new Arb();
                                                 arb.setProfit(profit);

@@ -13,10 +13,7 @@ import org.junit.Test;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -61,7 +58,7 @@ public class CategoryInfoRepositoryTest {
         assertNotNull(categoryInfoRepository.byName("Dinamo"));
 
     }
-
+    // This test must be run on clean DB
     @Test
     public void testSaveFromCapture() throws Exception {
         FileInputStream fis = new FileInputStream("../capture.tmp");
@@ -73,15 +70,14 @@ public class CategoryInfoRepositoryTest {
 
         List<Category> data = new ArrayList<>();
         data.add( category);
-        List<CategoryInfo> categoryInfos = new ArrayList<>();
 
+
+        List<CategoryInfo> categoryInfos = new ArrayList<>();
         data.stream().forEach(categoryItem -> {
 
             CategoryInfo parentCategoryInfo = new CategoryInfo();
             parentCategoryInfo.setName(categoryItem.getName());
             parentCategoryInfo.setBookieId(bookieId);
-
-            System.out.println("ss");
 
             // Add parent categoryInfo too
             categoryInfos.add(parentCategoryInfo);
@@ -92,8 +88,6 @@ public class CategoryInfoRepositoryTest {
                 categoryInfo.setBookieId(bookieId);
                 categoryInfo.setParent(parentCategoryInfo);
 
-                System.out.println("ss");
-
                 // Add sub categoryInfo
                 categoryInfos.add(categoryInfo);
             });
@@ -103,6 +97,86 @@ public class CategoryInfoRepositoryTest {
 
         categoryInfoRepository.updateCategoryInfosForBookie(bookieId, categoryInfos);
 
-        System.out.println("asdsad");
+        List<CategoryInfo> secondCategoryInfos = new ArrayList<>();
+        data.stream().forEach(categoryItem -> {
+
+            CategoryInfo parentCategoryInfo = new CategoryInfo();
+            parentCategoryInfo.setName(categoryItem.getName());
+            parentCategoryInfo.setBookieId(bookieId);
+
+            System.out.println("ss");
+
+            // Add parent categoryInfo too
+            secondCategoryInfos.add(parentCategoryInfo);
+
+            categoryItem.getSubCategories().forEach(subCategory -> {
+                CategoryInfo categoryInfo = new CategoryInfo();
+                categoryInfo.setName(subCategory.getName());
+                categoryInfo.setBookieId(bookieId);
+                categoryInfo.setParent(parentCategoryInfo);
+
+                System.out.println("ss");
+
+                // Add sub categoryInfo
+                secondCategoryInfos.add(categoryInfo);
+            });
+
+            secondCategoryInfos.add(makeSampleCategoryInfo(parentCategoryInfo, bookieId));
+        });
+
+        categoryInfoRepository.updateCategoryInfosForBookie(bookieId, secondCategoryInfos);
+
+        assertEquals(1, categoryInfoRepository.byNameList(secondCategoryInfos.get(0).getName()).size());
+    }
+
+    private CategoryInfo makeSampleCategoryInfo(CategoryInfo parentCategoryInfo, Long bookieId){
+        CategoryInfo categoryInfo = new CategoryInfo();
+        categoryInfo.setName("Added subCategory");
+        categoryInfo.setBookieId(bookieId);
+        categoryInfo.setParent(parentCategoryInfo);
+
+        return categoryInfo;
+    }
+
+    private CategoryInfo makeSampleCategoryInfo(String name, Long bookieId){
+        CategoryInfo categoryInfo = new CategoryInfo();
+        categoryInfo.setName(name);
+        categoryInfo.setBookieId(bookieId);
+        //categoryInfo.setParent(parentCategoryInfo);
+
+        return categoryInfo;
+    }
+
+    @Test
+    public void testByNameList() throws PersistException {
+
+        String categoryName = UUID.randomUUID().toString();
+
+        CategoryInfoRepository categoryInfoRepository = new CategoryInfoRepository();
+        CategoryInfo categoryInfo1 = makeSampleCategoryInfo(categoryName, 29L);
+        CategoryInfo categoryInfo2 = makeSampleCategoryInfo(categoryName, 29L);
+
+        categoryInfoRepository.saveCategoryInfo(categoryInfo1);
+        categoryInfoRepository.saveCategoryInfo(categoryInfo2);
+
+        assertEquals(2, categoryInfoRepository.byNameList(categoryName).size());
+    }
+
+    @Test
+    public void testCascade() throws PersistException {
+
+        CategoryInfo parent = new CategoryInfo();
+        parent.setName("Parent");
+        parent.setBookieId(27L);
+        //parent.setParent(parentCategoryInfo);
+
+        CategoryInfo child = new CategoryInfo();
+        child.setName("Child");
+        child.setBookieId(27L);
+        child.setParent(parent);
+
+        CategoryInfoRepository categoryInfoRepository = new CategoryInfoRepository();
+        categoryInfoRepository.saveCategoryInfo(child);
+        //categoryInfoRepository.saveCategoryInfo(parent);
     }
 }
