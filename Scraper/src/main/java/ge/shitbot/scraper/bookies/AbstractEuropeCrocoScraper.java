@@ -7,8 +7,11 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import ge.shitbot.core.datatypes.OddType;
 import ge.shitbot.core.datatypes.deserialize.AbstractDateDeserializer;
 import ge.shitbot.core.datatypes.util.http.Http;
 import ge.shitbot.scraper.BookieScraper;
@@ -22,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by giga on 11/12/17.
@@ -106,6 +110,13 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
             super.setSideTwo(names[1]);
         }
 
+        @JsonProperty("eventGames")
+        @JsonDeserialize(using = LocalEventOddsDeserializer.class)
+        @Override
+        public void setOdds(Map<OddType, Double> odds) {
+
+        }
+
         @Override
         public void setSideTwo(String sideTwo) {
             super.setSideTwo(sideTwo);
@@ -126,6 +137,55 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
             //TODO: Removed multply on 1000 cause it seems it is in milliseconds already. NOT TESTED IF IT IS CORRECT
             return new Date(unixSeconds);
         }
+    }
+
+    protected static class LocalEventOddsDeserializer extends JsonDeserializer<Map<OddType, Double>> {
+
+        // Game types we currently take cate of
+        int[] gameTypesUsed = {1, 4, 98, 8};
+
+        @Override
+        public Map<OddType, Double> deserialize(JsonParser jp, DeserializationContext ctx) throws IOException {
+
+            Map<OddType, Double> result = new HashMap<>();
+
+            Map<String, OddType> oddNameMapping = new HashMap<>();
+            oddNameMapping.put("1", OddType._1);
+            oddNameMapping.put("X", OddType._X);
+            oddNameMapping.put("2", OddType._2);
+            oddNameMapping.put("1/X", OddType._1X);
+            oddNameMapping.put("1/2", OddType._12);
+            oddNameMapping.put("X/2", OddType._X2);
+            oddNameMapping.put("Under", OddType._UNDER_25);
+            oddNameMapping.put("Over", OddType._OVER_25);
+            oddNameMapping.put("Yes", OddType._YES);
+            oddNameMapping.put("No", OddType._NO);
+
+            JsonNode node = jp.readValueAsTree();
+            Iterator<JsonNode> oddGroups = node.elements();
+
+            while (oddGroups.hasNext()) {
+                JsonNode oddGroup = oddGroups.next();
+                JsonNode gameType = oddGroup.get("gameType");
+
+                if(gameType.canConvertToInt()) {
+
+                    int gameT = gameType.asInt();
+
+                    if(IntStream.of(gameTypesUsed).anyMatch(type -> type == gameT)) {
+                        JsonNode odds = oddGroup.get("outcomes");
+
+                        for(JsonNode odd : odds) {
+                            OddType oddType = oddNameMapping.get(odd.get("outcomeName").asText());
+                            result.put(oddType, odd.get("outcomeOdds").asDouble());
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
     }
 
     public List<? extends Category> getFreshData() throws ScraperException {

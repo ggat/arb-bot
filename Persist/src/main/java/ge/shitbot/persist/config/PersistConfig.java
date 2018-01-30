@@ -14,4 +14,5 @@ public class PersistConfig extends HashMap<String, String> {
     public PersistConfig(Map<? extends String, ? extends String> m) {
         super(m);
     }
+
 }
