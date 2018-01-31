@@ -114,7 +114,7 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
         @JsonDeserialize(using = LocalEventOddsDeserializer.class)
         @Override
         public void setOdds(Map<OddType, Double> odds) {
-
+            super.setOdds(odds);
         }
 
         @Override
@@ -139,17 +139,25 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
         }
     }
 
+    protected abstract String[] getList();
+
     protected static class LocalEventOddsDeserializer extends JsonDeserializer<Map<OddType, Double>> {
 
         // Game types we currently take cate of
-        int[] gameTypesUsed = {1, 4, 98, 8};
+        protected String[] engGameTypes = {"1X2 *", "Double Chance *", "Under/Over 2.5 goals *", "Both teams to score *"};
 
-        @Override
-        public Map<OddType, Double> deserialize(JsonParser jp, DeserializationContext ctx) throws IOException {
+        //TODO: Enable after gameTypes for other langs are added, also we need to get langUsed from somwhere.
+        //if(Language.ENGLISH == langUsed) {
+        List<String> list = new ArrayList<>(Arrays.asList(getEngGameTypes()));
+        //}
 
-            Map<OddType, Double> result = new HashMap<>();
+        public String[] getEngGameTypes() {
+            return engGameTypes;
+        }
 
-            Map<String, OddType> oddNameMapping = new HashMap<>();
+        protected Map<String, OddType> getOddNameMapping() {
+
+            /*Map<String, OddType> oddNameMapping = new HashMap<>();
             oddNameMapping.put("1", OddType._1);
             oddNameMapping.put("X", OddType._X);
             oddNameMapping.put("2", OddType._2);
@@ -159,26 +167,37 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
             oddNameMapping.put("Under", OddType._UNDER_25);
             oddNameMapping.put("Over", OddType._OVER_25);
             oddNameMapping.put("Yes", OddType._YES);
-            oddNameMapping.put("No", OddType._NO);
+            oddNameMapping.put("No", OddType._NO);*/
+
+            return new HashMap<>();
+        }
+
+        @Override
+        public Map<OddType, Double> deserialize(JsonParser jp, DeserializationContext ctx) throws IOException {
+
+            Map<OddType, Double> result = new HashMap<>();
+
+            Map<String, OddType> oddNameMapping = getOddNameMapping();
 
             JsonNode node = jp.readValueAsTree();
             Iterator<JsonNode> oddGroups = node.elements();
 
             while (oddGroups.hasNext()) {
                 JsonNode oddGroup = oddGroups.next();
-                JsonNode gameType = oddGroup.get("gameType");
+                String gameT = oddGroup.get("gameName").asText();
 
-                if(gameType.canConvertToInt()) {
+                if (list.stream().anyMatch(type -> type.equals(gameT))) {
+                    JsonNode odds = oddGroup.get("outcomes");
 
-                    int gameT = gameType.asInt();
-
-                    if(IntStream.of(gameTypesUsed).anyMatch(type -> type == gameT)) {
-                        JsonNode odds = oddGroup.get("outcomes");
-
-                        for(JsonNode odd : odds) {
-                            OddType oddType = oddNameMapping.get(odd.get("outcomeName").asText());
-                            result.put(oddType, odd.get("outcomeOdds").asDouble());
+                    for (JsonNode odd : odds) {
+                        OddType oddType = null;
+                        String parsedOddTypeName = odd.get("outcomeName").asText();
+                        try {
+                            oddType = oddNameMapping.get(parsedOddTypeName);
+                        } catch (NullPointerException e) {
+                            logger.warn("Unknown odd type string parsed \"{}\"", parsedOddTypeName);
                         }
+                        result.put(oddType, odd.get("outcomeOdds").asDouble());
                     }
                 }
             }
@@ -318,11 +337,9 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
 
     protected ArrayList<LocalEvent> parseEvents(Category surroundingCategory) throws ScraperException {
         try {
-
-            ObjectMapper mapper = new ObjectMapper();
             String data = getJsonDataNodeFromUrl(getEventsUrl(surroundingCategory.getId()));
 
-            return mapper.readValue(data, new TypeReference<ArrayList<LocalEvent>>() { });
+            return mapLocalEvents(data);
 
         } catch (Exception e) {
 
@@ -332,4 +349,6 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
             throw new ScraperException(e);
         }
     }
+
+    protected abstract ArrayList<LocalEvent> mapLocalEvents(String data) throws Exception;
 }
