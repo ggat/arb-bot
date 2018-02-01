@@ -71,8 +71,12 @@ public class CrocoBetScraper extends AbstractEuropeCrocoScraper {
             oddNameMapping.put("1X", OddType._1X);
             oddNameMapping.put("12", OddType._12);
             oddNameMapping.put("X2", OddType._X2);
-            oddNameMapping.put("Under", OddType._UNDER_25);
-            oddNameMapping.put("Over", OddType._OVER_25);
+            oddNameMapping.put("Under 2.5", OddType._UNDER_25);
+            oddNameMapping.put("Over 2.5", OddType._OVER_25);
+
+            //NOTE: For some reason somtimes these odd types have two spaces between instead of one.
+            oddNameMapping.put("Under  2.5", OddType._UNDER_25);
+            oddNameMapping.put("Over  2.5", OddType._OVER_25);
             oddNameMapping.put("Yes", OddType._YES);
             oddNameMapping.put("No", OddType._NO);
 

@@ -15,4 +15,9 @@ public class CrocoBetTest extends ScraperTest {
     public void testOddScrap() throws ScraperException {
         super.testOddScrap(new CrocoBetScraper());
     }
+
+    @Test
+    public void testAllOddTypesAreParsed() throws ScraperException {
+        super.testAllOddTypesAreParsed(new CrocoBetScraper());
+    }
 }
