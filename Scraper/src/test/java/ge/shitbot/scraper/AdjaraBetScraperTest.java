@@ -15,4 +15,9 @@ public class AdjaraBetScraperTest extends ScraperTest {
     public void testOddScrap() throws ScraperException {
         super.testOddScrap(new AdjaraBetScraper());
     }
+
+    @Test
+    public void testAllOddTypesAreParsed() throws ScraperException {
+        super.testAllOddTypesAreParsed(new AdjaraBetScraper());
+    }
 }

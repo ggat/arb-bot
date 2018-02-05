@@ -14,8 +14,6 @@ public class EuropeBetTest extends ScraperTest {
         super.testOddScrap(new EuropeBetScraper());
     }
 
-
-
     @Test
     public void testAllOddTypesAreParsed() throws ScraperException {
         super.testAllOddTypesAreParsed(new EuropeBetScraper());

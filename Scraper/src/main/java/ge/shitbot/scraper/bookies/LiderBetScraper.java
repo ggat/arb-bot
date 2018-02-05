@@ -167,6 +167,10 @@ public class LiderBetScraper implements BookieScraper {
 
                 for(JsonNode odd : odds) {
                     OddType oddType = oddNameMapping.get(odd.get("n").asText());
+                    if(oddType == null) {
+                        continue;
+                    }
+
                     result.put(oddType, odd.get("v").asDouble());
                 }
             }

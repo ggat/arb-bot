@@ -33,7 +33,7 @@ import java.util.*;
  */
 public class AdjaraBetScraper implements BookieScraper {
 
-    private static Logger logger = LoggerFactory.getLogger(CrystalBetScraper.class);
+    private static Logger logger = LoggerFactory.getLogger(AdjaraBetScraper.class);
 
     protected Long SOCCER_ID = 27L;
 
