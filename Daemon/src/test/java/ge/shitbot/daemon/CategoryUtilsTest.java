@@ -1,14 +1,9 @@
 package ge.shitbot.daemon;
 
-import ge.shitbot.daemon.analyze.utils.ChainUtils;
-import ge.shitbot.daemon.analyze.utils.categories.CategoryUtils;
+import ge.shitbot.core.datatypes.util.HierarchicalUtils;
 import ge.shitbot.persist.models.CategoryInfo;
-import ge.shitbot.persist.models.Chain;
 import ge.shitbot.scraper.datatypes.Category;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -55,15 +50,15 @@ public class CategoryUtilsTest {
         categoryInfoJamaica.setName("Jamaica");
         categoryInfoDinamoButJamaica.setParent(categoryInfoJamaica);
 
-        assertTrue("Child comparison failed", CategoryUtils.matches(categoryInfoDinamo, categoryDinamo));
-        assertTrue("Parents comparison failed", CategoryUtils.matches(categoryInfoTbilisi, categoryTbilisi));
-        assertFalse("Parent and child compared they should not match", CategoryUtils.matches(categoryInfoDinamo, categoryTbilisi));
-        assertFalse("Parent and child compared they should not match", CategoryUtils.matches(categoryInfoTbilisi, categoryDinamo));
+        assertTrue("Child comparison failed", HierarchicalUtils.matches(categoryInfoDinamo, categoryDinamo));
+        assertTrue("Parents comparison failed", HierarchicalUtils.matches(categoryInfoTbilisi, categoryTbilisi));
+        assertFalse("Parent and child compared they should not match", HierarchicalUtils.matches(categoryInfoDinamo, categoryTbilisi));
+        assertFalse("Parent and child compared they should not match", HierarchicalUtils.matches(categoryInfoTbilisi, categoryDinamo));
 
         //Now test if same names and different parents does not match.
-        assertTrue(CategoryUtils.matches(categoryInfoDinamoButJamaica, categoryDinamoButJamaica));
+        assertTrue(HierarchicalUtils.matches(categoryInfoDinamoButJamaica, categoryDinamoButJamaica));
 
         //This should fail because category names are same but parents are different, so they are different categories
-        assertFalse(CategoryUtils.matches(categoryInfoDinamoButJamaica, categoryDinamo));
+        assertFalse(HierarchicalUtils.matches(categoryInfoDinamoButJamaica, categoryDinamo));
     }
 }

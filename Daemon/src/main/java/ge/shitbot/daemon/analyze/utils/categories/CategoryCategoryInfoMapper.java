@@ -1,5 +1,6 @@
 package ge.shitbot.daemon.analyze.utils.categories;
 
+import ge.shitbot.core.datatypes.util.HierarchicalUtils;
 import ge.shitbot.core.datatypes.util.StreamUtils;
 import ge.shitbot.persist.exceptions.PersistException;
 import ge.shitbot.persist.models.CategoryInfo;
@@ -49,13 +50,13 @@ public class CategoryCategoryInfoMapper {
             CategoryInfo categoryInfo = null;
             try {
                 categoryInfo = categoryInfos.stream()
-                        .filter(categoryInfoItem -> CategoryUtils.matches(categoryInfoItem, category))
+                        .filter(categoryInfoItem -> HierarchicalUtils.matches(categoryInfoItem, category))
                         .collect(StreamUtils.singletonCollector());
             } catch (IllegalStateException e) { // Multiple possible matches found
 
                 //Retry, but compare more details (subCategories)
                 categoryInfo = categoryInfos.stream()
-                        .filter(categoryInfoItem -> CategoryUtils.matchesDeep(categoryInfoItem, category)).collect(StreamUtils.singletonCollector());
+                        .filter(categoryInfoItem -> HierarchicalUtils.matchesDeep(categoryInfoItem, category)).collect(StreamUtils.singletonCollector());
 
                 System.out.println("adasd");
             }

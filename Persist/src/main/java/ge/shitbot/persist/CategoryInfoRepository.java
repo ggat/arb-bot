@@ -1,5 +1,6 @@
 package ge.shitbot.persist;
 
+import ge.shitbot.core.datatypes.util.HierarchicalUtils;
 import ge.shitbot.persist.exceptions.PersistException;
 import ge.shitbot.persist.models.CategoryInfo;
 import ge.shitbot.persist.util.SessionUtil;
@@ -105,7 +106,8 @@ public class CategoryInfoRepository extends BaseRepository {
 
             //Check if this categoryInfo already exists
             for(CategoryInfo existingCategoryInfo : existingInfos) {
-                if(existingCategoryInfo.getName().equals(newCategoryInfo.getName())) {
+                //if(existingCategoryInfo.getName().equals(newCategoryInfo.getName())) {
+                if(HierarchicalUtils.matches(existingCategoryInfo, newCategoryInfo)) {
 
                     existingInfo = existingCategoryInfo;
                     break;

@@ -1,22 +1,21 @@
-package ge.shitbot.daemon.analyze.utils.categories;
+package ge.shitbot.core.datatypes.util;
 
-import ge.shitbot.persist.models.CategoryInfo;
-import ge.shitbot.scraper.datatypes.Category;
+import ge.shitbot.core.datatypes.Hierarchical;
 
 import java.util.List;
 
 /**
  * Created by giga on 1/9/18.
  */
-public class CategoryUtils {
+public class HierarchicalUtils {
 
     private static final String NO_PARENT_NAME = "NO_PARENT";
 
-    public static boolean matches(CategoryInfo categoryInfo, Category category) {
+    public static boolean matches(Hierarchical categoryInfo, Hierarchical category) {
 
         if(categoryInfo.getName().equals(category.getName())) {
-            CategoryInfo categoryInfoParent = categoryInfo.getParent();
-            Category categoryParent = category.getParent();
+            Hierarchical categoryInfoParent = categoryInfo.getParent();
+            Hierarchical categoryParent = category.getParent();
 
             String categoryInfoParentName = categoryInfoParent != null ? categoryInfoParent.getName() : NO_PARENT_NAME;
             String categoryParentName = categoryParent != null ? categoryParent.getName() : NO_PARENT_NAME;
@@ -29,14 +28,14 @@ public class CategoryUtils {
         return false;
     }
 
-    public static boolean matchesDeep(CategoryInfo categoryInfo, Category category) {
+    public static boolean matchesDeep(Hierarchical categoryInfo, Hierarchical category) {
 
         if(matches(categoryInfo, category)) {
-            List<CategoryInfo> subCatInfos = categoryInfo.getSubCategoryInfos();
-            List<Category> subCats = category.getSubCategories();
+            List<Hierarchical> subCatInfos = categoryInfo.getSubCategories();
+            List<Hierarchical> subCats = category.getSubCategories();
 
-            for(CategoryInfo subCatInfo : subCatInfos) {
-                for(Category subCat : subCats) {
+            for(Hierarchical subCatInfo : subCatInfos) {
+                for(Hierarchical subCat : subCats) {
 
                     //If any of subCategoryNames match
                     //Parent comparison makes no sense here as we know that they have same parents, for sure.

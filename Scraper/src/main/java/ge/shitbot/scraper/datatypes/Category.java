@@ -1,10 +1,12 @@
 package ge.shitbot.scraper.datatypes;
 
+import ge.shitbot.core.datatypes.Hierarchical;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Category implements Serializable {
+public class Category implements Hierarchical<Category>, Serializable {
     private String name;
     private Long id;
     private List<Category> subCategories = new ArrayList<>();

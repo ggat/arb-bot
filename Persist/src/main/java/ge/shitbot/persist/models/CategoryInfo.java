@@ -1,5 +1,7 @@
 package ge.shitbot.persist.models;
 
+import ge.shitbot.core.datatypes.Hierarchical;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +10,7 @@ import java.util.List;
  * Created by giga on 12/19/17.
  */
 @Entity
-public class CategoryInfo {
+public class CategoryInfo implements Hierarchical<CategoryInfo> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,5 +67,9 @@ public class CategoryInfo {
 
     public void setSubCategoryInfos(List<CategoryInfo> subCategoryInfos) {
         this.subCategoryInfos = subCategoryInfos;
+    }
+
+    public List<CategoryInfo> getSubCategories() {
+        return getSubCategoryInfos();
     }
 }

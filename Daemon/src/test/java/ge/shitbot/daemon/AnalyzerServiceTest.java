@@ -3,18 +3,15 @@ package ge.shitbot.daemon;
 import ge.shitbot.core.datatypes.Arb;
 import ge.shitbot.daemon.analyze.AnalyzerService;
 import ge.shitbot.daemon.analyze.models.LiveData;
-import ge.shitbot.daemon.analyze.utils.categories.CategoryUtils;
 import ge.shitbot.daemon.exceptions.AnalyzeException;
 import ge.shitbot.persist.ChainRepository;
 import ge.shitbot.persist.exceptions.PersistException;
-import ge.shitbot.persist.models.CategoryInfo;
 import ge.shitbot.scraper.bookies.CrystalBetScraper;
 import ge.shitbot.scraper.bookies.EuropeBetScraper;
 import ge.shitbot.scraper.datatypes.Category;
 import ge.shitbot.scraper.exceptions.ScraperException;
 import org.junit.Test;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
