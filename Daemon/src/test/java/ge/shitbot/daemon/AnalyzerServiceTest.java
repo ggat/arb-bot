@@ -1,5 +1,6 @@
 package ge.shitbot.daemon;
 
+import ge.shitbot.core.datatypes.Arb;
 import ge.shitbot.daemon.analyze.AnalyzerService;
 import ge.shitbot.daemon.analyze.models.LiveData;
 import ge.shitbot.daemon.analyze.utils.categories.CategoryUtils;
@@ -7,7 +8,10 @@ import ge.shitbot.daemon.exceptions.AnalyzeException;
 import ge.shitbot.persist.ChainRepository;
 import ge.shitbot.persist.exceptions.PersistException;
 import ge.shitbot.persist.models.CategoryInfo;
+import ge.shitbot.scraper.bookies.CrystalBetScraper;
+import ge.shitbot.scraper.bookies.EuropeBetScraper;
 import ge.shitbot.scraper.datatypes.Category;
+import ge.shitbot.scraper.exceptions.ScraperException;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -32,6 +36,7 @@ public class AnalyzerServiceTest {
 
     private final String savedDataFile = "freshData.tmp";
 
+    //From serialized data
     @Test
     public void testArbSearch() throws IOException, ClassNotFoundException, PersistException, AnalyzeException {
         //FileInputStream fis = new FileInputStream();
@@ -44,6 +49,24 @@ public class AnalyzerServiceTest {
         analyzerService.analyze(toLiveData(readObjects), chainRepository.all(), generateBookieNames(readObjects));
 
         ois.close();
+    }
+
+    @Test
+    public void testArbSearchRemote() throws ScraperException, PersistException, AnalyzeException {
+
+        List<? extends Category> crystalCategories = (new CrystalBetScraper()).getFreshData();
+        List<? extends Category> europeCategories = (new EuropeBetScraper()).getFreshData();
+
+        HashMap<Long, List<? extends Category>> data = new HashMap<>();
+        data.put(27L, crystalCategories);
+        data.put(28L, europeCategories);
+
+        AnalyzerService analyzerService = new AnalyzerService();
+        ChainRepository chainRepository = new ChainRepository();
+
+        List<Arb> arbs = analyzerService.analyze(toLiveData(data), chainRepository.all(), generateBookieNames(data));
+
+        System.out.println(arbs.size());
     }
 
     private Map<Long, String> generateBookieNames (HashMap<Long, List<? extends Category>> data) {

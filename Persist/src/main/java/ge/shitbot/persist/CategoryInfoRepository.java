@@ -112,11 +112,22 @@ public class CategoryInfoRepository extends BaseRepository {
                 }
             }
 
-            // If it exists, save it and start saving its subCategories. Then finish execution by return statement.
+            // If it exists, save it and start saving its subCategories. Then go to next iteration by continue statement
             if(existingInfo != null) {
+
+                newCategoryInfo.setId(existingInfo.getId());
+
                 //it's subCategories must be compared to existingInfos subCategories second argument
                 recursiveSave(newCategoryInfo.getSubCategoryInfos(), existingInfo.getSubCategoryInfos());
-                return;
+                continue;
+            }
+
+            // If having parent merge it to persist state to avoid problems while saving childs e.g. subcategories
+            CategoryInfo parentCategoryInfo = newCategoryInfo.getParent();
+
+            if(parentCategoryInfo != null) {
+                CategoryInfo mergedParentCategoryInfo = (CategoryInfo) session.merge(parentCategoryInfo);
+                newCategoryInfo.setParent(mergedParentCategoryInfo);
             }
 
             // Save it
@@ -124,7 +135,9 @@ public class CategoryInfoRepository extends BaseRepository {
 
             // When there is no existing categoryInfo it means, newCategoryInfo's subcategories should not be compared
             // to anything cause we know for sure that they does not exist yet
-            recursiveSave(newCategoryInfo.getSubCategoryInfos(), new ArrayList<>());
+            if(newCategoryInfo.getSubCategoryInfos().size() > 0) {
+                recursiveSave(newCategoryInfo.getSubCategoryInfos(), new ArrayList<>());
+            }
         }
     }
 

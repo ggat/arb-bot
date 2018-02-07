@@ -17,6 +17,12 @@ public class CategoryCategoryInfoMapper {
 
     protected static Logger logger = LoggerFactory.getLogger(CategoryCategoryInfoMapper.class);
 
+    List<Category> leftOver = new ArrayList<>();
+
+    public List<Category> getLeftOver() {
+        return leftOver;
+    }
+
     public List<CategoryCategoryInfoPair> map(List<? extends Category> categories, List<? extends CategoryInfo> categoryInfos, Long bookieId) throws PersistException {
         List<CategoryCategoryInfoPair> pairs = new ArrayList<>();
 
@@ -61,7 +67,9 @@ public class CategoryCategoryInfoMapper {
                 recurse(category.getSubCategories(), categoryInfo.getSubCategoryInfos(), targetPairList, bookieId);
 
             } else {
-                logger.warn("Could not find CategoryInfo for Category={} and Category.id={} and Bookie.id={}", category.getName(), category.getId(), bookieId);
+                leftOver.add(category);
+                Category parentCategory = category.getParent();
+                logger.warn("Could not find CategoryInfo for Category={} and Category.id={} and Bookie.id={} and Parent={}", category.getName(), category.getId(), bookieId, parentCategory != null ? parentCategory.getName() : "Null");
             }
         }
     }

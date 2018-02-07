@@ -87,6 +87,9 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     protected static class LocalEvent extends Event {
+
+        private static final long serialVersionUID = -8427487129119333649L;
+
         @JsonProperty("eventStart")
         @JsonDeserialize(using = LocalEventDateDeserializer.class)
         @Override

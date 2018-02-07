@@ -16,7 +16,7 @@
         <dependency>
             <groupId>ge.shitbot</groupId>
             <artifactId>shitbot-scraper</artifactId>
-            <version>0.1</version>
+            <version>0.2</version>
         </dependency>
 
         <dependency>
