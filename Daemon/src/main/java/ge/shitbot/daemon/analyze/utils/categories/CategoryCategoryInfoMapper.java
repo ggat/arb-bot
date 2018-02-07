@@ -49,6 +49,8 @@ public class CategoryCategoryInfoMapper {
             // So we need a way to compare parents too or something like that.
             CategoryInfo categoryInfo = null;
             try {
+
+                //FIXME: This failed for some bookies cause some bookie categories had sports as parents some had just null
                 categoryInfo = categoryInfos.stream()
                         .filter(categoryInfoItem -> HierarchicalUtils.matches(categoryInfoItem, category))
                         .collect(StreamUtils.singletonCollector());

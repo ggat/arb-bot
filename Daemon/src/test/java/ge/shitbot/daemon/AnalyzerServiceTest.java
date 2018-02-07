@@ -1,6 +1,7 @@
 package ge.shitbot.daemon;
 
 import ge.shitbot.core.datatypes.Arb;
+import ge.shitbot.core.datatypes.util.FileSerializer;
 import ge.shitbot.daemon.analyze.AnalyzerService;
 import ge.shitbot.daemon.analyze.models.LiveData;
 import ge.shitbot.daemon.exceptions.AnalyzeException;
@@ -43,20 +44,25 @@ public class AnalyzerServiceTest {
         ChainRepository chainRepository = new ChainRepository();
 
         AnalyzerService analyzerService = new AnalyzerService();
-        analyzerService.analyze(toLiveData(readObjects), chainRepository.all(), generateBookieNames(readObjects));
+        List<Arb> arbs = analyzerService.analyze(toLiveData(readObjects), chainRepository.all(), generateBookieNames(readObjects));
 
         ois.close();
     }
 
     @Test
-    public void testArbSearchRemote() throws ScraperException, PersistException, AnalyzeException {
+    public void testArbSearchRemote() throws ScraperException, PersistException, AnalyzeException, ClassNotFoundException, IOException {
 
-        List<? extends Category> crystalCategories = (new CrystalBetScraper()).getFreshData();
-        List<? extends Category> europeCategories = (new EuropeBetScraper()).getFreshData();
+        //List<? extends Category> crystalCategories = (new CrystalBetScraper()).getFreshData();
+        //List<? extends Category> europeCategories = (new EuropeBetScraper()).getFreshData();
 
+        List<? extends Category> crystalCategories = (List<? extends Category>) FileSerializer.fromFile("crystalCategories.dump");
+        List<? extends Category> europeCategories = (List<? extends Category>) FileSerializer.fromFile("europeCategories.dump");
+
+
+        //System.out.println(europeCategories);
         HashMap<Long, List<? extends Category>> data = new HashMap<>();
-        data.put(27L, crystalCategories);
-        data.put(28L, europeCategories);
+        data.put(10L, crystalCategories);
+        data.put(11L, europeCategories);
 
         AnalyzerService analyzerService = new AnalyzerService();
         ChainRepository chainRepository = new ChainRepository();

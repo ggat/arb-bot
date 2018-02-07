@@ -285,6 +285,9 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
         long subCategoryCount = sports.stream().filter(el -> el.getLocalLevel().equals(3L)).count();
         long parsedEventCount = sports.stream().filter(el -> el.getLocalLevel().equals(4L)).count();
 
+        //FIXME: See fixme that starts with !!! below
+        List<Category> categories = new ArrayList<>();
+
         //Add categories to each sport
         sports.stream().forEach(sport -> {
 
@@ -293,7 +296,13 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
                 //If current items parent id matches current sporsId. Add category to sport
                if(category.getLocalParentId().equals(sport.getId()) && category.getLocalLevel().equals(2L)) {
 
-                   sport.addSubCategory(category);
+                   //TODO: Look at me
+                   //FIXME: !!! We have problem when sport is parent category of category like league.
+                   // Cause some scrapers parse sports and some not and then we have a code that accounts on parent
+                   // categories to map Categories to CategoryInfos for example. CategoryCategoryInfoMapper.map()
+                   // and that fails because of this.
+                   //sport.addSubCategory(category);
+                   categories.add(category);
 
                    //Add subcategories to category
                    allCategories.stream().forEach(subCategory -> {
@@ -330,7 +339,10 @@ public abstract class AbstractEuropeCrocoScraper implements BookieScraper {
         logger.info("Events parsed: {}", parsedEventCount);
 
         //Get 0 just because we only need Soccer yet. And above we take only it into sports.
-        return sports.get(0).getSubCategories();
+        //return sports.get(0).getSubCategories();
+
+        //FIXME: See fixme that starts with !!! above
+        return categories;
     }
 
     static String convertStreamToString(InputStream is) {
