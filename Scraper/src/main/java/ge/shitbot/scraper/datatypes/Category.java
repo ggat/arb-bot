@@ -81,19 +81,13 @@ public class Category implements Hierarchical<Category>, Serializable {
         Category category = (Category) o;
 
         if (name != null ? !name.equals(category.name) : category.name != null) return false;
-        if (id != null ? !id.equals(category.id) : category.id != null) return false;
-        if (!subCategories.equals(category.subCategories)) return false;
-        if (parent != null ? !parent.equals(category.parent) : category.parent != null) return false;
-        return events != null ? events.equals(category.events) : category.events == null;
+        return id != null ? id.equals(category.id) : category.id == null;
     }
 
     @Override
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (id != null ? id.hashCode() : 0);
-        result = 31 * result + subCategories.hashCode();
-        result = 31 * result + (parent != null ? parent.hashCode() : 0);
-        result = 31 * result + (events != null ? events.hashCode() : 0);
         return result;
     }
 

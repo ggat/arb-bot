@@ -5,8 +5,14 @@ import ge.shitbot.core.datatypes.util.FileSerializer;
 import ge.shitbot.daemon.analyze.AnalyzerService;
 import ge.shitbot.daemon.analyze.models.LiveData;
 import ge.shitbot.daemon.exceptions.AnalyzeException;
+import ge.shitbot.daemon.util.CachedData;
+import ge.shitbot.hardcode.BookieNames;
+import ge.shitbot.persist.BookieRepository;
+import ge.shitbot.persist.CategoryInfoRepository;
 import ge.shitbot.persist.ChainRepository;
 import ge.shitbot.persist.exceptions.PersistException;
+import ge.shitbot.persist.models.Bookie;
+import ge.shitbot.persist.models.CategoryInfo;
 import ge.shitbot.scraper.bookies.CrystalBetScraper;
 import ge.shitbot.scraper.bookies.EuropeBetScraper;
 import ge.shitbot.scraper.datatypes.Category;
@@ -15,6 +21,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,22 +59,34 @@ public class AnalyzerServiceTest {
     @Test
     public void testArbSearchRemote() throws ScraperException, PersistException, AnalyzeException, ClassNotFoundException, IOException {
 
-        //List<? extends Category> crystalCategories = (new CrystalBetScraper()).getFreshData();
-        //List<? extends Category> europeCategories = (new EuropeBetScraper()).getFreshData();
+        BookieRepository bookieRepository = new BookieRepository();
 
-        List<? extends Category> crystalCategories = (List<? extends Category>) FileSerializer.fromFile("crystalCategories.dump");
-        List<? extends Category> europeCategories = (List<? extends Category>) FileSerializer.fromFile("europeCategories.dump");
+        List<Bookie> bookies = bookieRepository.all();
+        //Bookie names by ID.
+        Map<Long, String> bookieNames = new HashMap<>();
 
+        for (Bookie tmpBookie : bookies) {
+            bookieNames.put(tmpBookie.getId(), tmpBookie.getName());
+        }
 
-        //System.out.println(europeCategories);
+        CachedData cachedData = new CachedData();
         HashMap<Long, List<? extends Category>> data = new HashMap<>();
-        data.put(10L, crystalCategories);
-        data.put(11L, europeCategories);
+
+        for(Map.Entry<Long, String> entry : bookieNames.entrySet()) {
+            if(entry.getValue().equals(BookieNames.BET_LIVE)) continue;
+
+            List<? extends Category> categories = cachedData.getCategories(entry.getValue());
+            updateCategoryInfosForBookie(entry.getKey(), categories);
+            data.put(entry.getKey(), cachedData.getCategories(entry.getValue()));
+        }
+
+        //data.put(10L, cachedData.getCategories(BookieNames.CRYSTAL_BET));
+        //data.put(11L, cachedData.getCategories(BookieNames.EUROPE_BET));
 
         AnalyzerService analyzerService = new AnalyzerService();
         ChainRepository chainRepository = new ChainRepository();
 
-        List<Arb> arbs = analyzerService.analyze(toLiveData(data), chainRepository.all(), generateBookieNames(data));
+        List<Arb> arbs = analyzerService.analyze(toLiveData(data), chainRepository.all(), bookieNames);
 
         System.out.println(arbs.size());
     }
@@ -93,5 +112,32 @@ public class AnalyzerServiceTest {
         }
 
         return liveData;
+    }
+
+    private void updateCategoryInfosForBookie(Long bookieId, List<? extends Category> data) throws PersistException {
+        List<CategoryInfo> categoryInfos = new ArrayList<>();
+
+        data.stream().forEach(category -> {
+
+            CategoryInfo parentCategoryInfo = new CategoryInfo();
+            parentCategoryInfo.setName(category.getName());
+            parentCategoryInfo.setBookieId(bookieId);
+
+            // Add parent categoryInfo too
+            categoryInfos.add(parentCategoryInfo);
+
+            category.getSubCategories().forEach(subCategory -> {
+                CategoryInfo categoryInfo = new CategoryInfo();
+                categoryInfo.setName(subCategory.getName());
+                categoryInfo.setBookieId(bookieId);
+                categoryInfo.setParent(parentCategoryInfo);
+
+                // Add sub categoryInfo
+                categoryInfos.add(categoryInfo);
+            });
+        });
+
+        CategoryInfoRepository categoryInfoRepository = new CategoryInfoRepository();
+        categoryInfoRepository.updateCategoryInfosForBookie(bookieId, categoryInfos);
     }
 }
