@@ -12,6 +12,7 @@ public class FileSerializer {
     public static void toFile(String fileName, Object object) throws IOException {
 
         File yourFile = new File(fileName);
+        yourFile.getParentFile().mkdirs();
         yourFile.createNewFile();
 
         FileOutputStream fos = new FileOutputStream(fileName);
