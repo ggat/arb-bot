@@ -1,7 +1,6 @@
 package ge.shitbot.daemon;
 
 import ge.shitbot.core.datatypes.Arb;
-import ge.shitbot.core.datatypes.util.FileSerializer;
 import ge.shitbot.daemon.analyze.AnalyzerService;
 import ge.shitbot.daemon.analyze.models.LiveData;
 import ge.shitbot.daemon.exceptions.AnalyzeException;
