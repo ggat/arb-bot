@@ -65,8 +65,6 @@ public class AnalyzerService {
                     }
 
                     CategoryCategoryInfoMapper mapper = new CategoryCategoryInfoMapper();
-                    //Flatten category
-                    //FlatCategories flatCategories = new FlatCategories(categories);
                     CategoryInfoRepository categoryInfoRepository = new CategoryInfoRepository();
                     List<? extends CategoryInfo> categoryInfosForBookie = categoryInfoRepository.getCategoryInfosForBookie(bookieId);
                     List<CategoryCategoryInfoPair> pairs = mapper.map(categories, categoryInfosForBookie, bookieId);

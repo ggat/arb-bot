@@ -21,6 +21,10 @@ public class Analyzer {
     Logger logger = LoggerFactory.getLogger(Analyzer.class);
 
     public List<Arb> findArbs(List<ComparableChain> comparableChains) {
+        return findArbs(comparableChains, 0d);
+    }
+
+    public List<Arb> findArbs(List<ComparableChain> comparableChains, Double minimumLimit) {
 
         List<Arb> resultArbs = new ArrayList<>();
 
@@ -71,7 +75,7 @@ public class Analyzer {
                                             Double profit = Calc.profit(eventDataOneOdd, eventDataTwoOdd);
 
                                             //TODO: Temporary searching for negative arbs too
-                                            if(profit > 0) {
+                                            if(profit > minimumLimit) {
                                                 //We found arb!
                                                 Arb arb = new Arb();
                                                 arb.setProfit(profit);
