@@ -1,24 +1,19 @@
-package ge.shitbot.daemon;
+package ge.shitbot.daemon.mapper;
 
-import ge.shitbot.daemon.analyze.utils.categories.CategoryCategoryInfoMapper;
-import ge.shitbot.daemon.analyze.utils.categories.CategoryCategoryInfoPair;
-import ge.shitbot.hardcode.BookieNames;
-import ge.shitbot.persist.BookieRepository;
-import ge.shitbot.persist.CategoryInfoRepository;
-import ge.shitbot.persist.models.CategoryInfo;
-import ge.shitbot.scraper.bookies.AdjaraBetScraper;
-import ge.shitbot.scraper.datatypes.Category;
+import ge.shitbot.core.datatypes.util.FileSerializer;
+import ge.shitbot.core.datatypes.util.Resources;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.Set;
 
 /**
  * Created by giga on 2/6/18.
  */
 public class CategoryCategoryInfoMapperTest {
 
-    @Test
+    /*@Test
     public void test() throws Exception {
 
         Long bookieId = 25L;
@@ -66,5 +61,15 @@ public class CategoryCategoryInfoMapperTest {
 
             repository.updateCategoryInfosForBookie(bookieId, categoryInfos);
         }
+    }*/
+
+    @Test
+    public void testMapping() throws Exception {
+
+        Set<String> categoryNames = (Set<String>)FileSerializer.loadFromResources(this, "category-names.ser");
+        Set<String> subCategoryNames = (Set<String>)FileSerializer.loadFromResources(this, "subcategory-names.ser");
+        Set<String> teamNames = (Set<String>)FileSerializer.loadFromResources(this, "team-names.ser");
+
+        System.out.println("");
     }
 }

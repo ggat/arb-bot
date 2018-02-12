@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -121,6 +122,33 @@ public class AnalyzerService {
         }
 
         return comparableChains;
+    }
+
+    /**
+     * Category/CategoryInfo mapping for bookies.
+     */
+    Map<Long, List<CategoryCategoryInfoPair>> categoryCategoryInfoMap = new HashMap<>();
+
+    /**
+     * Creates, saves, and returns Category/CategoryInfo mapping for this bookie, if does not exist yet.
+     * If mapping already exists it will be directly returned.
+     *
+     * @param bookieId
+     * @param categories
+     * @return
+     * @throws PersistException
+     */
+    public List<CategoryCategoryInfoPair> cachedCategoryCategoryInfos(Long bookieId, List<? extends Category> categories, List<? extends CategoryInfo> categoryInfosForBookie) throws PersistException {
+
+        List<CategoryCategoryInfoPair> pairs = categoryCategoryInfoMap.get(bookieId);
+
+        if(pairs == null) {
+            CategoryCategoryInfoMapper mapper = new CategoryCategoryInfoMapper();
+            pairs = mapper.map(categories, categoryInfosForBookie, bookieId);
+            categoryCategoryInfoMap.put(bookieId, pairs);
+        }
+
+        return pairs;
     }
 
     public List<Arb> analyze(LiveData liveData,

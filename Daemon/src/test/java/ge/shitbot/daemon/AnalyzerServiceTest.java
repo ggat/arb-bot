@@ -3,8 +3,10 @@ package ge.shitbot.daemon;
 import ge.shitbot.core.datatypes.Arb;
 import ge.shitbot.daemon.analyze.AnalyzerService;
 import ge.shitbot.daemon.analyze.models.LiveData;
+import ge.shitbot.daemon.analyze.utils.categories.CategoryCategoryInfoPair;
 import ge.shitbot.daemon.exceptions.AnalyzeException;
 import ge.shitbot.daemon.util.CachedData;
+import ge.shitbot.daemon.util.Generator;
 import ge.shitbot.hardcode.BookieNames;
 import ge.shitbot.persist.BookieRepository;
 import ge.shitbot.persist.CategoryInfoRepository;
@@ -25,8 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by giga on 12/7/17.
@@ -138,5 +139,48 @@ public class AnalyzerServiceTest {
 
         CategoryInfoRepository categoryInfoRepository = new CategoryInfoRepository();
         categoryInfoRepository.updateCategoryInfosForBookie(bookieId, categoryInfos);
+    }
+
+    @Test
+    public void testCachedCategoryCategoryInfo() throws PersistException {
+
+        AnalyzerService analyzerService = new AnalyzerService();
+
+        //CategoryInfoRepository categoryInfoRepository = new CategoryInfoRepository();
+        //List<? extends CategoryInfo> categoryInfosForBookie = categoryInfoRepository.getCategoryInfosForBookie(bookieId);
+
+        Long[] bookieIds = {1L, 2L, 3L};
+        Map<Long, List<Category>> categoriesByBookie = new HashMap<>();
+        Map<Long, List<? extends CategoryInfo>> categoryInfosByBookie = new HashMap<>();
+
+        for(Long bookieId : bookieIds) {
+            List<Category> categories = new ArrayList<>();
+            List<CategoryInfo> categoryInfos = new ArrayList<>();
+            for (int i = 0; i < 71; i++) {
+
+                Category category = Generator.randomCategory();
+                categories.add(category);
+
+                CategoryInfo categoryInfo = new CategoryInfo();
+                categoryInfo.setId(new Long(Generator.randomId()));
+                categoryInfo.setName(category.getName());
+                categoryInfos.add(categoryInfo);
+            }
+
+            categoriesByBookie.put(bookieId, categories);
+            categoryInfosByBookie.put(bookieId, categoryInfos);
+        }
+
+        for(int l=0; l < 4; l++) {
+            for (Long bookieId : bookieIds) {
+                List<Category> categories = categoriesByBookie.get(bookieId);
+                List<? extends CategoryInfo> categoryInfos = categoryInfosByBookie.get(bookieId);
+                List<CategoryCategoryInfoPair> pairs = analyzerService.cachedCategoryCategoryInfos(bookieId, categories, categoryInfos);
+
+                assertNotNull(pairs);
+            }
+        }
+
+        //System.out.println(pairs);
     }
 }
