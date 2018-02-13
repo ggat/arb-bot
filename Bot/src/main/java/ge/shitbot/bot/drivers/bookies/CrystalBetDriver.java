@@ -4,7 +4,7 @@ import ge.shitbot.bot.OddType;
 import ge.shitbot.bot.drivers.BookieDriver;
 import ge.shitbot.bot.drivers.BookieDriverGeneral;
 import ge.shitbot.bot.exceptions.UnknownOddTypeException;
-import org.openqa.selenium.By;
+import ge.shitbot.bot.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -44,13 +44,22 @@ public class CrystalBetDriver extends BookieDriverGeneral implements BookieDrive
 
     protected void login() {
 
-        goToMainPage();
+        //goToMainPage();
 
         //Input user name
         webDriver.findElement(By.cssSelector("#ctl00_MainLoginView_MainLogin_UserName")).sendKeys(user);
         webDriver.findElement(By.cssSelector("#ctl00_MainLoginView_MainLogin_Password")).sendKeys(password);
         webDriver.findElement(By.cssSelector("#ctl00_MainLoginView_MainLogin_LoginButton")).click();
 
+    }
+
+    protected void changeLang() {
+
+        WebElement langDropDown = presenceOfElementLocated(ge.shitbot.bot.selenium.By.xpath("//*[@id='ctl00_UpdatePanelLanguages']/div[havingClass('head1_1_new')]"));
+        WebElement engButton = langDropDown.findElement(ge.shitbot.bot.selenium.By.xpath("//div[havingClass('head1_1_new_sub')]/div[havingClass('head1_1_new_sub1') and havingClass('en')]/label/a"));
+
+        hoverAndClick(langDropDown);
+        hoverAndClick(engButton);
     }
 
     public boolean isLoggedIn(){
@@ -79,11 +88,17 @@ public class CrystalBetDriver extends BookieDriverGeneral implements BookieDrive
     protected void createBetImpl(String category, String subCategory, String teamOneName, String teamTwoName, String oddType, Double amount, Double oddConfirmation) throws UnknownOddTypeException {
 
         // +2 cause first is TD is 'date' and second is 'team names'
-        int oddTypeIndex = getOddTypeIndex(oddType) + 2;
+        int oddTypeIndex = getOddTypeIndex(oddType);
 
+        goToMainPage();
+
+        // In case of Crystal bet we first login and only than change/choose language cause otherwise
+        // It is reset to default lang after login
         if(!isLoggedIn()) {
             login();
         }
+
+        changeLang();
 
         // nav სპორტი
         ensureClick(By.xpath("//a[@id=\"ctl00_hlSports\"]"));
@@ -98,7 +113,8 @@ public class CrystalBetDriver extends BookieDriverGeneral implements BookieDrive
         //FIXME: Currently we choose odds using td index which may change in future.
         //TODO: Add event date confirmation
         // rowWithOdds
-        presenceOfElementLocated(By.xpath("//div[contains(@class, 'x_loop_title_bg') and contains(text(), '"+category+"') and contains(text(), '"+ subCategory +"')]/parent::div/following-sibling::div[contains(@class, 'x_loop_list')]/table/tbody/tr[contains(@class, 'x_loop_game_title_block')]/td[contains(@class, 'x_game_title')]//span[contains(text(), '"+teamOneName+"') and contains(text(), '"+teamTwoName+"')]/parent::td/parent::tr/td["+oddTypeIndex+"]")).click();
+        //presenceOfElementLocated(By.xpath("//div[contains(@class, 'x_loop_title_bg') and contains(text(), '"+category+"') and contains(text(), '"+ subCategory +"')]/parent::div/following-sibling::div[contains(@class, 'x_loop_list')]/table/tbody/tr[contains(@class, 'x_loop_game_title_block')]/td[contains(@class, 'x_game_title')]//span[contains(text(), '"+teamOneName+"') and contains(text(), '"+teamTwoName+"')]/parent::td/parent::tr/td["+oddTypeIndex+"]")).click();
+        presenceOfElementLocated(By.xpath("//div[contains(@class, 'x_loop_title_bg') and contains(text(), '"+category+"') and contains(text(), '"+ subCategory +"')]/parent::div/following-sibling::div[contains(@class, 'x_loop_list')]/div[havingClass('game-table')]/div[contains(@class, 'x_loop_game_title_block')]/div[contains(@class, 'x_game_title')]//span[contains(text(), '"+teamOneName+"') and contains(text(), '"+teamTwoName+"')]/parent::div/parent::div/div[havingClass('Snatch')]["+oddTypeIndex+"]")).click();
 
         WebElement stakeInput = presenceOfElementLocated(By.xpath("//*[@id=\"TextBoxAmount\"]"));
 

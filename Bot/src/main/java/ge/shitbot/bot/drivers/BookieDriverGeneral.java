@@ -37,7 +37,7 @@ public abstract class BookieDriverGeneral extends AbstractBookieDriver {
 
     protected void hoverAndClick(WebElement webElement) {
         Actions actions = new Actions(webDriver);
-        actions.moveToElement(webElement).click().build().perform();
+        actions.moveToElement(webElement, 1, 1).click().build().perform();
     }
 
     protected WebElement visibilityOfElementLocated(By by) {

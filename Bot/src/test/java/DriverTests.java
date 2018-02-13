@@ -43,8 +43,8 @@ public class DriverTests {
 //            testBookieAndSaveStatus(BookieNames.EUROPE_BET, arbs);
 //            testBookieAndSaveStatus(BookieNames.LIDER_BET, arbs);
 //            testBookieAndSaveStatus(BookieNames.BET_LIVE, arbs);
-//            testBookieAndSaveStatus(BookieNames.CRYSTAL_BET, arbs);
-            testBookieAndSaveStatus(BookieNames.CROCO_BET, arbs);
+            testBookieAndSaveStatus(BookieNames.CRYSTAL_BET, arbs);
+//            testBookieAndSaveStatus(BookieNames.CROCO_BET, arbs);
 
             statuses.forEach((k, v) -> {
                 System.out.println(k + ": " + v);
@@ -73,6 +73,7 @@ public class DriverTests {
         List<Arb.Bookie> oddsForBookie = getOddsForBookie(arbs, bookieName);
 
         if(oddsForBookie.size() == 0){
+            statuses.put(bookieName, BookieStatus.UNABLE_TO_CHECK);
             return;
         }
 
