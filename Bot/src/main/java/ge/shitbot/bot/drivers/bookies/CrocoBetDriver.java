@@ -7,6 +7,7 @@ import ge.shitbot.bot.exceptions.UnknownOddTypeException;
 import ge.shitbot.bot.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 import java.util.HashMap;
 
@@ -42,8 +43,6 @@ public class CrocoBetDriver extends BookieDriverGeneral implements BookieDriver 
 
     protected void login() {
 
-        goToMainPage();
-
         //Input user name
         webDriver.findElement(By.xpath("//*[@id=\"navbar\"]/form[contains(@name, 'loginForm')]/div/div/input[contains(@name, \"login\")]")).sendKeys(user);
         webDriver.findElement(By.xpath("//*[@id=\"navbar\"]/form[contains(@name, 'loginForm')]/div/div//input[contains(@name, 'password') and contains(@type, \"password\")]")).sendKeys(password);
@@ -51,9 +50,17 @@ public class CrocoBetDriver extends BookieDriverGeneral implements BookieDriver 
 
     }
 
-    public boolean isLoggedIn() {
+    protected void changeLang() {
 
-        goToMainPage();
+        WebElement langDropDown = presenceOfElementLocated(By.xpath("//*[@id=\"navbar\"]/form/div[havingClass('language-selector')]/div[havingClass('dropdown') and havingClass('language')]"));
+        WebElement engButton = langDropDown.findElement(By.xpath("//a/img[@alt='lang.english']/parent::a"));
+
+        hoverAndClick(langDropDown);
+        hoverAndClick(engButton);
+
+    }
+
+    public boolean isLoggedIn() {
 
         try{
             webDriver.findElement(By.xpath("//*[@id=\"navbar\"]/div/button[@type='button' and contains(@class, 'logout-btn')]")).isDisplayed();
@@ -70,6 +77,10 @@ public class CrocoBetDriver extends BookieDriverGeneral implements BookieDriver 
         //FIXME: Currently we choose odds using td index which may change in future.
         //TODO: Add event date confirmation
         //TODO: Add odd confirmation.*/
+
+        goToMainPage();
+
+        changeLang();
 
         Poin oddTypeIndex = getOddTypeIndex(oddType);
 

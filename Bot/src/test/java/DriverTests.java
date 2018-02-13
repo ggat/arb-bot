@@ -39,12 +39,12 @@ public class DriverTests {
         try {
             List<Arb> arbs = arbMainDataSource.getArbs();
 
-            testBookieAndSaveStatus(BookieNames.AJARA_BET, arbs);/*
-            testBookieAndSaveStatus(BookieNames.EUROPE_BET, arbs);
-            testBookieAndSaveStatus(BookieNames.LIDER_BET, arbs);
-            testBookieAndSaveStatus(BookieNames.BET_LIVE, arbs);
-            testBookieAndSaveStatus(BookieNames.CRYSTAL_BET, arbs);
-            testBookieAndSaveStatus(BookieNames.CROCO_BET, arbs);*/
+//            testBookieAndSaveStatus(BookieNames.AJARA_BET, arbs);
+//            testBookieAndSaveStatus(BookieNames.EUROPE_BET, arbs);
+//            testBookieAndSaveStatus(BookieNames.LIDER_BET, arbs);
+//            testBookieAndSaveStatus(BookieNames.BET_LIVE, arbs);
+//            testBookieAndSaveStatus(BookieNames.CRYSTAL_BET, arbs);
+            testBookieAndSaveStatus(BookieNames.CROCO_BET, arbs);
 
             statuses.forEach((k, v) -> {
                 System.out.println(k + ": " + v);
