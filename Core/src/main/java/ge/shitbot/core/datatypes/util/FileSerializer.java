@@ -50,6 +50,14 @@ public class FileSerializer {
         return result;
     }
 
+    /**
+     * Load serialized file from resources. File gets loaded relative to referer package.
+     *
+     * @param referer
+     * @param fileName
+     * @return
+     * @throws FileSerializerException
+     */
     public static Object loadFromResources(Object referer, String fileName) throws FileSerializerException {
         try {
             URL resource = Resources.loadFromSamePackage(referer,fileName);

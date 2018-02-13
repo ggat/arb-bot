@@ -24,7 +24,15 @@ public class CategoryCategoryInfoMapper {
         return leftOver;
     }
 
-    public List<CategoryCategoryInfoPair> map(List<? extends Category> categories, List<? extends CategoryInfo> categoryInfos, Long bookieId) throws PersistException {
+    /**
+     * Map Categories to corresponding CategoryInfos
+     *
+     * @param categories Nested structure with parents and subcategories are expected.
+     * @param categoryInfos Nested structure with parents and subcategories are expected.
+     * @param bookieId passed only for logging. Does not serve any other purpose
+     * @return
+     */
+    public List<CategoryCategoryInfoPair> map(List<? extends Category> categories, List<? extends CategoryInfo> categoryInfos, Long bookieId) {
         List<CategoryCategoryInfoPair> pairs = new ArrayList<>();
 
         logger.info("Start matching CategoryInfos for bookie={}", bookieId);
