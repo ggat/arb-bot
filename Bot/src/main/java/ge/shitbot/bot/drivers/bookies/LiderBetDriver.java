@@ -4,7 +4,7 @@ import ge.shitbot.bot.OddType;
 import ge.shitbot.bot.drivers.BookieDriver;
 import ge.shitbot.bot.drivers.BookieDriverGeneral;
 import ge.shitbot.bot.exceptions.UnknownOddTypeException;
-import org.openqa.selenium.By;
+import ge.shitbot.bot.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -17,7 +17,7 @@ import java.util.Arrays;
  */
 public class LiderBetDriver extends BookieDriverGeneral implements BookieDriver {
 
-    String baseUrl = "https://www.lider-bet.com/web/ka/promotions/?page=sagzuri";
+    String baseUrl = "https://www.lider-bet.com/web/en/main/";
     String user = "i.gatenashvili";
     String password = "camaross69";
 
@@ -34,11 +34,13 @@ public class LiderBetDriver extends BookieDriverGeneral implements BookieDriver 
 
         goToMainPage();
 
-        //Input user name
-        webDriver.findElement(By.xpath("/html/body/div[1]/div[2]/div/table/tbody/tr/td[2]/span/div/div[2]/input")).sendKeys(user);
-        webDriver.findElement(By.xpath("/html/body/div[1]/div[2]/div/table/tbody/tr/td[2]/span/div/div[3]/input")).sendKeys(password);
-        webDriver.findElement(By.xpath("/html/body/div[1]/div[2]/div/table/tbody/tr/td[2]/span/div//*[@onclick='auth_submiter(this)']")).click();
+        WebElement loginGroup = presenceOfElementLocated(By.xpath("/html/body//div[havingClass('auth_form_panel')]/div[@class='lb_auth']"));
 
+        loginGroup.findElement(By.xpath("//input[@name='username']")).sendKeys(user);
+        loginGroup.findElement(By.xpath("//input[@name='password']")).sendKeys(password);
+        loginGroup.findElement(By.xpath("//input[@type='button' and @class='lb_login_btn']")).click();
+
+        //Input user name
     }
 
     public boolean isLoggedIn() {
@@ -78,9 +80,9 @@ public class LiderBetDriver extends BookieDriverGeneral implements BookieDriver 
             login();
         }
 
-        ensureClick(By.xpath("/html/body/div[contains(@class, 'menu lb_nav')]/div/ul/li/a[contains(string(.), 'სპორტი')]"));
+        ensureClick(By.xpath("/html/body/div[contains(@class, 'menu lb_nav')]/div/ul/li/a[contains(string(.), 'Sport')]"));
 
-        presenceOfElementLocated(By.xpath("/html/body/table/tbody/tr/td[contains(@class, 'tote-content')]/ul[contains(@class, 'sport-name-list')]/li[contains(string(.), 'ფეხბურთი')]")).click();
+        presenceOfElementLocated(By.xpath("/html/body/table/tbody/tr/td[contains(@class, 'tote-content')]/ul[contains(@class, 'sport-name-list')]/li[contains(string(.), 'Soccer')]")).click();
 
         presenceOfElementLocated(By.xpath("/html/body/table/tbody/tr/td[contains(@class, 'tote-content')]/ul[contains(@class, 'country-name-list')]/li/a/span[contains(text(), '"+category+"')]")).click();
 
