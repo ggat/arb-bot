@@ -4,10 +4,11 @@ import ge.shitbot.bot.OddType;
 import ge.shitbot.bot.drivers.BookieDriver;
 import ge.shitbot.bot.exceptions.UnknownOddTypeException;
 import ge.shitbot.bot.drivers.BookieDriverGeneral;
-import org.openqa.selenium.By;
+import ge.shitbot.bot.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -18,7 +19,7 @@ import java.util.Arrays;
  */
 public class AdjaraBetDriver extends BookieDriverGeneral implements BookieDriver {
 
-    String baseUrl = "https://www.adjarabet.com/ka";
+    String baseUrl = "https://www.adjarabet.com/en";
     String user = "ggat";
     String password = "Boogieman50";
 
@@ -66,6 +67,17 @@ public class AdjaraBetDriver extends BookieDriverGeneral implements BookieDriver
 
     }
 
+    protected void changeLang() {
+
+        /*Actions actions = new Actions(webDriver);
+
+        WebElement langDropDown = webDriver.findElement(By.xpath("/html/body/my-app//adj-lang/div[1]"));
+        WebElement engButton = langDropDown.findElement(By.xpath("//a[havingClass('eng')]"));
+
+        //Language dropdown lang
+        actions.moveToElement(langDropDown).moveToElement(engButton).click().build().perform();*/
+    }
+
     public boolean isLoggedIn() {
 
         goToMainPage();
@@ -87,6 +99,9 @@ public class AdjaraBetDriver extends BookieDriverGeneral implements BookieDriver
         //TODO: Add event date confirmation
         //TODO: Add odd confirmation.*/
 
+        //No need for change lang actions cause we can directly go on english by suffix like: https://www.adjarabet.com/en
+        //changeLang();
+
         int oddTypeIndex = getOddTypeIndex(oddType) + 3;
 
         if(!isLoggedIn()) {
@@ -95,20 +110,22 @@ public class AdjaraBetDriver extends BookieDriverGeneral implements BookieDriver
 
         //nav სპორტი
         //NOTE: string(.) is used to get entire child nodes as string.
-        presenceOfElementLocated(By.xpath("/html/body/my-app/adj-item/adj-grid/div/adj-item/adj-grid/adj-item/a[contains(string(.), 'სპორტი')]")).click();
+        WebElement sportsButton = presenceOfElementLocated(By.xpath("/html/body/my-app/adj-item/adj-grid/div/adj-item/adj-grid/adj-item/a[contains(string(.), 'Sports')]"));
+
+        hoverAndClick(sportsButton);
 
         webDriver.switchTo().frame("CustomSBContainer");
 
         //aside ფეხბურთი
-        presenceOfElementLocated(By.xpath("//*[@id=\"Cat27\" and contains(string(.), 'ფეხბურთი')]")).click();
+        presenceOfElementLocated(By.xpath("//*[@id=\"Cat27\" and contains(string(.), 'Soccer')]")).click();
 
 
         //TODO: Here we should go deeper and ten return up. cause there may be tow ესპანეთი.
         //aside ფეხბურთი
-        presenceOfElementLocated(By.xpath("//*[@id=\"Cat27\" and contains(string(.), 'ფეხბურთი')]/following-sibling::div/ul/li/a/span[contains(@class, 'category') and contains(text(), '"+ category +"')]")).click();
+        presenceOfElementLocated(By.xpath("//*[@id=\"Cat27\" and contains(string(.), 'Soccer')]/following-sibling::div/ul/li/a/span[contains(@class, 'category') and contains(text(), '"+ category +"')]")).click();
 
         //aside ფეხბურთი
-        presenceOfElementLocated(By.xpath("//*[@id=\"Cat27\" and contains(string(.), 'ფეხბურთი')]/following-sibling::div/ul/li/a/span[contains(@class, 'category') and contains(text(), '"+ category +"')]/parent::a/following-sibling::ul/li/a[contains(text(), '"+ subCategory +"')]")).click();
+        presenceOfElementLocated(By.xpath("//*[@id=\"Cat27\" and contains(string(.), 'Soccer')]/following-sibling::div/ul/li/a/span[contains(@class, 'category') and contains(text(), '"+ category +"')]/parent::a/following-sibling::ul/li/a[contains(text(), '"+ subCategory +"')]")).click();
 
         //actually picking a bet
         presenceOfElementLocated(By.xpath("//*[@id=\"Sport27\"]/div/div[contains(@class, 'games-container')]/div/div[contains(@class, 'collapsible-header')]/h3[contains(string(.), '"+ subCategory +"') and contains(string(.), '" + category +  "')]/parent::div/following-sibling::div[contains(@class, 'collapsible-body')]//tbody/tr/td[contains(@class, 'cell-pair') and contains(string(.), '"+teamOneName+"') and contains(string(.), '"+teamTwoName+"')]/parent::tr/td["+oddTypeIndex+"]")).click();

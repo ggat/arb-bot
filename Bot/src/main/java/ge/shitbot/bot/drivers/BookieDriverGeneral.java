@@ -1,10 +1,12 @@
 package ge.shitbot.bot.drivers;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.text.DecimalFormat;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by giga on 10/10/17.
@@ -20,13 +22,22 @@ public abstract class BookieDriverGeneral extends AbstractBookieDriver {
     }
 
     protected WebElement presenceOfElementLocated(Long timeOut, By by) {
-        return (new WebDriverWait(webDriver, timeOut))
+        WebElement element = (new WebDriverWait(webDriver, timeOut))
                 .until(ExpectedConditions.presenceOfElementLocated(by));
+
+        //webDriver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
+
+        return element;
     }
 
     protected WebElement visibilityOfElementLocated(Long timeOut, By by) {
         return (new WebDriverWait(webDriver, timeOut))
                 .until(ExpectedConditions.visibilityOfElementLocated(by));
+    }
+
+    protected void hoverAndClick(WebElement webElement) {
+        Actions actions = new Actions(webDriver);
+        actions.moveToElement(webElement).click().build().perform();
     }
 
     protected WebElement visibilityOfElementLocated(By by) {

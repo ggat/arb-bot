@@ -1,3 +1,4 @@
+import ge.shitbot.datasources.source.NewDataSource;
 import ge.shitbot.hardcode.BookieNames;
 import ge.shitbot.bot.drivers.BookieDriver;
 import ge.shitbot.bot.drivers.BookieDriverRegistry;
@@ -31,19 +32,19 @@ public class DriverTests {
 
         logger.info("Going to run tests for all bookies.");
 
-        MainDataSource<Arb> arbMainDataSource = new MainDataSource<>();
+        NewDataSource<Arb> arbMainDataSource = new NewDataSource<>();
 
         statuses.clear();
 
         try {
             List<Arb> arbs = arbMainDataSource.getArbs();
 
-            testBookieAndSaveStatus(BookieNames.AJARA_BET, arbs);
+            testBookieAndSaveStatus(BookieNames.AJARA_BET, arbs);/*
             testBookieAndSaveStatus(BookieNames.EUROPE_BET, arbs);
             testBookieAndSaveStatus(BookieNames.LIDER_BET, arbs);
             testBookieAndSaveStatus(BookieNames.BET_LIVE, arbs);
             testBookieAndSaveStatus(BookieNames.CRYSTAL_BET, arbs);
-            testBookieAndSaveStatus(BookieNames.CROCO_BET, arbs);
+            testBookieAndSaveStatus(BookieNames.CROCO_BET, arbs);*/
 
             statuses.forEach((k, v) -> {
                 System.out.println(k + ": " + v);
@@ -98,15 +99,9 @@ public class DriverTests {
             e.printStackTrace();
             return BookieStatus.UNABLE_TO_CHECK;
 
-        } catch (RuntimeException e) {
+        } catch (Throwable e){
             e.printStackTrace();
             return BookieStatus.FAILS;
-        } finally {
-            /*try {
-                bookieDriver.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
         }
 
         return BookieStatus.WORKS;

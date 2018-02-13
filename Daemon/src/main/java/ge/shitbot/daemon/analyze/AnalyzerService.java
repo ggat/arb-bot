@@ -161,6 +161,6 @@ public class AnalyzerService {
         logger.info("Created {} ", comparableChains.size());
 
         //FIXME: This is only for single bookie so probably it will never generate Arbs
-        return analyzer.findArbs(comparableChains);
+        return analyzer.findArbs(comparableChains, -7.0);
     }
 }

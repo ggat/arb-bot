@@ -12,6 +12,6 @@ public interface BookieDriver extends Closeable {
     Long getBalance() throws Throwable;
     boolean isLoggedIn() throws Throwable;
     void createBet(String category, String subCategory, String teamOneName, String teamTwoName, String oddType,
-                   Double amount, Double oddConfirmation) throws UnknownOddTypeException;
+                   Double amount, Double oddConfirmation) throws UnknownOddTypeException, RuntimeException;
 
 }
