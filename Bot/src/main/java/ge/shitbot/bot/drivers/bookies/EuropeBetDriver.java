@@ -17,7 +17,7 @@ import java.util.Arrays;
  */
 public class EuropeBetDriver extends BookieDriverGeneral implements BookieDriver {
 
-    String baseUrl = "https://www.europebet.com/ka";
+    String baseUrl = "https://www.europebet.com/en";
     String user = "i.gatenashvili";
     String password = "axalgori11";
 
@@ -61,8 +61,6 @@ public class EuropeBetDriver extends BookieDriverGeneral implements BookieDriver
 
     protected void login() {
 
-        goToMainPage();
-
         // Sometimes inputs are not show directly and we need to go with popup
         try {
             //Input user name
@@ -98,6 +96,14 @@ public class EuropeBetDriver extends BookieDriverGeneral implements BookieDriver
 
     }
 
+    protected void changeLang() {
+        /*WebElement langDropDown = presenceOfElementLocated(ge.shitbot.bot.selenium.By.xpath("/*//*[@id='ctl00_UpdatePanelLanguages']/div[havingClass('head1_1_new')]"));
+        WebElement engButton = langDropDown.findElement(ge.shitbot.bot.selenium.By.xpath("//div[havingClass('head1_1_new_sub')]/div[havingClass('head1_1_new_sub1') and havingClass('en')]/label/a"));
+
+        hoverAndClick(langDropDown);
+        hoverAndClick(engButton);*/
+    }
+
     public boolean isLoggedIn() {
         goToMainPage();
 
@@ -128,17 +134,20 @@ public class EuropeBetDriver extends BookieDriverGeneral implements BookieDriver
         //TODO: Add event date confirmation
         //TODO: Add odd confirmation.*/
 
+        //No need for change lang actions cause we can directly go on english by suffix like: https://www.adjarabet.com/en
+        //changeLang();
+
         int oddTypeIndex = getOddTypeIndex(oddType);
 
         if(!isLoggedIn()) {
             login();
         }
 
-        ensureClick(By.xpath("//*[@id=\"site\"]/header/nav/div/div/ul[contains(@class, 'topmenu')]/li/a[contains(text(), 'სპორტი')]"));
+        ensureClick(By.xpath("//*[@id=\"site\"]/header/nav/div/div/ul[contains(@class, 'topmenu')]/li/a[@data-testid='Sport']"));
 
         webDriver.switchTo().frame("gameIFrame");
 
-        WebElement sportCategoryButton = presenceOfElementLocated(By.xpath("//*[@id=\"select-sports-panel-placeholder\"]/div[contains(@class, 'select-sports-panel')]//div/span[contains(@class, 'sport-name') and contains(text(), 'ფეხბურთი')]/ancestor::div[contains(@class, 'subcategory-buttons-row')][1]/div"));
+        WebElement sportCategoryButton = presenceOfElementLocated(By.xpath("//*[@id=\"select-sports-panel-placeholder\"]/div[contains(@class, 'select-sports-panel')]//div/span[contains(@class, 'sport-name') and contains(text(), 'Soccer')]/ancestor::div[contains(@class, 'subcategory-buttons-row')][1]/div"));
 
         // Sport category may be already selected
         if( ! sportCategoryButton.getAttribute("class").contains("active")){

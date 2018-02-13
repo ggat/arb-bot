@@ -56,9 +56,10 @@ public class CrystalBetDriver extends BookieDriverGeneral implements BookieDrive
     protected void changeLang() {
 
         WebElement langDropDown = presenceOfElementLocated(ge.shitbot.bot.selenium.By.xpath("//*[@id='ctl00_UpdatePanelLanguages']/div[havingClass('head1_1_new')]"));
-        WebElement engButton = langDropDown.findElement(ge.shitbot.bot.selenium.By.xpath("//div[havingClass('head1_1_new_sub')]/div[havingClass('head1_1_new_sub1') and havingClass('en')]/label/a"));
 
         hoverAndClick(langDropDown);
+
+        WebElement engButton = langDropDown.findElement(ge.shitbot.bot.selenium.By.xpath("//div[havingClass('head1_1_new_sub')]/div[havingClass('head1_1_new_sub1') and havingClass('en')]/label/a"));
         hoverAndClick(engButton);
     }
 
@@ -98,7 +99,21 @@ public class CrystalBetDriver extends BookieDriverGeneral implements BookieDrive
             login();
         }
 
-        changeLang();
+        // After login refreshes the page change lang elements are loaded again by JS probably and that's
+        // why we need to retry if they get staled.
+        try {
+            changeLang();
+        }
+        catch(org.openqa.selenium.StaleElementReferenceException ex)
+        {
+            try {
+                Thread.sleep(2000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            changeLang();
+        }
 
         // nav სპორტი
         ensureClick(By.xpath("//a[@id=\"ctl00_hlSports\"]"));
