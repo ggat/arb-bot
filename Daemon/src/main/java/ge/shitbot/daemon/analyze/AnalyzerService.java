@@ -152,7 +152,7 @@ public class AnalyzerService {
     }
 
     public List<Arb> analyze(LiveData liveData,
-                             List<ge.shitbot.persist.models.Chain> rawChains, Map<Long, String> bookieNames)throws AnalyzeException {
+                             List<ge.shitbot.persist.models.Chain> rawChains, Map<Long, String> bookieNames) throws AnalyzeException {
         Analyzer analyzer = new Analyzer();
 
         List<Chain> chains = ChainUtils.adaptChains(rawChains);
