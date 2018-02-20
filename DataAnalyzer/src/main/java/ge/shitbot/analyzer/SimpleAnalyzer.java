@@ -6,6 +6,7 @@ import ge.shitbot.core.datatypes.Arb;
 import ge.shitbot.core.datatypes.util.FileSerializer;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,31 +17,55 @@ import java.util.Map;
  */
 public class SimpleAnalyzer {
 
-    TeamNameChains teamNameChains;
-    private static final String fileName = "chains.ser";
+    private static SimpleAnalyzer instance = null;
 
-    public List<Arb> findArbs(List<? extends CategoryData> categoryDatas) throws Exception {
+    protected SimpleAnalyzer() throws IOException, ClassNotFoundException {
+        obtainTeamNameChains();
+    }
 
-        FileSerializer fileSerializer = new FileSerializer();
+    protected void obtainTeamNameChains() throws IOException, ClassNotFoundException {
         try {
-            teamNameChains = (TeamNameChains) fileSerializer.fromFile(fileName);
+            teamNameChains = (TeamNameChains) FileSerializer.fromFile(fileName);
         } catch (FileNotFoundException e) {
             teamNameChains = new TeamNameChains();
         }
+    }
+
+    public static SimpleAnalyzer getInstance() throws IOException, ClassNotFoundException {
+        if(instance == null) {
+            instance = new SimpleAnalyzer();
+        }
+        return instance;
+    }
+
+    protected TeamNameChains teamNameChains;
+
+    public TeamNameChains getTeamNameChains() {
+        return teamNameChains;
+    }
+
+    private static final String fileName = "chains.ser";
+
+    public void reset() throws IOException, ClassNotFoundException {
+        FileSerializer.toFile(fileName, new TeamNameChains());
+        obtainTeamNameChains();
+    }
+
+    public List<Arb> findArbs(List<? extends CategoryData> categoryDatas) throws IOException {
 
         for (CategoryData data1: categoryDatas) {
             for (CategoryData data2: categoryDatas) {
                 for (EventData eventData : data1.getEvents()) {
                     for (EventData eventData2 : data2.getEvents()) {
-                        if(eventData.equals(eventData2)) continue;
+                        if(eventData.equals(eventData2) || data1.getBookieName().equals(data2.getBookieName())) continue;
                         boolean eventsMatch = eventsMatch(eventData, data1.getBookieName(), eventData2, data2.getBookieName());
-                        System.out.println("Aliosha: " );
+                        //System.out.println("Aliosha: " );
                     }
                 }
             }
         }
 
-        fileSerializer.toFile(fileName, teamNameChains);
+        FileSerializer.toFile(fileName, teamNameChains);
 
         return new ArrayList<>();
     }
