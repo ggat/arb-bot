@@ -133,8 +133,11 @@ public class SimpleAnalyzerTest {
         assertEquals(4, chains.size());
         assertThat(chains, hasItems(chain1, chain2, chain1_1, chain2_1));
 
-        categoryDatas.add(createFullCategoryData(BET, "Spain", "La liga", "Liverpool_5", "Chelsea_1", date));
-        categoryDatas.add(createFullCategoryData(CRY, "Spain", "La liga", "Liverpool_6", "Chelsea_1", date));
+        Calendar c = Calendar.getInstance();
+        c.set(2017, 10, 5, 0, 0);
+
+        categoryDatas.add(createFullCategoryData(BET, "Spain", "La liga", "Liverpool_5", "Chelsea_1", c.getTime()));
+        categoryDatas.add(createFullCategoryData(CRY, "Spain", "La liga", "Liverpool_6", "Chelsea_1", c.getTime()));
 
         analyzer.findArbs(categoryDatas);
         chains = analyzer.getTeamNameChains();
@@ -149,10 +152,16 @@ public class SimpleAnalyzerTest {
         chain3_1.put(BET, "Chelsea_1");
         chain3_1.put(CRY, "Chelsea_1");
 
-        chain1 = chain2 = null;
+        Map<String, String> chain3_2 = new HashMap<>();
+        chain3_2.put(CRY, "Manchester_2");
+        chain3_2.put(CRO, "Manchester_2");
+        chain3_2.put(BET, "Manchester_1");
+        chain3_2.put(ADJ, "Manchester_1");
 
-        assertEquals(4, chains.size());
-        assertThat(chains, hasItems(chain1_1, chain2_1, chain3, chain3_1));
+        chain1 = chain2 = chain1_1 = chain2_1 = null;
+
+        assertEquals(3, chains.size());
+        assertThat(chains, hasItems(chain3, chain3_1, chain3_2));
 
         System.out.println(analyzer.getTeamNameChains());
     }

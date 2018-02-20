@@ -51,19 +51,27 @@ public class SimpleAnalyzer {
         obtainTeamNameChains();
     }
 
+    protected boolean updated;
+
     public List<Arb> findArbs(List<? extends CategoryData> categoryDatas) throws IOException {
 
-        for (CategoryData data1: categoryDatas) {
-            for (CategoryData data2: categoryDatas) {
-                for (EventData eventData : data1.getEvents()) {
-                    for (EventData eventData2 : data2.getEvents()) {
-                        if(eventData.equals(eventData2) || data1.getBookieName().equals(data2.getBookieName())) continue;
-                        boolean eventsMatch = eventsMatch(eventData, data1.getBookieName(), eventData2, data2.getBookieName());
-                        //System.out.println("Aliosha: " );
+        do {
+
+            updated = false;
+
+            for (CategoryData data1: categoryDatas) {
+                for (CategoryData data2: categoryDatas) {
+                    for (EventData eventData : data1.getEvents()) {
+                        for (EventData eventData2 : data2.getEvents()) {
+                            if(eventData.equals(eventData2) || data1.getBookieName().equals(data2.getBookieName())) continue;
+                            boolean eventsMatch = eventsMatch(eventData, data1.getBookieName(), eventData2, data2.getBookieName());
+                            //System.out.println("Aliosha: " );
+                        }
                     }
                 }
             }
-        }
+        } while (updated);
+
 
         FileSerializer.toFile(fileName, teamNameChains);
 
@@ -84,8 +92,9 @@ public class SimpleAnalyzer {
                 return false;
             }
 
-            if(! (side1Equals && side2Equals)) {
+            if(!side1Equals) {
                 updateTeamNames(bookie1, eventData1.getSideOne(), bookie2, eventData2.getSideOne());
+            } else {
                 updateTeamNames(bookie1, eventData1.getSideTwo(), bookie2, eventData2.getSideTwo());
             }
 
@@ -107,30 +116,30 @@ public class SimpleAnalyzer {
         Map<String, String> nameListByBookie1 = teamNameChains.findFirst(bookie1, name1);
         Map<String, String> nameListByBookie2 = teamNameChains.findFirst(bookie2, name2);
 
+        if(nameListByBookie1 == null && nameListByBookie2 == null) {
+            return false;
+        }
+
         String nameForBookie1;
         String nameForBookie2;
 
         if(nameListByBookie1 != null && nameListByBookie2 == null) {
             nameForBookie1 = nameListByBookie1.get(bookie1);
             nameForBookie2 = nameListByBookie1.get(bookie2);
-        } else if(nameListByBookie1 == null && nameListByBookie2 != null) {
+        } else if(nameListByBookie1 == null/* && nameListByBookie2 != null*/) {
             nameForBookie1 = nameListByBookie2.get(bookie1);
             nameForBookie2 = nameListByBookie2.get(bookie2);
 
             //  Here if we know that other team name matches then these different chains must be merged, otherwise
             //  Two chains found are not for same team
             //  This means name chains where found for both bookies but in different chains
-        } else if(nameListByBookie1 != null && nameListByBookie2 != null && nameListByBookie1 != nameListByBookie2) {
+        } else if(nameListByBookie1 != nameListByBookie2) {
             return false;
-        } else {
-            return false;
-        }
-
-        if (nameForBookie1 != null && nameForBookie1.equals(name1) && nameForBookie2 != null && nameForBookie2.equals(name2)){
+        } else { // They are in the same chain
             return true;
         }
 
-        return false;
+        return nameForBookie1 != null && nameForBookie1.equals(name1) && nameForBookie2 != null && nameForBookie2.equals(name2);
     }
 
     //Update names are considered to be called only when other side matched.
@@ -138,9 +147,9 @@ public class SimpleAnalyzer {
         /*Map<String, String> nameListByBookie1 = teamNameChains.findFirst(bookie1, name1);
         Map<String, String> nameListByBookie2 = teamNameChains.findFirst(bookie2, name2);*/
 
-        //Without specifing exact bookie we have more chanses to find chain for this particular team.
-        Map<String, String> nameListByBookie1 = teamNameChains.findFirst(name1);
-        Map<String, String> nameListByBookie2 = teamNameChains.findFirst(name2);
+        //Without specifing exact bookie we have more chances to find chain for this particular team.
+        Map<String, String> nameListByBookie1 = teamNameChains.findFirst(bookie1, name1);
+        Map<String, String> nameListByBookie2 = teamNameChains.findFirst(bookie2, name2);
 
         if(nameListByBookie1 != null && nameListByBookie2 != null && nameListByBookie1 != nameListByBookie2) {
             //This is the case where team names were found for both bookies
@@ -159,10 +168,14 @@ public class SimpleAnalyzer {
 
             //Add new merged chain
             teamNameChains.add(mergeChains(nameListByBookie1, nameListByBookie2));
+
+            updated = true;
         } else if(nameListByBookie1 != null && nameListByBookie2 == null) {
             nameListByBookie1.put(bookie2, name2);
+            updated = true;
         } else if(nameListByBookie1 == null && nameListByBookie2 != null) {
             nameListByBookie2.put(bookie1, name1);
+            updated = true;
         } else if(nameListByBookie1 == null && nameListByBookie2 == null) {
 
             // This is place where we may create new chain for team that already exists for other bookies.
@@ -171,6 +184,7 @@ public class SimpleAnalyzer {
             newChain.put(bookie2, name2);
 
             teamNameChains.add(newChain);
+            updated = true;
         }
     }
 
