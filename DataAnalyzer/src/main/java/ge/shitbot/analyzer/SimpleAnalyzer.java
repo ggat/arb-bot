@@ -53,19 +53,42 @@ public class SimpleAnalyzer {
 
     protected boolean updated;
 
+    protected class MatchedEvents {
+        CategoryData categoryData1;
+        EventData eventData1;
+        CategoryData categoryData2;
+        EventData eventData2;
+
+        public MatchedEvents(CategoryData categoryData1, EventData eventData1, CategoryData categoryData2, EventData eventData2) {
+            this.categoryData1 = categoryData1;
+            this.eventData1 = eventData1;
+            this.categoryData2 = categoryData2;
+            this.eventData2 = eventData2;
+        }
+    }
+
     public List<Arb> findArbs(List<? extends CategoryData> categoryDatas) throws IOException {
 
-        do {
+        List<MatchedEvents> matchedEventsList;
 
+        //Learn team names and collect matching events.
+        do {
             updated = false;
 
+            // Reset matched events because this if team name learning updated, this loop will run again for same teams
+            // and we will have dublicates in matchedEventsList
+            matchedEventsList = new ArrayList<>();
             for (CategoryData data1: categoryDatas) {
                 for (CategoryData data2: categoryDatas) {
                     for (EventData eventData : data1.getEvents()) {
                         for (EventData eventData2 : data2.getEvents()) {
                             if(eventData.equals(eventData2) || data1.getBookieName().equals(data2.getBookieName())) continue;
-                            boolean eventsMatch = eventsMatch(eventData, data1.getBookieName(), eventData2, data2.getBookieName());
-                            //System.out.println("Aliosha: " );
+
+                            if(eventsMatch(eventData, data1.getBookieName(), eventData2, data2.getBookieName())) {
+
+                                matchedEventsList.add(new MatchedEvents(data1, eventData, data2, eventData2));
+                                //resultArbs.addAll(AnalyzerFunctions.compareForArb(data1, eventData, data2, eventData2));
+                            }
                         }
                     }
                 }
@@ -73,9 +96,12 @@ public class SimpleAnalyzer {
         } while (updated);
 
 
+
+        List<Arb> resultArbs = new ArrayList<>();
+
         FileSerializer.toFile(fileName, teamNameChains);
 
-        return new ArrayList<>();
+        return resultArbs;
     }
 
     protected boolean eventsMatch(EventData eventData1, String bookie1, EventData eventData2, String bookie2) {
@@ -106,6 +132,10 @@ public class SimpleAnalyzer {
 
     protected boolean namesEqual(String bookie1, String name1, String bookie2, String name2) /*throws NameChainFragmentationException*/ {
 
+
+        if(name1 == null || name2 == null) {
+            return false;
+        }
 
         // TODO: Should we directly names as strings first?
         // If so how do we update persisted data

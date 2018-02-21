@@ -1,6 +1,7 @@
 package ge.shitbot.daemon.analyze;
 
 import ge.shitbot.analyzer.Analyzer;
+import ge.shitbot.analyzer.SimpleAnalyzer;
 import ge.shitbot.analyzer.datatypes.CategoryData;
 import ge.shitbot.analyzer.datatypes.ComparableChain;
 import ge.shitbot.analyzer.datatypes.EventData;
@@ -20,6 +21,7 @@ import ge.shitbot.scraper.datatypes.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -161,5 +163,55 @@ public class AnalyzerService {
         logger.info("Created {} ", comparableChains.size());
 
         return analyzer.findArbs(comparableChains, -7.0);
+    }
+
+    public List<Arb> analyze(LiveData liveData, Map<Long, String> bookieNames) throws AnalyzeException {
+
+        try {
+            SimpleAnalyzer analyzer = SimpleAnalyzer.getInstance();
+            List<? extends CategoryData> categoryDatas = liveDataToCategoryDatas(liveData, bookieNames);
+
+            return analyzer.findArbs(categoryDatas);
+
+        } catch (Exception e) {
+            throw new AnalyzeException(e);
+        }
+    }
+
+    protected List<? extends CategoryData> liveDataToCategoryDatas(LiveData liveData, Map<Long, String> bookieNames) {
+
+        List<CategoryData> categoryDatas = new ArrayList<>();
+
+        for (Map.Entry<Long, List<? extends Category>> categoriesForBookie : liveData.entrySet()) {
+
+            for (Category category : categoriesForBookie.getValue()) {
+                for (Category subCategory : category.getSubCategories()) {
+                    if (subCategory.getEvents().size() > 0) {
+                        categoryDatas.add(createCategoryData(subCategory, categoriesForBookie.getKey(), bookieNames));
+                    }
+                }
+            }
+        }
+
+        return categoryDatas;
+    }
+
+    protected CategoryData createCategoryData(Category category, Long bookieId, Map<Long, String> bookieNames) {
+        CategoryData categoryData = new CategoryData();
+        categoryData.setBookieName(bookieNames.get(bookieId));
+        categoryData.setCategory(category.getParent().getName());
+        categoryData.setSubCategory(category.getName());
+
+        for (Event event : category.getEvents()) {
+            EventData eventData = new EventData();
+            eventData.setDate(event.getDate());
+            eventData.setOdds(event.getOdds());
+            eventData.setSideOne(event.getSideOne());
+            eventData.setSideTwo(event.getSideTwo());
+
+            categoryData.getEvents().add(eventData);
+        }
+
+        return categoryData;
     }
 }

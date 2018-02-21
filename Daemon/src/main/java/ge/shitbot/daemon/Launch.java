@@ -245,7 +245,8 @@ public class Launch {
                         bookieNames.put(tmpBookie.getId(), tmpBookie.getName());
                     }
 
-                    List<Arb> arbs = analyzerService.analyze(liveData, chainRepository.all(), bookieNames);
+                    //List<Arb> arbs = analyzerService.analyze(liveData, chainRepository.all(), bookieNames);
+                    List<Arb> arbs = analyzerService.analyze(liveData, bookieNames);
                     logger.info("Found {} Arbs", arbs.size());
 
                     try {
