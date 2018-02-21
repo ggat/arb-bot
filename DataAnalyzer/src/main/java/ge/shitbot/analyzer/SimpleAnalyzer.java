@@ -95,9 +95,12 @@ public class SimpleAnalyzer {
             }
         } while (updated);
 
-
-
         List<Arb> resultArbs = new ArrayList<>();
+
+        for (MatchedEvents matchedEvents : matchedEventsList) {
+            resultArbs.addAll(AnalyzerFunctions.compareForArb(matchedEvents.categoryData1, matchedEvents.eventData1,
+                    matchedEvents.categoryData2, matchedEvents.eventData2));
+        }
 
         FileSerializer.toFile(fileName, teamNameChains);
 
@@ -192,18 +195,47 @@ public class SimpleAnalyzer {
             //
             // So we can merge these chains here.
 
+            /*
+            When situation like this we don't take any action.
+            Because we cannot decide which names are correct and which are not.
+
+            So what we do is we merge these two list, then take size from whichever is greater in size.
+            And compare to size of list created by merge if merged list's size is not greater, then it means
+            actual learning/update did not happen.
+
+            nameListByBookie1 = {HashMap@6253}  size = 2
+                 0 = {HashMap$Node@6257} "CrocoBet" -> "Everton Vina del Mar"
+                 1 = {HashMap$Node@6258} "AdjaraBet" -> "Everton de Vina Del Mar"
+            nameListByBookie2 = {HashMap@6254}  size = 4
+                 0 = {HashMap$Node@6261} "CrocoBet" -> "Everton"
+                 1 = {HashMap$Node@6263} "EuropeBet" -> "Everton"
+                 2 = {HashMap$Node@6265} "AdjaraBet" -> "Everton FC"
+                 3 = {HashMap$Node@6267} "LiderBet" -> "Everton"
+             */
+            Map<String, String> mergedList = mergeChains(nameListByBookie1, nameListByBookie2);
+
+            if( ! (mergedList.size() > Math.max(nameListByBookie1.size(), nameListByBookie2.size()))) {
+                return;
+            }
+
             //Remove old chains
             teamNameChains.remove(nameListByBookie1);
             teamNameChains.remove(nameListByBookie2);
 
             //Add new merged chain
-            teamNameChains.add(mergeChains(nameListByBookie1, nameListByBookie2));
+            teamNameChains.add(mergedList);
 
             updated = true;
         } else if(nameListByBookie1 != null && nameListByBookie2 == null) {
+            if(nameListByBookie1.get(bookie2) != null) {
+                return;
+            }
             nameListByBookie1.put(bookie2, name2);
             updated = true;
         } else if(nameListByBookie1 == null && nameListByBookie2 != null) {
+            if(nameListByBookie2.get(bookie1) != null) {
+                return;
+            }
             nameListByBookie2.put(bookie1, name1);
             updated = true;
         } else if(nameListByBookie1 == null && nameListByBookie2 == null) {
