@@ -3,7 +3,11 @@ package ge.shitbot.core.datatypes.util.http;
 import ge.shitbot.core.datatypes.util.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +51,30 @@ public class Http {
         InputStream inputStream = response.getEntity().getContent();
 
         return StringUtils.fromStream(inputStream);
+    }
+
+    public static String post(String url, Map<String, String> headers, String payload) throws Exception {
+        CloseableHttpClient client = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost(url);
+
+        for (Map.Entry<String, String> header : headers.entrySet()) {
+            httpPost.setHeader(header.getKey(), header.getValue());
+        }
+        
+        httpPost.setEntity(new StringEntity(payload));
+
+        //httpPost.setRe(new StringRequestEntity(stringData));
+
+        /*List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("username", "John"));
+        params.add(new BasicNameValuePair("password", "pass"));
+        httpPost.setEntity(new UrlEncodedFormEntity(params));*/
+
+        CloseableHttpResponse response = client.execute(httpPost);
+        String responseBody = StringUtils.fromStream(response.getEntity().getContent());
+        client.close();
+
+        return responseBody;
     }
 
 }
