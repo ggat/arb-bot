@@ -33,7 +33,7 @@ public class Calc {
 
     //TODO: Use big decimals for precision.
     public static Double profit(Double a, Double b) {
-        return 100 - ((1 / a * 100) + (1 / b * 100));
+        return 100.0 - ((1.0 / a * 100.0) + (1.0 / b * 100.0));
     }
 
     public static Pair<Double> proportions(Double a, Double b) {
@@ -69,8 +69,8 @@ public class Calc {
     public static void main(String[] args) {
 
         Double a, b;
-        a = 1.45;
-        b = 5.5;
+        a = 1.71;
+        b = 2.45;
 
         System.out.printf("profit: %f\n", profit(a, b));
         System.out.printf("stakes: %f - %f\n", stakes(100.0, a, b).a, stakes(100.0, a, b).b);

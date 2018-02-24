@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -164,6 +165,41 @@ public class SimpleAnalyzerTest {
         assertThat(chains, hasItems(chain3, chain3_1, chain3_2));
 
         System.out.println(analyzer.getTeamNameChains());
+    }
+
+    @Test
+    public void testRemoveAmbiguousTeamNames() throws Exception {
+        final String ADJ = "ADJ";
+        final String EUR = "EUR";
+        final String LDB = "LDB";
+
+        List<CategoryData> categoryDatas = new ArrayList<>();
+        Date date = new Date();
+        categoryDatas.add(createFullCategoryData(ADJ, "England", "National League", "Sutton", "Manchester_1", date));
+        categoryDatas.add(createFullCategoryData(ADJ, "England", "Northern Premier League", "Sutton", "Manchester_2", date));
+        categoryDatas.add(createFullCategoryData(ADJ, "England", "Championship", "Sutton", "Manchester_1", date));
+        categoryDatas.add(createFullCategoryData(EUR, "Spain", "La liga", "Liverpool_3", "Manchester_3", date));
+        categoryDatas.add(createFullCategoryData(LDB, "Spain", "La liga", "Liverpool_4", "Manchester_4", date));
+
+        List<? extends CategoryData> result = SimpleAnalyzer.getInstance().removeAmbiguousTeamNames(categoryDatas);
+
+        CategoryData adjNationalLeague = result.stream().filter(elem -> { return elem.getBookieName().equals(ADJ) &&
+                elem.getSubCategory().equals("National League"); } ).collect(Collectors.toList()).iterator().next();
+
+        CategoryData adjNorthPremier = result.stream().filter(elem -> { return elem.getBookieName().equals(ADJ) &&
+                elem.getSubCategory().equals("Northern Premier League"); } ).collect(Collectors.toList()).iterator().next();
+
+        CategoryData adjChampionship = result.stream().filter(elem -> { return elem.getBookieName().equals(ADJ) &&
+                elem.getSubCategory().equals("Championship"); } ).collect(Collectors.toList()).iterator().next();
+
+        CategoryData eurLaLiga = result.stream().filter(elem -> { return elem.getBookieName().equals(EUR); } ).collect(Collectors.toList()).iterator().next();
+        CategoryData ldbLaLiga = result.stream().filter(elem -> { return elem.getBookieName().equals(LDB); } ).collect(Collectors.toList()).iterator().next();
+
+        assertEquals(0, adjNationalLeague.getEvents().size());
+        assertEquals(0, adjNorthPremier.getEvents().size());
+        assertEquals(1, adjChampionship.getEvents().size());
+        assertEquals(1, eurLaLiga.getEvents().size());
+        assertEquals(1, ldbLaLiga.getEvents().size());
     }
 
     private CategoryData createCategoryData(String bookieName, String category, String subCategory) {

@@ -4,6 +4,8 @@ import ge.shitbot.analyzer.datatypes.CategoryData;
 import ge.shitbot.analyzer.datatypes.EventData;
 import ge.shitbot.core.datatypes.Arb;
 import ge.shitbot.core.datatypes.util.FileSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -11,16 +13,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by giga on 2/16/18.
  */
 public class SimpleAnalyzer {
 
+    protected static Logger logger = LoggerFactory.getLogger(SimpleAnalyzer.class);
+
     private static SimpleAnalyzer instance = null;
 
     protected SimpleAnalyzer() throws IOException, ClassNotFoundException {
         obtainTeamNameChains();
+        System.out.println("");
     }
 
     protected void obtainTeamNameChains() throws IOException, ClassNotFoundException {
@@ -67,7 +73,79 @@ public class SimpleAnalyzer {
         }
     }
 
+
+    //FIXME: This modifies list that is passed. This method does not create new list
+    // In future we may consider to deep clone (by serialization most likely) here cause it may affect code outside
+    public List<? extends CategoryData> removeAmbiguousTeamNames(List<? extends CategoryData> categoryDatas) {
+        Map<String, List<CategoryData>> categoryDatasByBookieName = categoryDatas
+                .stream().collect(Collectors.groupingBy(CategoryData::getBookieName));
+
+        // Make comparison of team names for each bookie internally
+        // datas here is categoryDatas for particular bookie
+        for (List<CategoryData> datas : categoryDatasByBookieName.values()) {
+            // Compare datas to each other
+            for (CategoryData data1 : datas) {
+                for (CategoryData data2 : datas) {
+                    for (EventData eventData1 : new ArrayList<>(data1.getEvents())) {
+                        for (EventData eventData2 : new ArrayList<>(data2.getEvents())) {
+                            if (eventData1 == eventData2) continue;
+                            if (eventData1.getDate().compareTo(eventData2.getDate()) != 0) continue;
+
+//                            String[] names = {eventData1.getSideOne(), eventData1.getSideTwo(),
+//                                    eventData2.getSideOne(), eventData2.getSideTwo()};
+
+                            // Compare all variations of names and if any of them literally match
+                            // and they are in different categories we remove these events.
+
+                            if(eventData1.getSideOne() == null ||
+                            eventData1.getSideTwo() == null ||
+                            eventData2.getSideOne() == null ||
+                            eventData2.getSideTwo() == null) {
+                                continue;
+                            }
+
+                            if( eventData1.getSideOne().equals(eventData2.getSideOne()) ||
+                            eventData1.getSideOne().equals(eventData2.getSideTwo()) ||
+                            eventData1.getSideTwo().equals(eventData2.getSideOne()) ||
+                            eventData1.getSideTwo().equals(eventData2.getSideTwo()) ) {
+                                boolean categoriesEqual = data1.getCategory().equals(data2.getCategory());
+                                boolean subCategoriesEqual = data1.getSubCategory().equals(data2.getSubCategory());
+
+                                // Category and SubCategory of these team names match then
+                                // We are just comparing same team between two different events
+                                // So it should not be excluded
+                                if(categoriesEqual && subCategoriesEqual) continue;
+
+                                logger.info("Removing event with ambiguous team names: {}", eventData1 );
+                                logger.info("Removing event with ambiguous team names: {}", eventData2 );
+                                // Otherwise we found events that have events with ambiguous team names.
+                                // We remove both and
+                                data1.getEvents().remove(eventData1);
+                                data2.getEvents().remove(eventData2);
+                            }
+
+//                            compareNames:
+//                            for (String name1 : names) {
+//                                for (String name2 : names) {
+//                                    // FIXME: We take care if both names are present cause sometimes they are null due
+//                                    // to scraping failure the thing is that it should be handled elsewhere
+//                                    if(name1 != null && name2 != null && name1.equals(name2)) {
+//
+//                                    }
+//                                }
+//                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return categoryDatas;
+    }
+
     public List<Arb> findArbs(List<? extends CategoryData> categoryDatas) throws IOException {
+
+        categoryDatas = removeAmbiguousTeamNames(categoryDatas);
 
         List<MatchedEvents> matchedEventsList;
 

@@ -16,6 +16,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -28,16 +30,21 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by giga on 9/13/17.
  */
 public class AppMain extends javafx.application.Application {
+
+    protected static Logger logger = LoggerFactory.getLogger(AppMain.class);
 
     Label response;
     Label currentWidth;
@@ -299,32 +306,47 @@ public class AppMain extends javafx.application.Application {
             }
         });
 
+        profit.setComparator(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                Double d1 = Double.parseDouble(o1);
+                Double d2 = Double.parseDouble(o2);
+                return Double.compare(d1,d2);
+            }
+        });
+
         date.setCellValueFactory(new PropertyValueFactory<Arb, Date>("date"));
         hostID.setCellValueFactory(new PropertyValueFactory<Arb, Long>("hostID"));
         guestID.setCellValueFactory(new PropertyValueFactory<Arb, Long>("guestID"));
 
         table.getColumns().addAll(action, myProfit, score, stake, profit,date, hostID, guestID, bookeOne, bookieTwo);
 
+        LoadArbsTask task = new LoadArbsTask();
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent t) {
+                //List<Arb> currentArbs = table.getItems();
+                table.setItems(task.getValue());
+                table.getSortOrder().addAll(score);
+                table.sort();
+            }
+        });
+        new Thread(task).run();
 
-        try {
-            table.setItems(getArbs());
-            table.getSortOrder().addAll(score);
-            table.sort();
-        } catch (DataSourceException e) {
-            e.printStackTrace();
-        }
-        Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(20), new EventHandler<ActionEvent>() {
+        Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(180), new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("this is called every 5 seconds on UI thread");
-                try {
-                    table.setItems(getArbs());
-                    table.getSortOrder().addAll(score);
-                    table.sort();
-                } catch (DataSourceException e) {
-                    e.printStackTrace();
-                }
+                LoadArbsTask task = new LoadArbsTask();
+                task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent t) {
+                        table.setItems(task.getValue());
+                        table.getSortOrder().addAll(score);
+                        table.sort();
+                    }
+                });
+                new Thread(task).run();
             }
         }));
         fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
@@ -342,6 +364,13 @@ public class AppMain extends javafx.application.Application {
 
         //pane.getChildren().add(vBox);
         return table;
+    }
+
+    private class LoadArbsTask extends Task<ObservableList<Arb>> {
+        @Override
+        protected ObservableList<Arb> call() throws Exception {
+            return getArbs();
+        }
     }
 
     protected ObservableList<Arb> getArbs() throws DataSourceException {

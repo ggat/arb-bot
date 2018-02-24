@@ -55,7 +55,7 @@ public class NewDataSource<T extends Arb> implements ArbDataSource {
         ObjectMapper mapper = new ObjectMapper();
 
         //HttpGet request = new HttpGet("http://homestead.test/arb-infos");
-        HttpGet request = new HttpGet("http://178.79.153.88/arb-infos");
+        HttpGet request = new HttpGet("http://homestead.test/arb-infos");
 
         //request.setEntity(new StringEntity(mapper.writeValueAsString(params)));
 

@@ -15,6 +15,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
 
@@ -22,6 +24,8 @@ import java.text.DecimalFormat;
  * Created by giga on 10/3/17.
  */
 public class ArbDetailsPanel extends GridPane {
+
+    protected static Logger logger = LoggerFactory.getLogger(ArbDetailsPanel.class);
 
     public static class Event extends GridPane {
         final Label bookie = new Label();
@@ -177,11 +181,14 @@ public class ArbDetailsPanel extends GridPane {
 
                 try {
                     botService.createBet(bookie1, stakes.getA());
-                    botService.createBet(bookie2, stakes.getB());
+                } catch (Exception e) {
+                    logger.error("Stake creation failed for {} error was {}", bookie1, e);
+                }
 
-                } catch (BookieDriverNotFoundException | UnknownOddTypeException e) {
-                    //TODO: Show message about this situation to GUI.
-                    e.printStackTrace();
+                try {
+                    botService.createBet(bookie2, stakes.getB());
+                } catch (Exception e) {
+                    logger.error("Stake creation failed for {} error was {}", bookie1, e);
                 }
             }
         });

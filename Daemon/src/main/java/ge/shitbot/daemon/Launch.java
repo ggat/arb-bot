@@ -261,6 +261,8 @@ public class Launch {
 
                         logger.error("Could not create JSON of ArbInfo list. {}", e);
                     }
+
+                    logger.info("Saved {} Arbs", arbs.size());
                 } catch (AnalyzeException e) {
 
                     logger.error("Error while analyzing data. {}", e);
