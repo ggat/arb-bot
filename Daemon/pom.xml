@@ -15,6 +15,12 @@
     <dependencies>
         <dependency>
             <groupId>ge.shitbot</groupId>
+            <artifactId>shitbot-alert</artifactId>
+            <version>0.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ge.shitbot</groupId>
             <artifactId>shitbot-scraper</artifactId>
             <version>0.2</version>
         </dependency>

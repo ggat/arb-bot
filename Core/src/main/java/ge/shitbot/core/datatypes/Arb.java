@@ -80,6 +80,36 @@ public class Arb {
         public void setSubCategory(String subCategory) {
             this.subCategory = subCategory;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Bookie bookie = (Bookie) o;
+
+            if (!name.equals(bookie.name)) return false;
+            if (!oddType.equals(bookie.oddType)) return false;
+            if (!odd.equals(bookie.odd)) return false;
+            if (teamOneName != null ? !teamOneName.equals(bookie.teamOneName) : bookie.teamOneName != null)
+                return false;
+            if (teamTwoName != null ? !teamTwoName.equals(bookie.teamTwoName) : bookie.teamTwoName != null)
+                return false;
+            if (!category.equals(bookie.category)) return false;
+            return subCategory.equals(bookie.subCategory);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = name.hashCode();
+            result = 31 * result + oddType.hashCode();
+            result = 31 * result + odd.hashCode();
+            result = 31 * result + (teamOneName != null ? teamOneName.hashCode() : 0);
+            result = 31 * result + (teamTwoName != null ? teamTwoName.hashCode() : 0);
+            result = 31 * result + category.hashCode();
+            result = 31 * result + subCategory.hashCode();
+            return result;
+        }
     }
 
     private Double profit;
@@ -173,5 +203,23 @@ public class Arb {
         this.bookieTwo = bookieTwo;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Arb arb = (Arb) o;
+
+        if (!profit.equals(arb.profit)) return false;
+        if (!date.equals(arb.date)) return false;
+        if (!bookieOne.equals(arb.bookieOne)) return false;
+        return bookieTwo.equals(arb.bookieTwo);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = profit.hashCode();
+        result = 31 * result + date.hashCode();
+        return result;
+    }
 }

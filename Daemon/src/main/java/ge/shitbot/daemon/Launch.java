@@ -263,6 +263,9 @@ public class Launch {
                     }
 
                     logger.info("Saved {} Arbs", arbs.size());
+
+                    AlertService.propagateArbs(arbs);
+
                 } catch (AnalyzeException e) {
 
                     logger.error("Error while analyzing data. {}", e);

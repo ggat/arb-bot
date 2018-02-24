@@ -128,41 +128,4 @@ public class TelegramNotification {
             }
         }, 0, intervalSeconds * 1000);
     }*/
-
-    private static String getShotName(String name) {
-
-        String shotName = name;
-
-        switch (name) {
-            case "AdjaraBet":
-                shotName = "ADJ";
-                break;
-
-            case "BetLive":
-                shotName = "BTL";
-                break;
-
-            case "CrystalBet":
-                shotName = "CRY";
-                break;
-
-            case "EuropeBet":
-                shotName = "EUR";
-                break;
-
-            case "LiderBet":
-                shotName = "LDR";
-                break;
-
-            case "CrocoBet":
-                shotName = "CRO";
-                break;
-
-            default:
-                shotName = name;
-                break;
-        }
-
-        return shotName;
-    }
 }
