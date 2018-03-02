@@ -5,14 +5,15 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import ge.shitbot.core.datatypes.deserialize.BookieDeserializer;
 import ge.shitbot.core.datatypes.deserialize.ArbDateDeserializer;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Created by giga on 9/27/17.
  */
-public class Arb {
+public class Arb implements Serializable {
 
-    public static class Bookie {
+    public static class Bookie implements Serializable {
         private String name;
         private String oddType;
         private Double odd;

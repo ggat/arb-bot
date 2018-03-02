@@ -37,11 +37,11 @@ public class TelegramNotification {
         GetUpdatesResponse updatesResponse = bot.execute(getUpdates);
         List<Update> updates = updatesResponse.updates();
 
-        System.out.println("Size: " + updates.size());
+        //System.out.println("Size: " + updates.size());
 
-        if(updates.size() > 0){
+        /*if(updates.size() > 0){
             System.out.println(updates.get(0));
-        }
+        }*/
 
         //SendMessage request = new SendMessage("438642777", data)
         SendMessage request = new SendMessage("-262116666", data)
@@ -58,10 +58,10 @@ public class TelegramNotification {
         Message message = sendResponse.message();
         String description = sendResponse.description();
 
-        System.out.println("Response status: " + ok);
+        /*System.out.println("Response status: " + ok);
         System.out.println("Response errorCode: " + errorCode);
         System.out.println("Response message: " + message);
-        System.out.println("Response description: " + description);
+        System.out.println("Response description: " + description);*/
     }
 
     /*public static void main(String[] args) {
