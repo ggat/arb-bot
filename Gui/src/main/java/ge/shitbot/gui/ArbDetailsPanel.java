@@ -9,12 +9,15 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -37,6 +40,7 @@ public class ArbDetailsPanel extends GridPane {
         final Label category = new Label();
         final Label subCategory = new Label();
         final Label teamName = new Label();
+        final Label teamNameCompare = new Label();
         final Label stake = new Label();
         final Label win = new Label();
         final Label totalWin = new Label();
@@ -76,9 +80,13 @@ public class ArbDetailsPanel extends GridPane {
             bookie.setFont(h1);
             oddType.setFont(h3);
             teamName.setFont(Font.font(defaultFont.getName(), FontWeight.BOLD, 14));
+            teamName.setTextFill(Color.BLUE);
+            teamNameCompare.setFont(Font.font(defaultFont.getName(), FontWeight.BOLD, 14));
+            teamNameCompare.setTextFill(Color.GREY);
             //odd.setFont(h2);
             //stake.setFont(h2);
-            //win.setFont(h2);
+            win.setFont(h2);
+            win.setTextFill(Color.RED);
 
             /*
             bookie.setStyle("-fx-background-color: #CCCCCC;");
@@ -87,12 +95,13 @@ public class ArbDetailsPanel extends GridPane {
             this.add(bookie, 0, 0);
             this.add(oddType, 0, 1);
             this.add(teamName, 0, 2);
-            this.add(odd, 0, 3);
-            this.add(stake, 0, 4);
-            this.add(win, 0, 5);
-            this.add(totalWin, 0, 6);
-            this.add(category, 0, 7);
-            this.add(subCategory, 0, 8);
+            this.add(teamNameCompare, 0, 3);
+            this.add(odd, 0, 4);
+            this.add(stake, 0, 5);
+            this.add(win, 0, 6);
+            this.add(totalWin, 0, 7);
+            this.add(category, 0, 8);
+            this.add(subCategory, 0, 9);
         }
 
         Event(HPos alignment){
@@ -105,7 +114,7 @@ public class ArbDetailsPanel extends GridPane {
             GridPane.setHalignment(category, alignment);
             GridPane.setHalignment(subCategory, alignment);
             GridPane.setHalignment(teamName, alignment);
-            GridPane.setHalignment(teamName, alignment);
+            GridPane.setHalignment(teamNameCompare, alignment);
             GridPane.setHalignment(stake, alignment);
             GridPane.setHalignment(win, alignment);
             GridPane.setHalignment(totalWin, alignment);
@@ -175,6 +184,10 @@ public class ArbDetailsPanel extends GridPane {
             this.subCategory.setText(subCategory);
         }
 
+        public void setTeamNameCompare(String subCategory) {
+            this.teamNameCompare.setText(subCategory);
+        }
+
     }
 
     Event firstCriteria = new Event(HPos.RIGHT);
@@ -190,7 +203,9 @@ public class ArbDetailsPanel extends GridPane {
         this.add(firstCriteria, 0, 0);
         this.add(secondCriteria, 1, 0);
 
-        this.add(stakeField, 2, 0);
+        //this.add(stakeField, 0, 1, 2, 1);
+        stakeField.setFont(Font.font(Font.getDefault().getName(), FontWeight.BOLD, 24));
+        stakeField.setAlignment(Pos.CENTER);
         stakeField.setPromptText("Total stake");
 
         stakeField.textProperty().addListener(new ChangeListener<String>() {
@@ -211,7 +226,14 @@ public class ArbDetailsPanel extends GridPane {
             }
         });
 
-        this.add(makeStakeButton, 2, 1);
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(stakeField, makeStakeButton);
+        vBox.setSpacing(10);
+
+        makeStakeButton.setMaxWidth(Double.MAX_VALUE);
+        makeStakeButton.setPrefHeight(42);
+        makeStakeButton.setMinHeight(36);
+        this.add(vBox, 0, 1, 2, 1);
 
         makeStakeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -251,6 +273,7 @@ public class ArbDetailsPanel extends GridPane {
         this.getFirstCriteria().setOddType(arb.getBookieOne().getOddType());
         this.getFirstCriteria().setOdd(arb.getBookieOne().getOdd().toString());
         this.getFirstCriteria().setTeamName(arb.getBookieOne().getTeamOneName());
+        this.getFirstCriteria().setTeamNameCompare(arb.getBookieTwo().getTeamOneName());
         this.getFirstCriteria().setCategory(arb.getBookieOne().getCategory());
         this.getFirstCriteria().setSubCategory(arb.getBookieOne().getSubCategory());
 
@@ -258,6 +281,7 @@ public class ArbDetailsPanel extends GridPane {
         this.getSecondCriteria().setOddType(arb.getBookieTwo().getOddType());
         this.getSecondCriteria().setOdd(arb.getBookieTwo().getOdd().toString());
         this.getSecondCriteria().setTeamName(arb.getBookieTwo().getTeamTwoName());
+        this.getSecondCriteria().setTeamNameCompare(arb.getBookieOne().getTeamTwoName());
         this.getSecondCriteria().setCategory(arb.getBookieTwo().getCategory());
         this.getSecondCriteria().setSubCategory(arb.getBookieTwo().getSubCategory());
 

@@ -22,11 +22,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
@@ -58,9 +60,20 @@ public class AppMain extends javafx.application.Application {
         launch(args);
     }
 
+    /*protected void maximize(Stage stage) {
+        Screen screen = Screen.getPrimary();
+        Rectangle2D bounds = screen.getVisualBounds();
+
+        stage.setX(bounds.getMinX());
+        stage.setY(bounds.getMinY());
+        stage.setWidth(bounds.getWidth());
+        stage.setHeight(bounds.getHeight());
+    }*/
+
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle("Shit Bot v0.1");
+        stage.setMaximized(true);
 
         GridPane pane = new GridPane();
 
@@ -87,7 +100,7 @@ public class AppMain extends javafx.application.Application {
         //MainPane
         SplitPane splitPane = new SplitPane();
         splitPane.setOrientation(Orientation.VERTICAL);
-        splitPane.setPrefSize(300, 200);
+        //splitPane.setPrefSize(300, 200);
 
         //Scene scene = new Scene(pane, 800, 600);
         Scene scene = new Scene(splitPane, 800, 600);
@@ -134,10 +147,17 @@ public class AppMain extends javafx.application.Application {
         }*/);
 
         ArbDetailsPanel detailsPanel = createDetailsPanel();
-        splitPane.getItems().addAll(wrapWithVBox(tableView), wrapWithVBox(detailsPanel));
+
+        VBox wrapped = wrapWithVBox(detailsPanel);
+        splitPane.getItems().addAll(wrapped, wrapWithVBox(tableView));
+        table.prefHeightProperty().bind(splitPane.heightProperty());
 
         stage.setScene(scene);
         stage.show();
+
+        stage.widthProperty().addListener((obs, oldVal, newVal) -> {
+            splitPane.setDividerPositions(0f);
+        });
     }
 
     /*protected void arbSelectedListener(ObservableValue obs, Arb oldSelection, Arb newSelection) {
@@ -551,5 +571,19 @@ public class AppMain extends javafx.application.Application {
         vBox.getChildren().add(node);
 
         return vBox;
+    }
+
+    protected HBox wrapWithHBox(Node node) {
+        final HBox hBox = new HBox();
+        hBox.setSpacing(5);
+        hBox.setPadding(new Insets(10, 20, 10, 20));
+        //hBox.getChildren().addAll(label, table);
+
+        GridPane.setHgrow(hBox, Priority.ALWAYS);
+        GridPane.setVgrow(hBox, Priority.ALWAYS);
+
+        hBox.getChildren().add(node);
+
+        return hBox;
     }
 }
