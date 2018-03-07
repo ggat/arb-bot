@@ -11,10 +11,13 @@ import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,12 +34,39 @@ public class ArbDetailsPanel extends GridPane {
         final Label bookie = new Label();
         final Label oddType = new Label();
         final Label odd = new Label();
+        final Label category = new Label();
+        final Label subCategory = new Label();
         final Label teamName = new Label();
         final Label stake = new Label();
         final Label win = new Label();
         final Label totalWin = new Label();
 
+        protected void copyOnClick(MouseEvent event) {
+            Object target = event.getTarget();
+            if(target instanceof Text) {
+                Text targetLabel = (Text) target;
+                String name = targetLabel.getText();
+
+                final Clipboard clipboard = Clipboard.getSystemClipboard();
+                final ClipboardContent content = new ClipboardContent();
+                content.putString(name != null ? name : "");
+                clipboard.setContent(content);
+
+                System.out.println("Text copied: " + name);
+            }
+        }
+
         Event(){
+
+            bookie.setOnMouseClicked(this::copyOnClick);
+            oddType.setOnMouseClicked(this::copyOnClick);
+            odd.setOnMouseClicked(this::copyOnClick);
+            category.setOnMouseClicked(this::copyOnClick);
+            subCategory.setOnMouseClicked(this::copyOnClick);
+            teamName.setOnMouseClicked(this::copyOnClick);
+            stake.setOnMouseClicked(this::copyOnClick);
+            win.setOnMouseClicked(this::copyOnClick);
+            totalWin.setOnMouseClicked(this::copyOnClick);
 
             Font defaultFont = Font.getDefault();
             Font h1 = Font.font(defaultFont.getName(), FontWeight.BOLD, 24);
@@ -61,6 +91,8 @@ public class ArbDetailsPanel extends GridPane {
             this.add(stake, 0, 4);
             this.add(win, 0, 5);
             this.add(totalWin, 0, 6);
+            this.add(category, 0, 7);
+            this.add(subCategory, 0, 8);
         }
 
         Event(HPos alignment){
@@ -70,6 +102,9 @@ public class ArbDetailsPanel extends GridPane {
             GridPane.setHalignment(bookie, alignment);
             GridPane.setHalignment(oddType, alignment);
             GridPane.setHalignment(odd, alignment);
+            GridPane.setHalignment(category, alignment);
+            GridPane.setHalignment(subCategory, alignment);
+            GridPane.setHalignment(teamName, alignment);
             GridPane.setHalignment(teamName, alignment);
             GridPane.setHalignment(stake, alignment);
             GridPane.setHalignment(win, alignment);
@@ -131,6 +166,15 @@ public class ArbDetailsPanel extends GridPane {
         public void setTotalWin(String totalWin) {
             this.totalWin.setText(totalWin);
         }
+
+        public void setCategory(String category) {
+            this.category.setText(category);
+        }
+
+        public void setSubCategory(String subCategory) {
+            this.subCategory.setText(subCategory);
+        }
+
     }
 
     Event firstCriteria = new Event(HPos.RIGHT);
@@ -207,11 +251,15 @@ public class ArbDetailsPanel extends GridPane {
         this.getFirstCriteria().setOddType(arb.getBookieOne().getOddType());
         this.getFirstCriteria().setOdd(arb.getBookieOne().getOdd().toString());
         this.getFirstCriteria().setTeamName(arb.getBookieOne().getTeamOneName());
+        this.getFirstCriteria().setCategory(arb.getBookieOne().getCategory());
+        this.getFirstCriteria().setSubCategory(arb.getBookieOne().getSubCategory());
 
         this.getSecondCriteria().setBookie(arb.getBookieTwo().getName());
         this.getSecondCriteria().setOddType(arb.getBookieTwo().getOddType());
         this.getSecondCriteria().setOdd(arb.getBookieTwo().getOdd().toString());
-        this.getSecondCriteria().setTeamName(arb.getBookieOne().getTeamTwoName());
+        this.getSecondCriteria().setTeamName(arb.getBookieTwo().getTeamTwoName());
+        this.getSecondCriteria().setCategory(arb.getBookieTwo().getCategory());
+        this.getSecondCriteria().setSubCategory(arb.getBookieTwo().getSubCategory());
 
         this.arb = arb;
 
