@@ -5,16 +5,16 @@ package ge.shitbot.bot;
  */
 public class OddType {
 
-    public static final String Win              = "1";
-    public static final String Loose            = "2";
-    public static final String Draw             = "X";
-    public static final String DrawOrLoose        = "X2";
-    public static final String WinOrDraw        = "1X";
-    public static final String WinOrLoose       = "12";
-    public static final String Yes              = "Yes";
-    public static final String No               = "No";
-    public static final String Under25          = "Under25";
-    public static final String Over25           = "Over25";
+    public static final String Win              = ge.shitbot.core.datatypes.OddType._1.stringValue();
+    public static final String Loose            = ge.shitbot.core.datatypes.OddType._2.stringValue();
+    public static final String Draw             = ge.shitbot.core.datatypes.OddType._X.stringValue();
+    public static final String DrawOrLoose      = ge.shitbot.core.datatypes.OddType._X2.stringValue();
+    public static final String WinOrDraw        = ge.shitbot.core.datatypes.OddType._1X.stringValue();
+    public static final String WinOrLoose       = ge.shitbot.core.datatypes.OddType._12.stringValue();
+    public static final String Yes              = ge.shitbot.core.datatypes.OddType._YES.stringValue();
+    public static final String No               = ge.shitbot.core.datatypes.OddType._NO.stringValue();
+    public static final String Under25          = ge.shitbot.core.datatypes.OddType._UNDER_25.stringValue();
+    public static final String Over25           = ge.shitbot.core.datatypes.OddType._OVER_25.stringValue();
 
     public static final String I                = Win;
     public static final String II               = Loose;
