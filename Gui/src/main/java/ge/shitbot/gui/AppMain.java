@@ -34,9 +34,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -152,8 +154,9 @@ public class AppMain extends javafx.application.Application {
     protected TableView createTableView() {
 
         table = new TableView();
+        table.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 
-        TableColumn action = new TableColumn("Action");
+        /*TableColumn action = new TableColumn("Action");
 
         Callback<TableColumn<Arb, String>, TableCell<Arb, String>> buttonCellFactory
                 = //
@@ -184,9 +187,9 @@ public class AppMain extends javafx.application.Application {
                     }
                 };
 
-        action.setCellFactory(buttonCellFactory);
+        action.setCellFactory(buttonCellFactory);*/
 
-        TableColumn stake = new TableColumn("Stake");
+        /*TableColumn stake = new TableColumn("Stake");
 
         Callback<TableColumn<Arb, String>, TableCell<Arb, String>> textFieldCellFactory
                 = //
@@ -213,10 +216,10 @@ public class AppMain extends javafx.application.Application {
                                         }
                                     });
 
-                                    /*btn.setOnAction(event -> {
+                                    *//*btn.setOnAction(event -> {
                                         Arb arb = getTableView().getItems().get(getIndex());
                                         System.out.println(arb.getProfit());
-                                    });*/
+                                    });*//*
                                     setGraphic(field);
                                     setText(null);
                                 }
@@ -226,7 +229,7 @@ public class AppMain extends javafx.application.Application {
                     }
                 };
 
-        stake.setCellFactory(textFieldCellFactory);
+        stake.setCellFactory(textFieldCellFactory);*/
 
         TableColumn myProfit = new TableColumn("My Profit");
 
@@ -249,6 +252,7 @@ public class AppMain extends javafx.application.Application {
                 return Double.compare(d1,d2);
             }
         });
+        myProfit.setPrefWidth(50);
 
         TableColumn score = new TableColumn("Score");
 
@@ -283,8 +287,9 @@ public class AppMain extends javafx.application.Application {
                 return Double.compare(d2,d1);
             }
         });
+        score.setPrefWidth(50);
 
-        TableColumn profit = new TableColumn("Profit");
+        //TableColumn profit = new TableColumn("Profit");
         TableColumn date = new TableColumn("Date");
 
         TableColumn hostID = new TableColumn("HostID");
@@ -299,7 +304,7 @@ public class AppMain extends javafx.application.Application {
         TableColumn bookieTwo = new TableColumn("Bookie Two");
         finalizeBookieColumn(bookieTwo, "bookie_2");
 
-        profit.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Arb, Double>, StringExpression>() {
+        /*profit.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Arb, Double>, StringExpression>() {
             @Override
             public StringExpression call(TableColumn.CellDataFeatures<Arb, Double> cellDataFeatures) {
                 return Bindings.format("%.2f", cellDataFeatures.getValue().getProfit());
@@ -313,13 +318,39 @@ public class AppMain extends javafx.application.Application {
                 Double d2 = Double.parseDouble(o2);
                 return Double.compare(d1,d2);
             }
-        });
+        });*/
 
-        date.setCellValueFactory(new PropertyValueFactory<Arb, Date>("date"));
+        //date.setCellValueFactory(new PropertyValueFactory<Arb, Date>("date"));
+        String pattern = "dd MMM HH:mm";
+        date.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Arb, String>, StringExpression>() {
+            @Override
+            public StringExpression call(TableColumn.CellDataFeatures<Arb, String> cellDataFeatures) {
+                // 16 Jul 19:15
+                SimpleDateFormat format = new SimpleDateFormat(pattern);
+                Date date = cellDataFeatures.getValue().getDate();
+
+                return Bindings.concat(format.format(date));
+            }
+        });
+        date.setComparator(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+
+                try {
+                    Date date1 = new SimpleDateFormat(pattern).parse(o1);
+                    Date date2 = new SimpleDateFormat(pattern).parse(o2);
+                    return date1.compareTo(date2);
+                } catch (ParseException e) {
+                    return -1;
+                }
+            }
+        });
+        date.setMinWidth(95);
+
         hostID.setCellValueFactory(new PropertyValueFactory<Arb, Long>("hostID"));
         guestID.setCellValueFactory(new PropertyValueFactory<Arb, Long>("guestID"));
 
-        table.getColumns().addAll(action, myProfit, score, stake, profit,date, hostID, guestID, bookeOne, bookieTwo);
+        table.getColumns().addAll(/*action,*/ myProfit, score, /*stake, profit,*/ date, hostID, guestID, bookeOne, bookieTwo);
 
         LoadArbsTask task = new LoadArbsTask();
         task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
@@ -439,6 +470,7 @@ public class AppMain extends javafx.application.Application {
                 return new SimpleStringProperty(bookie.getOddType());
             }
         });
+        oddType.setPrefWidth(45);
 
         odd.setCellValueFactory(new MyCallback<Number>(bookie){
 
@@ -447,6 +479,7 @@ public class AppMain extends javafx.application.Application {
                 return new SimpleDoubleProperty(bookie.getOdd());
             }
         });
+        odd.setPrefWidth(45);
 
         teamOneName.setCellValueFactory(new MyCallback<String>(bookie){
 
@@ -455,6 +488,7 @@ public class AppMain extends javafx.application.Application {
                 return new SimpleStringProperty(bookie.getTeamOneName());
             }
         });
+        teamOneName.setPrefWidth(150);
 
         teamTwoName.setCellValueFactory(new MyCallback<String>(bookie){
 
@@ -463,6 +497,7 @@ public class AppMain extends javafx.application.Application {
                 return new SimpleStringProperty(bookie.getTeamTwoName());
             }
         });
+        teamTwoName.setPrefWidth(150);
 
         category.setCellValueFactory(new MyCallback<String>(bookie){
 
@@ -471,6 +506,7 @@ public class AppMain extends javafx.application.Application {
                 return new SimpleStringProperty(bookie.getCategory());
             }
         });
+        category.setPrefWidth(150);
 
         subCategory.setCellValueFactory(new MyCallback<String>(bookie){
 
@@ -479,6 +515,7 @@ public class AppMain extends javafx.application.Application {
                 return new SimpleStringProperty(bookie.getSubCategory());
             }
         });
+        subCategory.setPrefWidth(200);
     }
 
     ArbDetailsPanel arbDetailsPanel;
