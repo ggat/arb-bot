@@ -267,8 +267,9 @@ public class Launch {
                     AlertService.propagateArbs(arbs);
 
                 } catch (AnalyzeException e) {
-
                     logger.error("Error while analyzing data. {}", e);
+                } catch (Exception e) {
+                    logger.warn("Error in daemon loop going to next iteration. {}", e);
                 }
             }
         }
