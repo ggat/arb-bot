@@ -13,9 +13,9 @@
             <useAllReactorProjects>true</useAllReactorProjects>
 
             <includes>
-                <include>ge.shitbot:shitbot-bot</include>
-                <include>ge.shitbot:shitbot-datasources</include>
-                <include>ge.shitbot:shitbot-gui</include>
+                <include>ge.arb-bot:shitbot-bot</include>
+                <include>ge.arb-bot:shitbot-datasources</include>
+                <include>ge.arb-bot:shitbot-gui</include>
             </includes>
 
             <binaries>

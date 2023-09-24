@@ -56,15 +56,15 @@
         </encoder>
     </appender>
 
-    <logger name="ge.shitbot.scraper" level="debug" additivity="false">
+    <logger name="ge.arb-bot.scraper" level="debug" additivity="false">
         <appender-ref ref="SCRAPER" />
     </logger>
 
-    <logger name="ge.shitbot.analyzer" level="debug" additivity="false">
+    <logger name="ge.arb-bot.analyzer" level="debug" additivity="false">
         <appender-ref ref="ANALYZER" />
     </logger>
 
-    <logger name="ge.shitbot.alert" level="debug" additivity="false">
+    <logger name="ge.arb-bot.alert" level="debug" additivity="false">
         <appender-ref ref="ALERT" />
     </logger>
 

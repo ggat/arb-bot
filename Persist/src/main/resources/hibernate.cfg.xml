@@ -15,12 +15,12 @@
         <property name="dialect">
             org.hibernate.dialect.MySQL5Dialect
         </property>
-        <mapping class="ge.shitbot.persist.models.Person" />
-        <mapping class="ge.shitbot.persist.models.Skill" />
-        <mapping class="ge.shitbot.persist.models.Ranking" />
-        <mapping class="ge.shitbot.persist.models.CategoryInfo" />
-        <mapping class="ge.shitbot.persist.models.Bookie" />
-        <mapping class="ge.shitbot.persist.models.Chain" />
-        <mapping class="ge.shitbot.persist.models.ArbInfo" />
+        <mapping class="ge.arb-bot.persist.models.Person" />
+        <mapping class="ge.arb-bot.persist.models.Skill" />
+        <mapping class="ge.arb-bot.persist.models.Ranking" />
+        <mapping class="ge.arb-bot.persist.models.CategoryInfo" />
+        <mapping class="ge.arb-bot.persist.models.Bookie" />
+        <mapping class="ge.arb-bot.persist.models.Chain" />
+        <mapping class="ge.arb-bot.persist.models.ArbInfo" />
     </session-factory>
 </hibernate-configuration>

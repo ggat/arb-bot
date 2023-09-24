@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="ge.shitbot.persist.Event" table="events">
+    <class name="ge.arb-bot.persist.Event" table="events">
         <id name="id" column="EVENT_ID">
             <generator class="native" />
         </id>

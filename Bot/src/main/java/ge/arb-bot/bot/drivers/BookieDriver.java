@@ -1,0 +1,17 @@
+package ge.arb-bot.bot.drivers;
+
+import ge.arb-bot.bot.exceptions.UnknownOddTypeException;
+
+import java.io.Closeable;
+
+/**
+ * Created by giga on 9/13/17.
+ */
+public interface BookieDriver extends Closeable {
+
+    Long getBalance() throws Throwable;
+    boolean isLoggedIn() throws Throwable;
+    void createBet(String category, String subCategory, String teamOneName, String teamTwoName, String oddType,
+                   Double amount, Double oddConfirmation) throws UnknownOddTypeException, RuntimeException;
+
+}

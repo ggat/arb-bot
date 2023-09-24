@@ -1,12 +1,12 @@
-import ge.shitbot.datasources.source.NewDataSource;
-import ge.shitbot.hardcode.BookieNames;
-import ge.shitbot.bot.drivers.BookieDriver;
-import ge.shitbot.bot.drivers.BookieDriverRegistry;
-import ge.shitbot.bot.exceptions.BookieDriverNotFoundException;
-import ge.shitbot.bot.exceptions.UnknownOddTypeException;
-import ge.shitbot.core.datatypes.Arb;
-import ge.shitbot.datasources.exceptions.DataSourceException;
-import ge.shitbot.datasources.source.MainDataSource;
+import ge.arb-bot.datasources.source.NewDataSource;
+import ge.arb-bot.hardcode.BookieNames;
+import ge.arb-bot.bot.drivers.BookieDriver;
+import ge.arb-bot.bot.drivers.BookieDriverRegistry;
+import ge.arb-bot.bot.exceptions.BookieDriverNotFoundException;
+import ge.arb-bot.bot.exceptions.UnknownOddTypeException;
+import ge.arb-bot.core.datatypes.Arb;
+import ge.arb-bot.datasources.exceptions.DataSourceException;
+import ge.arb-bot.datasources.source.MainDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
